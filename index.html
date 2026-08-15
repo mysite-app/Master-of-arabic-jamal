@@ -224,6 +224,38 @@
       margin-bottom: 20px;
     }
 
+    /* شريط البحث المطور */
+    .search-box-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .search-box-wrapper input {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      border: 2px solid var(--cream);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-box-wrapper input:focus {
+      border-color: var(--gold);
+      box-shadow: var(--shadow-md);
+    }
+
+    .search-box-wrapper i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
     .plans-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -276,7 +308,7 @@
       font-weight: 400;
     }
 
-    /* مشغل الفيديو والوسائط الداخلي مع دعم التدوير والرجوع للوضع الطبيعي */
+    /* مشغل الوسائط الداخلي */
     .player-modal-content {
       position: relative;
       background: #000;
@@ -319,7 +351,6 @@
       transition: all 0.3s ease;
     }
 
-    /* وضع التدوير العرضي الكامل للهواتف */
     .player-viewport.rotated-fullscreen {
       position: fixed;
       top: 0;
@@ -330,29 +361,29 @@
       background: #000;
     }
 
-    /* زر عائم يظهر أثناء التدوير للرجوع الفوري للوضع الطبيعي */
+    /* زر عائم يظهر أثناء التدوير لجميع الوسائط (فيديو، صوت، كتب) */
     .floating-reset-orientation-btn {
       position: absolute;
       top: 18px;
       right: 18px;
-      background: rgba(78, 29, 31, 0.88);
+      background: rgba(78, 29, 31, 0.92);
       color: var(--cream);
       border: 1px solid var(--gold);
-      padding: 8px 16px;
+      padding: 10px 18px;
       border-radius: 50px;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
-      z-index: 1000;
+      z-index: 10000;
       backdrop-filter: blur(4px);
-      box-shadow: var(--shadow-md);
+      box-shadow: var(--shadow-lg);
       display: none;
     }
 
     .player-viewport.rotated-fullscreen .floating-reset-orientation-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     video {
@@ -887,7 +918,7 @@
     </div>
   </div>
 
-  <!-- المشغل الداخلي المحمي مع دعم التدوير والرجوع للوضع الطبيعي -->
+  <!-- المشغل الداخلي المحمي مع دعم التدوير والرجوع للوضع الطبيعي لجميع الوسائط -->
   <div class="modal-overlay" id="mediaPlayerModal">
     <div class="modal-card" style="max-width: 900px; padding: 0; background: #000; border-color: var(--gold);">
       <div class="player-modal-content">
@@ -908,12 +939,63 @@
         </div>
 
         <div class="player-viewport" id="playerViewport">
-          <!-- زر عائم يظهر أثناء التدوير للرجوع الفوري للوضع الطبيعي -->
+          <!-- زر عائم يظهر أثناء التدوير للرجوع الفوري للوضع الطبيعي (لكل الوسائط) -->
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
             <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
           </button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل المحتوى للأستاذ جمال (Edit Content Modal) -->
+  <div class="modal-overlay" id="editContentModal">
+    <div class="modal-card">
+      <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
+        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية
+      </h3>
+      <form onsubmit="App.handleSaveEditContent(event)">
+        <input type="hidden" id="editContentId">
+        <input type="hidden" id="editContentType">
+        
+        <div class="form-group">
+          <label>الصف الدراسي</label>
+          <select id="editContentGrade">
+            <option value="12">الصف الثاني عشر</option>
+            <option value="11">الصف الحادي عشر</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>العنوان</label>
+          <input type="text" id="editContentTitle" required>
+        </div>
+
+        <div class="form-group">
+          <label>الوحدة / الفرع</label>
+          <input type="text" id="editContentUnit" required>
+        </div>
+
+        <div class="form-group" id="editUrlGroup">
+          <label>رابط الملف أو الفيديو المشفر</label>
+          <div class="input-with-paste">
+            <input type="text" id="editContentUrl">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editContentUrl')">
+              <i class="fa-solid fa-paste"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" id="editTextGroup" style="display:none;">
+          <label>نصوص وشروحات المذكرة</label>
+          <textarea id="editContentText" rows="4"></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-primary" style="flex:1;">حفظ التعديلات في Firebase</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeEditModal()">إلغاء</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -1243,6 +1325,9 @@
       currentRoute: "LOGIN",
       activeContentTab: "VIDEOS",
       adminGradeFilter: "ALL",
+      adminContentTab: "LIST", // 'LIST' أو 'ADD'
+      studentSearchQuery: "",
+      adminSearchQuery: "",
       
       activeQuiz: null,
       activeQuestionIndex: 0,
@@ -1564,10 +1649,14 @@
             `;
           }
 
-          const gradeLessons = State.lessons.filter(l => l.grade === user.grade);
-          const gradeAudios = State.audios.filter(a => a.grade === user.grade);
-          const gradeBooks = State.books.filter(b => b.grade === user.grade);
-          const gradeQuizzes = State.quizzes.filter(q => q.grade === user.grade);
+          // تطبيق فلتر البحث الذكي للطالب
+          const q = State.studentSearchQuery.toLowerCase().trim();
+          const filterFn = item => !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+
+          const gradeLessons = State.lessons.filter(l => l.grade === user.grade && filterFn(l));
+          const gradeAudios = State.audios.filter(a => a.grade === user.grade && filterFn(a));
+          const gradeBooks = State.books.filter(b => b.grade === user.grade && filterFn(b));
+          const gradeQuizzes = State.quizzes.filter(qz => qz.grade === user.grade && filterFn(qz));
 
           return `
             ${isTrial ? `
@@ -1612,6 +1701,12 @@
               </div>
             </div>
 
+            <!-- شريط البحث الذكي للطالب -->
+            <div class="search-box-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" placeholder="🔍 ابحث في دروسك، المذكرات، التسجيلات، أو الاختبارات..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
+            </div>
+
             <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
               <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')">
                 <i class="fa-solid fa-video"></i> الدروس والفيديوهات (${gradeLessons.length})
@@ -1631,7 +1726,7 @@
               ${State.activeContentTab === 'VIDEOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-play-circle"></i> الدروس والشروحات المرئية المقررة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeLessons.map(les => `
+                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeLessons.map(les => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${les.title}</strong>
@@ -1648,7 +1743,7 @@
               ${State.activeContentTab === 'AUDIOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-volume-high"></i> التسجيلات الصوتية وإلقاء القصائد</h3>
                 <div style="display:flex; flex-direction:column; gap:14px;">
-                  ${gradeAudios.map(aud => `
+                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeAudios.map(aud => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${aud.title}</strong>
@@ -1665,7 +1760,7 @@
               ${State.activeContentTab === 'BOOKS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-folder-open"></i> المذكرات والعروض التقديمية والملفات المعتمدة</h3>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                  ${gradeBooks.map(bk => `
+                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px; grid-column:1/-1;">لا توجد نتائج تطابق بحثك.</p>' : gradeBooks.map(bk => `
                     <div class="card" style="margin:0; border-top: 4px solid var(--primary-burgundy);">
                       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                         <i class="fa-solid ${bk.format === 'PPTX' ? 'fa-file-powerpoint' : (bk.format === 'DOCX' ? 'fa-file-word' : 'fa-file-pdf')}" style="font-size:28px; color:var(--gold);"></i>
@@ -1684,7 +1779,7 @@
               ${State.activeContentTab === 'QUIZZES' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-trophy"></i> التحديات والاختبارات التفاعلية الجذابة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeQuizzes.map(qz => `
+                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--ivory); border:1px solid var(--gold); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> ${qz.title}</strong>
@@ -1810,11 +1905,11 @@
                 <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المحتوى السحابي المشفر، الطلاب، وبنك الأسئلة</p>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn btn-primary" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
+                  <i class="fa-solid fa-folder-open"></i> إدارة وتعديل المحتوى المنشور
+                </button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')">
                   <i class="fa-solid fa-circle-question"></i> إنشاء وتعديل الاختبارات
-                </button>
-                <button class="btn btn-primary" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
-                  <i class="fa-solid fa-folder-plus"></i> إدارة المحتوى
                 </button>
                 <button class="btn btn-primary" onclick="App.setRoute('ADMIN_STUDENTS')">
                   <i class="fa-solid fa-users"></i> سجل الطلاب (${total})
@@ -1927,66 +2022,151 @@
         },
 
         adminContentManager() {
+          // دمج وتصفية كافة المحتويات (فيديوهات، ملفات صوتية، كتب ومذكرات)
+          const allContent = [
+            ...State.lessons.map(l => ({ ...l, type: 'LESSON', typeLabel: 'فيديو', icon: 'fa-video' })),
+            ...State.audios.map(a => ({ ...a, type: 'AUDIO', typeLabel: 'صوت', icon: 'fa-headphones' })),
+            ...State.books.map(b => ({ ...b, type: 'BOOK', typeLabel: b.format || 'مذكرة', icon: 'fa-file-lines' }))
+          ];
+
+          const q = State.adminSearchQuery.toLowerCase().trim();
+          const filteredContent = allContent.filter(item => {
+            const matchGrade = State.adminGradeFilter === 'ALL' || item.grade == State.adminGradeFilter;
+            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+            return matchGrade && matchSearch;
+          });
+
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة وإضافة المحتوى السحابي</h2>
+              <div>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة وتعديل وحذف المحتوى</h2>
+                <div style="margin-top:6px; display:flex; gap:6px;">
+                  <button class="btn ${State.adminContentTab === 'LIST' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('LIST')">
+                    <i class="fa-solid fa-list-check"></i> المحتويات المنشورة (${allContent.length})
+                  </button>
+                  <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')">
+                    <i class="fa-solid fa-plus-circle"></i> إضافة مادة جديدة
+                  </button>
+                </div>
+              </div>
               <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
-                <i class="fa-solid fa-arrow-right"></i> العودة للرئيسية
+                <i class="fa-solid fa-arrow-right"></i> الرئيسية
               </button>
             </div>
 
-            <div class="card">
-              <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة</h3>
-              
-              <form onsubmit="App.handleCreateContent(event)">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-                  <div class="form-group">
-                    <label>نوع المحتوى</label>
-                    <select id="contentType" required onchange="App.toggleContentFields()">
-                      <option value="LESSON">درس وشرح مرئي (Video)</option>
-                      <option value="AUDIO">ملف وتسجيل صوتي (Audio)</option>
-                      <option value="BOOK_PDF">مذكرة أو كتاب (PDF)</option>
-                      <option value="BOOK_PPTX">عرض تقديمي (PowerPoint PPTX)</option>
-                      <option value="BOOK_DOCX">مستند Word (DOCX)</option>
-                    </select>
+            ${State.adminContentTab === 'ADD' ? `
+              <!-- نموذج إضافة محتوى جديد -->
+              <div class="card">
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة</h3>
+                <form onsubmit="App.handleCreateContent(event)">
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                    <div class="form-group">
+                      <label>نوع المحتوى</label>
+                      <select id="contentType" required onchange="App.toggleContentFields()">
+                        <option value="LESSON">درس وشرح مرئي (Video)</option>
+                        <option value="AUDIO">ملف وتسجيل صوتي (Audio)</option>
+                        <option value="BOOK_PDF">مذكرة أو كتاب (PDF)</option>
+                        <option value="BOOK_PPTX">عرض تقديمي (PowerPoint PPTX)</option>
+                        <option value="BOOK_DOCX">مستند Word (DOCX)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>الصف الدراسي المخصص</label>
+                      <select id="contentGrade">
+                        <option value="12">الصف الثاني عشر (متقدم)</option>
+                        <option value="11">الصف الحادي عشر (متقدم)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>عنوان المادة التعليمية</label>
+                      <input type="text" id="contentTitle" required placeholder="مثال: شرح أسلوب التوكيد">
+                    </div>
+                    <div class="form-group">
+                      <label>الوحدة / الفرع</label>
+                      <input type="text" id="contentUnit" required placeholder="مثال: النحو والصرف">
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label>الصف الدراسي المخصص</label>
-                    <select id="contentGrade">
-                      <option value="12">الصف الثاني عشر (متقدم)</option>
-                      <option value="11">الصف الحادي عشر (متقدم)</option>
-                    </select>
+
+                  <div class="form-group" id="urlFieldGroup">
+                    <label id="urlLabel">رابط الفيديو أو الملف المشفر</label>
+                    <div class="input-with-paste">
+                      <input type="text" id="contentUrl" placeholder="https://...">
+                      <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('contentUrl')" title="لصق الرابط من الحافظة">
+                        <i class="fa-solid fa-paste"></i> لصق
+                      </button>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label>عنوان المادة التعليمية</label>
-                    <input type="text" id="contentTitle" required placeholder="مثال: شرح أسلوب التوكيد">
+
+                  <div class="form-group" id="textFieldGroup" style="display:none;">
+                    <label>محتوى ونصوص المذكرة (اختياري)</label>
+                    <textarea id="contentText" rows="4" placeholder="اكتب نصوص وشروحات المذكرة هنا..."></textarea>
                   </div>
-                  <div class="form-group">
-                    <label>الوحدة / الفرع</label>
-                    <input type="text" id="contentUnit" required placeholder="مثال: النحو والصرف">
+
+                  <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى في المنصة
+                  </button>
+                </form>
+              </div>
+            ` : `
+              <!-- جدول إدارة وتعديل وحذف المحتوى المنشور مع شريط البحث والفلترة -->
+              <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+                  <div class="search-box-wrapper" style="flex:1; min-width:240px; margin-bottom:0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="🔍 ابحث في المحتويات المنشورة..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)">
+                  </div>
+                  <div style="display:flex; gap:6px;">
+                    <button class="btn ${State.adminGradeFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('ALL')">الكل</button>
+                    <button class="btn ${State.adminGradeFilter === '12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('12')">الصف 12</button>
+                    <button class="btn ${State.adminGradeFilter === '11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('11')">الصف 11</button>
                   </div>
                 </div>
 
-                <div class="form-group" id="urlFieldGroup">
-                  <label id="urlLabel">رابط الفيديو أو الملف المشفر</label>
-                  <div class="input-with-paste">
-                    <input type="text" id="contentUrl" placeholder="https://...">
-                    <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('contentUrl')" title="لصق الرابط من الحافظة">
-                      <i class="fa-solid fa-paste"></i> لصق
-                    </button>
-                  </div>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>المادة التعليمية</th>
+                        <th>النوع</th>
+                        <th>الصف</th>
+                        <th>الوحدة / الفرع</th>
+                        <th>الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${filteredContent.length === 0 ? `
+                        <tr>
+                          <td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">
+                            لا يوجد محتوى يطابق البحث أو الفلتر المختار.
+                          </td>
+                        </tr>
+                      ` : filteredContent.map(item => `
+                        <tr>
+                          <td><strong>${item.title}</strong></td>
+                          <td>
+                            <span class="badge badge-trial">
+                              <i class="fa-solid ${item.icon}"></i> ${item.typeLabel}
+                            </span>
+                          </td>
+                          <td>الصف ${item.grade}</td>
+                          <td>${item.unit || 'عام'}</td>
+                          <td>
+                            <div style="display:flex; gap:4px;">
+                              <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.openEditModal('${item.id}', '${item.type}')">
+                                <i class="fa-solid fa-pen"></i> تعديل
+                              </button>
+                              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteContent('${item.id}', '${item.type}')">
+                                <i class="fa-solid fa-trash"></i> حذف
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
                 </div>
-
-                <div class="form-group" id="textFieldGroup" style="display:none;">
-                  <label>محتوى ونصوص المذكرة (اختياري)</label>
-                  <textarea id="contentText" rows="4" placeholder="اكتب نصوص وشروحات المذكرة هنا..."></textarea>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
-                  <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى في المنصة
-                </button>
-              </form>
-            </div>
+              </div>
+            `}
           `;
         },
 
@@ -2208,8 +2388,23 @@
         UI.render();
       },
 
+      setAdminContentTab(tab) {
+        State.adminContentTab = tab;
+        UI.render();
+      },
+
       setAdminGradeFilter(grade) {
         State.adminGradeFilter = grade;
+        UI.render();
+      },
+
+      handleStudentSearch(query) {
+        State.studentSearchQuery = query;
+        UI.render();
+      },
+
+      handleAdminSearch(query) {
+        State.adminSearchQuery = query;
         UI.render();
       },
 
@@ -2307,7 +2502,6 @@
         document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${lesson.title}`;
         const viewport = document.getElementById("playerViewport");
         
-        // إعادة تهيئة محتوى المشغل مع الزر العائم
         viewport.innerHTML = `
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
             <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
@@ -2318,6 +2512,59 @@
           </video>
           <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي</div>
         `;
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      openAudioPlayer(audioId) {
+        const aud = State.audios.find(a => a.id === audioId);
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-headphones"></i> ${aud.title}`;
+        const viewport = document.getElementById("playerViewport");
+        viewport.innerHTML = `
+          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+            <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
+          </button>
+          <div class="audio-player-inner">
+            <i class="fa-solid fa-file-audio" style="font-size:54px; color:var(--gold); margin-bottom:12px;"></i>
+            <h4 style="color:#FFF; margin-bottom:4px;">${aud.title}</h4>
+            <span style="color:var(--light-gold); font-size:0.85rem;">${aud.unit}</span>
+            <audio controls controlsList="nodownload" autoplay oncontextmenu="return false;">
+              <source src="${aud.audioUrl}" type="audio/mp3">
+            </audio>
+          </div>
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'})</div>
+        `;
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      openDocumentViewer(bookId) {
+        const bk = State.books.find(b => b.id === bookId);
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-lines"></i> ${bk.title} (${bk.format || 'PDF'})`;
+        const viewport = document.getElementById("playerViewport");
+
+        if (bk.fileUrl && bk.fileUrl.startsWith("http")) {
+          const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(bk.fileUrl)}&embedded=true`;
+          viewport.innerHTML = `
+            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+              <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
+            </button>
+            <iframe class="document-viewer-frame" src="${viewerUrl}" oncontextmenu="return false;"></iframe>
+            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – مشفر</div>
+          `;
+        } else {
+          viewport.innerHTML = `
+            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+              <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
+            </button>
+            <div class="doc-fallback-card">
+              <h3 style="color:var(--primary-burgundy); border-bottom:2px solid var(--gold); padding-bottom:8px; margin-bottom:14px;">${bk.title}</h3>
+              <p style="white-space: pre-line; line-height: 2; font-size: 1.05rem;">${bk.sampleContent}</p>
+            </div>
+            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – مشفر</div>
+          `;
+        }
+
         document.getElementById("mediaPlayerModal").classList.add("active");
         App.resetToNormalOrientation();
       },
@@ -2334,7 +2581,7 @@
         const viewport = document.getElementById("playerViewport");
         const btnText = document.getElementById("rotateBtnText");
         State.isRotatedLandscape = true;
-        viewport.classList.add("rotated-fullscreen");
+        if (viewport) viewport.classList.add("rotated-fullscreen");
         if (btnText) btnText.innerText = "الوضع الطبيعي";
 
         if (screen.orientation && screen.orientation.lock) {
@@ -2366,53 +2613,105 @@
         }
       },
 
-      openDocumentViewer(bookId) {
-        const bk = State.books.find(b => b.id === bookId);
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-lines"></i> ${bk.title} (${bk.format || 'PDF'})`;
-        const viewport = document.getElementById("playerViewport");
-
-        if (bk.fileUrl && bk.fileUrl.startsWith("http")) {
-          const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(bk.fileUrl)}&embedded=true`;
-          viewport.innerHTML = `
-            <iframe class="document-viewer-frame" src="${viewerUrl}" oncontextmenu="return false;"></iframe>
-            <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username}) – مشفر</div>
-          `;
-        } else {
-          viewport.innerHTML = `
-            <div class="doc-fallback-card">
-              <h3 style="color:var(--primary-burgundy); border-bottom:2px solid var(--gold); padding-bottom:8px; margin-bottom:14px;">${bk.title}</h3>
-              <p style="white-space: pre-line; line-height: 2; font-size: 1.05rem;">${bk.sampleContent}</p>
-            </div>
-            <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username}) – مشفر</div>
-          `;
-        }
-
-        document.getElementById("mediaPlayerModal").classList.add("active");
-      },
-
-      openAudioPlayer(audioId) {
-        const aud = State.audios.find(a => a.id === audioId);
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-headphones"></i> ${aud.title}`;
-        const viewport = document.getElementById("playerViewport");
-        viewport.innerHTML = `
-          <div class="audio-player-inner">
-            <i class="fa-solid fa-file-audio" style="font-size:54px; color:var(--gold); margin-bottom:12px;"></i>
-            <h4 style="color:#FFF; margin-bottom:4px;">${aud.title}</h4>
-            <span style="color:var(--light-gold); font-size:0.85rem;">${aud.unit}</span>
-            <audio controls controlsList="nodownload" autoplay oncontextmenu="return false;">
-              <source src="${aud.audioUrl}" type="audio/mp3">
-            </audio>
-          </div>
-          <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username})</div>
-        `;
-        document.getElementById("mediaPlayerModal").classList.add("active");
-      },
-
       closeMediaPlayer() {
         const video = document.getElementById("activeVideoPlayer");
         if (video) video.pause();
         App.resetToNormalOrientation();
         document.getElementById("mediaPlayerModal").classList.remove("active");
+      },
+
+      // تعديل وحذف المحتوى من قبل الأستاذ جمال
+      openEditModal(contentId, type) {
+        let item;
+        if (type === 'LESSON') item = State.lessons.find(l => l.id === contentId);
+        else if (type === 'AUDIO') item = State.audios.find(a => a.id === contentId);
+        else if (type === 'BOOK') item = State.books.find(b => b.id === contentId);
+
+        if (!item) return;
+
+        document.getElementById('editContentId').value = item.id;
+        document.getElementById('editContentType').value = type;
+        document.getElementById('editContentGrade').value = item.grade;
+        document.getElementById('editContentTitle').value = item.title;
+        document.getElementById('editContentUnit').value = item.unit || '';
+        document.getElementById('editContentUrl').value = item.videoUrl || item.audioUrl || item.fileUrl || '';
+
+        const textGroup = document.getElementById('editTextGroup');
+        if (type === 'BOOK') {
+          textGroup.style.display = 'block';
+          document.getElementById('editContentText').value = item.sampleContent || '';
+        } else {
+          textGroup.style.display = 'none';
+        }
+
+        document.getElementById('editContentModal').classList.add('active');
+      },
+
+      closeEditModal() {
+        document.getElementById('editContentModal').classList.remove('active');
+      },
+
+      handleSaveEditContent(e) {
+        e.preventDefault();
+        const id = document.getElementById('editContentId').value;
+        const type = document.getElementById('editContentType').value;
+        const grade = parseInt(document.getElementById('editContentGrade').value);
+        const title = document.getElementById('editContentTitle').value.trim();
+        const unit = document.getElementById('editContentUnit').value.trim();
+        const url = document.getElementById('editContentUrl').value.trim();
+        const text = document.getElementById('editContentText').value.trim();
+
+        if (type === 'LESSON') {
+          const item = State.lessons.find(l => l.id === id);
+          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.videoUrl = url; DataStore.save('lessons', State.lessons); }
+        } else if (type === 'AUDIO') {
+          const item = State.audios.find(a => a.id === id);
+          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.audioUrl = url; DataStore.save('audios', State.audios); }
+        } else if (type === 'BOOK') {
+          const item = State.books.find(b => b.id === id);
+          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.fileUrl = url; item.sampleContent = text; DataStore.save('books', State.books); }
+        }
+
+        State.activityLogs.unshift({
+          time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
+          user: "jamal (Admin)",
+          action: `تعديل المادة التعليمية: (${title})`
+        });
+        DataStore.save('logs', State.activityLogs);
+
+        App.closeEditModal();
+        alert('تم حفظ وتحديث المادة بنجاح في السحابة.');
+        UI.render();
+      },
+
+      promptDeleteContent(contentId, type) {
+        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً من المنصة؟", () => {
+          let deletedTitle = "";
+          if (type === 'LESSON') {
+            const item = State.lessons.find(l => l.id === contentId);
+            deletedTitle = item ? item.title : "";
+            State.lessons = State.lessons.filter(l => l.id !== contentId);
+            DataStore.save('lessons', State.lessons);
+          } else if (type === 'AUDIO') {
+            const item = State.audios.find(a => a.id === contentId);
+            deletedTitle = item ? item.title : "";
+            State.audios = State.audios.filter(a => a.id !== contentId);
+            DataStore.save('audios', State.audios);
+          } else if (type === 'BOOK') {
+            const item = State.books.find(b => b.id === contentId);
+            deletedTitle = item ? item.title : "";
+            State.books = State.books.filter(b => b.id !== contentId);
+            DataStore.save('books', State.books);
+          }
+
+          State.activityLogs.unshift({
+            time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
+            user: "jamal (Admin)",
+            action: `حذف المادة التعليمية: (${deletedTitle})`
+          });
+          DataStore.save('logs', State.activityLogs);
+          UI.render();
+        });
       },
 
       startInteractiveQuiz(quizId) {
@@ -2667,7 +2966,7 @@
         }
 
         alert(`تمت إضافة ونشر (${title}) بنجاح.`);
-        App.setRoute("ADMIN_DASHBOARD");
+        App.setRoute("ADMIN_CONTENT_MANAGER");
       },
 
       toggleContentFields() {
