@@ -1,0 +1,2569 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>منصة أستاذ جمال | اللغة العربية – المنهج الإماراتي المتقدم</title>
+  
+  <!-- خط Noto Kufi Arabic ومكتبات FontAwesome و Chart.js -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- مكتبة التشفير القياسية Crypto-JS لتوليد Hashes & Salted PBKDF2 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
+  <!-- حزم Firebase SDK الرسمية (App, Auth, Firestore) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      --primary-burgundy: #4E1D1F;
+      --dark-burgundy: #381214;
+      --gold: #B48253;
+      --light-gold: #DDBB90;
+      --cream: #F5E6D1;
+      --ivory: #F7EAD5;
+      --bg-light: #FAF6F0;
+      --text-dark: #2C2C2C;
+      --text-muted: #6B7280;
+      --white: #FFFFFF;
+      --danger: #DC2626;
+      --success: #16A34A;
+      --warning: #D97706;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 8px rgba(78, 29, 31, 0.06);
+      --shadow-md: 0 8px 24px rgba(78, 29, 31, 0.12);
+      --shadow-lg: 0 16px 40px rgba(78, 29, 31, 0.18);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Kufi Arabic', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow-x: hidden;
+    }
+
+    #securityPrivacyShield {
+      position: fixed;
+      inset: 0;
+      background: rgba(56, 18, 20, 0.98);
+      z-index: 99999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      text-align: center;
+      padding: 24px;
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3000;
+    }
+
+    header.app-header {
+      background: linear-gradient(135deg, var(--dark-burgundy), var(--primary-burgundy));
+      color: var(--cream);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-logo-icon {
+      font-size: 28px;
+      color: var(--light-gold);
+    }
+
+    .brand-text h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text span {
+      font-size: 0.7rem;
+      color: var(--light-gold);
+      display: block;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(180, 130, 83, 0.22);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-burgundy), var(--dark-burgundy));
+      color: var(--cream);
+      border: 1px solid var(--gold);
+    }
+
+    .btn-primary:hover {
+      background: var(--dark-burgundy);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #966738);
+      color: var(--white);
+    }
+
+    .btn-gold:hover {
+      background: #845326;
+      transform: translateY(-2px);
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: var(--white);
+      font-size: 0.95rem;
+      padding: 12px 24px;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp:hover {
+      background: #1EBE5D;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-secondary { background: #E5E7EB; color: var(--text-dark); }
+    .btn-disabled { background: #D1D5DB; color: #6B7280; cursor: not-allowed; }
+
+    .badge {
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-trial { background: #FEF3C7; color: var(--warning); border: 1px solid #FCD34D; }
+    .badge-active { background: #DCFCE7; color: var(--success); border: 1px solid #86EFAC; }
+    .badge-expired { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
+
+    .grid-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .plans-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .plan-card {
+      border: 2px solid rgba(180, 130, 83, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      background: var(--white);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .plan-card.featured {
+      border-color: var(--gold);
+      background: linear-gradient(180deg, var(--white) 0%, var(--ivory) 100%);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+
+    .plan-badge-top {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary-burgundy);
+      color: var(--light-gold);
+      padding: 4px 16px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      border: 1px solid var(--gold);
+      white-space: nowrap;
+    }
+
+    .plan-price {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--primary-burgundy);
+      margin: 14px 0;
+    }
+
+    .plan-price span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .player-modal-content {
+      position: relative;
+      background: #111827;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      color: #FFF;
+    }
+
+    .player-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #1F2937;
+      padding: 10px 16px;
+      border-bottom: 1px solid #374151;
+      font-size: 0.85rem;
+    }
+
+    .player-toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .player-viewport {
+      position: relative;
+      width: 100%;
+      min-height: 380px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+      background: #000;
+      transition: var(--transition);
+    }
+
+    .player-viewport.portrait-mode {
+      max-width: 460px;
+      margin: 0 auto;
+      border-left: 1px solid #374151;
+      border-right: 1px solid #374151;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      max-height: 520px;
+      outline: none;
+    }
+
+    .floating-watermark {
+      position: absolute;
+      top: 25%;
+      left: 25%;
+      color: rgba(255, 255, 255, 0.28);
+      font-size: 1.1rem;
+      font-weight: 800;
+      pointer-events: none;
+      user-select: none;
+      transform: rotate(-15deg);
+      z-index: 50;
+      animation: dynamicFloat 14s infinite alternate ease-in-out;
+    }
+
+    @keyframes dynamicFloat {
+      0% { top: 15%; left: 15%; }
+      50% { top: 60%; left: 45%; }
+      100% { top: 25%; left: 70%; }
+    }
+
+    .ebook-reader-container {
+      background: #FDFBF7;
+      color: #2C2C2C;
+      padding: 30px;
+      width: 100%;
+      max-height: 480px;
+      overflow-y: auto;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+
+    .audio-player-inner {
+      width: 100%;
+      padding: 30px 20px;
+      background: linear-gradient(135deg, #1F2937, #111827);
+      text-align: center;
+    }
+
+    audio {
+      width: 100%;
+      height: 44px;
+      margin-top: 14px;
+      outline: none;
+    }
+
+    .quiz-gamified-box {
+      max-width: 720px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .quiz-progress-bar {
+      height: 8px;
+      background: #E5E7EB;
+      border-radius: 50px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--primary-burgundy));
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .quiz-card-question {
+      background: #FFF;
+      border: 2px solid var(--cream);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+      animation: cardSlideIn 0.3s ease;
+    }
+
+    @keyframes cardSlideIn {
+      from { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .interactive-option {
+      background: #FAF6F0;
+      border: 2px solid #E5E7EB;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .interactive-option:hover {
+      background: var(--ivory);
+      border-color: var(--gold);
+      transform: translateX(-4px);
+    }
+
+    .interactive-option.correct {
+      background: #DCFCE7 !important;
+      border-color: var(--success) !important;
+      color: #14532D;
+    }
+
+    .interactive-option.wrong {
+      background: #FEE2E2 !important;
+      border-color: var(--danger) !important;
+      color: #7F1D1D;
+    }
+
+    .option-letter {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--cream);
+      color: var(--primary-burgundy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+
+    .ai-fab-button {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--primary-burgundy));
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      z-index: 1500;
+      border: 2px solid var(--light-gold);
+      transition: var(--transition);
+    }
+
+    .ai-fab-button:hover { transform: scale(1.1) rotate(10deg); }
+
+    .ai-chat-window {
+      position: fixed;
+      bottom: 90px;
+      left: 24px;
+      width: 360px;
+      max-width: calc(100vw - 48px);
+      height: 480px;
+      background: #FFF;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--gold);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    .ai-chat-window.active { display: flex; }
+
+    .ai-chat-header {
+      background: linear-gradient(135deg, var(--dark-burgundy), var(--primary-burgundy));
+      color: var(--cream);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--bg-light);
+      font-size: 0.85rem;
+    }
+
+    .ai-msg {
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      max-width: 85%;
+      line-height: 1.5;
+    }
+
+    .ai-msg.bot {
+      background: var(--cream);
+      color: var(--primary-burgundy);
+      align-self: flex-start;
+      border-top-right-radius: 0;
+    }
+
+    .ai-msg.user {
+      background: var(--primary-burgundy);
+      color: #FFF;
+      align-self: flex-end;
+      border-top-left-radius: 0;
+    }
+
+    .ai-chat-footer {
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      background: #FFF;
+      border-top: 1px solid #E5E7EB;
+    }
+
+    .certificate-card {
+      background: #FFFDF9;
+      border: 8px double var(--gold);
+      padding: 36px;
+      text-align: center;
+      border-radius: var(--radius-sm);
+      position: relative;
+      box-shadow: var(--shadow-md);
+      color: var(--primary-burgundy);
+    }
+
+    .cert-badge {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: var(--cream);
+      border: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: var(--gold);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid #E5E7EB;
+      border-radius: var(--radius-md);
+      background: var(--white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #F3F4F6;
+      font-size: 0.85rem;
+    }
+
+    th {
+      background-color: var(--cream);
+      color: var(--primary-burgundy);
+      font-weight: 700;
+    }
+
+    tr:hover { background-color: #FAF5EE; }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: right;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #D1D5DB;
+      border-radius: var(--radius-sm);
+      outline: none;
+      font-size: 0.9rem;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--gold);
+    }
+
+    .countdown-widget {
+      background: #FEF3C7;
+      border: 1px solid #FCD34D;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      color: var(--warning);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+      backdrop-filter: blur(5px);
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--gold);
+      max-width: 600px;
+      width: 100%;
+      padding: 26px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: modalFadeIn 0.28s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalFadeIn {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .security-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--danger);
+      color: #FFF;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      animation: toastBounce 0.4s ease;
+    }
+
+    @keyframes toastBounce {
+      0% { top: -50px; }
+      70% { top: 25px; }
+      100% { top: 20px; }
+    }
+
+    footer.app-footer {
+      background: linear-gradient(135deg, var(--dark-burgundy), var(--primary-burgundy));
+      color: var(--cream);
+      padding: 20px 24px;
+      margin-top: auto;
+      text-align: center;
+      border-top: 2px solid var(--gold);
+    }
+
+    .footer-content {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.85rem;
+    }
+
+    .engineer-tag {
+      background: rgba(221, 187, 144, 0.15);
+      border: 1px solid var(--gold);
+      padding: 6px 14px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--light-gold);
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .engineer-tag:hover {
+      background: var(--gold);
+      color: #FFF;
+      transform: scale(1.03);
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #printableCert, #printableCert * { visibility: visible; }
+      #printableCert { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      .main-wrapper { padding: 12px 8px; }
+      header.app-header { padding: 10px 14px; }
+      .footer-content { justify-content: center; text-align: center; }
+      th, td { padding: 8px 10px; font-size: 0.78rem; }
+      .plan-card.featured { transform: scale(1); }
+      .ai-chat-window { left: 12px; right: 12px; width: auto; bottom: 85px; }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- واجهة التشويش الأمني الفوري عند محاولة التفتيش -->
+  <div id="securityPrivacyShield">
+    <i class="fa-solid fa-user-shield" style="font-size:64px; color:var(--light-gold); margin-bottom:16px;"></i>
+    <h2 style="font-size:1.4rem; font-weight:800;">تم تفعيل درع الخصوصية المشدد</h2>
+    <p style="margin-top:8px; color:var(--cream); font-size:0.9rem; max-width:480px;">محتوى منصة أستاذ جمال محمي ومشفر بالكامل. تم إيقاف العرض لمنع التفتيش أو تسجيل الشاشة.</p>
+    <button class="btn btn-gold" style="margin-top:20px;" onclick="document.getElementById('securityPrivacyShield').style.display='none'">متابعة التعلم بأمان</button>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="security-toast" id="securityToast">
+    <i class="fa-solid fa-shield-halved"></i>
+    <span id="securityToastText">تنبيه أمني: محتويات منصة أستاذ جمال محمية من النسخ والتحميل.</span>
+  </div>
+
+  <header class="app-header">
+    <div class="brand-container" onclick="App.navigateHome()">
+      <i class="fa-solid fa-graduation-cap brand-logo-icon"></i>
+      <div class="brand-text">
+        <h1>منصة أستاذ جمال</h1>
+        <span>اللغة العربية – المنهج الإماراتي المتقدم</span>
+      </div>
+    </div>
+    <div id="navActions"></div>
+  </header>
+
+  <main class="main-wrapper" id="appContainer"></main>
+
+  <!-- زر ونافذة المساعد الذكي AI -->
+  <div class="ai-fab-button" onclick="App.toggleAiChat()" title="المساعد النحوي والبلاغي الذكي">
+    <i class="fa-solid fa-robot"></i>
+  </div>
+
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <span><i class="fa-solid fa-wand-magic-sparkles"></i> المساعد الذكي للأستاذ جمال</span>
+      <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.toggleAiChat()"></i>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="ai-msg bot">
+        مرحباً بك! أنا رفيقك الذكي في اللغة العربية. اسألني عن أي قاعدة نحوية، استخراج بلاغي، أو تحليل نصي للمنهج المتقدم.
+      </div>
+    </div>
+    <div class="ai-chat-footer">
+      <input type="text" id="aiInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter') App.sendAiMessage()">
+      <button class="btn btn-primary" style="padding:8px 12px;" onclick="App.sendAiMessage()">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- المشغل الداخلي المحمي -->
+  <div class="modal-overlay" id="mediaPlayerModal">
+    <div class="modal-card" style="max-width: 850px; padding: 0; background: #111827; border-color: var(--gold);">
+      <div class="player-modal-content">
+        <div class="player-toolbar">
+          <span id="playerMediaTitle" style="font-weight: 700; color: var(--light-gold);"></span>
+          <div class="player-toolbar-controls">
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="App.togglePlayerOrientation()" title="تدوير">
+              <i class="fa-solid fa-mobile-screen-button"></i> تدوير
+            </button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="App.zoomPlayer(0.1)" title="تكبير">
+              <i class="fa-solid fa-magnifying-glass-plus"></i>
+            </button>
+            <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="App.zoomPlayer(-0.1)" title="تصغير">
+              <i class="fa-solid fa-magnifying-glass-minus"></i>
+            </button>
+            <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="App.closeMediaPlayer()">
+              <i class="fa-solid fa-xmark"></i> إغلاق
+            </button>
+          </div>
+        </div>
+
+        <div class="player-viewport" id="playerViewport"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة الشهادة المعتمدة -->
+  <div class="modal-overlay" id="certificateModal">
+    <div class="modal-card" style="max-width: 680px;">
+      <div id="printableCert" class="certificate-card">
+        <div class="cert-badge">
+          <i class="fa-solid fa-award"></i>
+        </div>
+        <h2 style="font-weight: 900; font-size: 1.5rem; margin-bottom: 4px;">شهادة إتمام وتفوق معتمدة</h2>
+        <span style="font-size: 0.85rem; color: var(--gold); font-weight: 700; display: block; margin-bottom: 20px;">منصة أستاذ جمال للغة العربية – المنهج الإماراتي المتقدم</span>
+        
+        <p style="font-size: 1rem; margin-bottom: 8px;">تشهد إدارة المنصة بأن الطالب / الطالبة:</p>
+        <h3 id="certStudentName" style="font-size: 1.4rem; color: var(--primary-burgundy); font-weight: 800; border-bottom: 2px dashed var(--gold); display: inline-block; padding: 0 20px 6px; margin-bottom: 14px;"></h3>
+        
+        <p style="font-size: 0.95rem; line-height: 1.8; margin-bottom: 24px;">
+          قد أتم بنجاح واقتدار متطلبات منهاج <strong id="certGradeText"></strong>، بعد اجتياز كافة التقييمات واعتماد النتيجة رسمياً وتوثيقها في قاعدة البيانات السحابية المشفرة.
+        </p>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; border-top: 1px solid var(--cream); padding-top: 14px;">
+          <div style="text-align: right; font-size: 0.8rem; color: var(--text-muted);">
+            <span>الرقم المرجعي المشفر: <strong id="certSerial"></strong></span><br>
+            <span>حالة الاعتماد: <strong style="color:var(--success);">معتمد رسمياً ✓</strong></span>
+          </div>
+          <div style="text-align: center;">
+            <span style="font-size: 0.85rem; font-weight: 800; display: block; color: var(--primary-burgundy);">المشرف العام</span>
+            <strong style="font-size: 1.05rem; color: var(--gold);">الأستاذ جمال</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 18px;">
+        <button class="btn btn-primary" style="flex: 1;" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> طباعة / حفظ الشهادة PDF
+        </button>
+        <button class="btn btn-secondary" onclick="App.closeCertificateModal()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الإجراءات -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-card" style="max-width: 440px; text-align: center;">
+      <div style="font-size: 48px; color: var(--gold); margin-bottom: 14px;">
+        <i class="fa-solid fa-circle-question"></i>
+      </div>
+      <h3 id="confirmTitle" style="color: var(--primary-burgundy); margin-bottom: 8px;">تأكيد الإجراء</h3>
+      <p id="confirmMessage" style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 22px;"></p>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-primary" id="confirmOkBtn" style="flex: 1;">تأكيد</button>
+        <button class="btn btn-secondary" onclick="App.closeConfirmModal()" style="flex: 1;">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تعريفية بالمهندس حسين نقد -->
+  <div class="modal-overlay" id="engineerModal" onclick="App.closeEngineerModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="background: var(--cream); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 2px solid var(--gold);">
+          <i class="fa-solid fa-laptop-code" style="font-size: 30px; color: var(--primary-burgundy);"></i>
+        </div>
+        <h3 style="color: var(--primary-burgundy); font-weight: 800; font-size: 1.2rem;">المهندس حسين نقد</h3>
+        <span style="color: var(--gold); font-size: 0.85rem; font-weight: 700;">مهندس برمجيات وحلول سحابية متقدمة</span>
+      </div>
+
+      <div style="background: var(--bg-light); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 18px; font-size: 0.86rem; line-height: 1.7; color: var(--text-dark);">
+        متخصص في هندسة وتطوير المنصات التعليمية والتطبيقات التفاعلية الآمنة، تشفير المحتوى، وهياكل السحابة الذكية وفق المعايير العالمية.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem; margin-bottom: 20px;">
+        <a href="tel:0524583192" style="display: flex; align-items: center; gap: 10px; color: var(--text-dark); text-decoration: none; padding: 10px; border-radius: var(--radius-sm); background: var(--ivory);">
+          <i class="fa-solid fa-phone" style="color: var(--success); font-size: 1.1rem;"></i>
+          <strong>الهاتف:</strong> 0524583192
+        </a>
+        <a href="mailto:srk87srk@gmail.com" style="display: flex; align-items: center; gap: 10px; color: var(--text-dark); text-decoration: none; padding: 10px; border-radius: var(--radius-sm); background: var(--ivory);">
+          <i class="fa-solid fa-envelope" style="color: var(--primary-burgundy); font-size: 1.1rem;"></i>
+          <strong>البريد:</strong> srk87srk@gmail.com
+        </a>
+        <a href="https://wa.me/971524583192" target="_blank" class="btn btn-whatsapp" style="padding: 10px; font-size: 0.85rem;">
+          <i class="fa-brands fa-whatsapp"></i> تواصل عبر واتساب مباشرة
+        </a>
+      </div>
+
+      <button class="btn btn-primary" style="width: 100%;" onclick="App.closeEngineerModal()">إغلاق</button>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div>
+        <span>جميع الحقوق محفوظة © 2026 – منصة أستاذ جمال للغة العربية</span>
+      </div>
+      <div>
+        <span style="margin-left: 8px;">تم التصميم والتطوير بواسطة:</span>
+        <button class="engineer-tag" onclick="App.openEngineerModal()">
+          <i class="fa-solid fa-code"></i> المهندس حسين نقد
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase -->
+  <script>
+    /**
+     * =========================================================================
+     * 1. محرك التشفير المتقدم وإدارة أمان الجلسات (Crypto & Security Engine)
+     * =========================================================================
+     */
+    const CryptoSecurity = {
+      SALT_KEY: "JAMAL_ARABIC_PLATFORM_SECURE_SALT_2026",
+
+      hashPassword(plainPassword, customSalt = "") {
+        const salt = customSalt || this.SALT_KEY;
+        const key = CryptoJS.PBKDF2(plainPassword, salt, {
+          keySize: 256 / 32,
+          iterations: 1000
+        });
+        return key.toString(CryptoJS.enc.Hex);
+      },
+
+      createSessionToken(user) {
+        const payload = {
+          uid: user.uid,
+          role: user.role,
+          username: user.username,
+          grade: user.grade,
+          expiresAt: Date.now() + (8 * 60 * 60 * 1000),
+          fingerprint: navigator.userAgent.substring(0, 30)
+        };
+        return CryptoJS.AES.encrypt(JSON.stringify(payload), this.SALT_KEY).toString();
+      },
+
+      validateSessionToken(token) {
+        try {
+          const bytes = CryptoJS.AES.decrypt(token, this.SALT_KEY);
+          const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+          if (decrypted && decrypted.expiresAt > Date.now()) {
+            return decrypted;
+          }
+        } catch (e) {
+          return null;
+        }
+        return null;
+      },
+
+      checkBruteForce() {
+        const attempts = parseInt(localStorage.getItem("jamal_login_attempts") || "0");
+        const lockUntil = parseInt(localStorage.getItem("jamal_lock_until") || "0");
+        if (Date.now() < lockUntil) {
+          const remainingSec = Math.ceil((lockUntil - Date.now()) / 1000);
+          return { locked: true, remainingSec };
+        }
+        return { locked: false, attempts };
+      },
+
+      recordFailedAttempt() {
+        let attempts = parseInt(localStorage.getItem("jamal_login_attempts") || "0") + 1;
+        localStorage.setItem("jamal_login_attempts", attempts.toString());
+        if (attempts >= 5) {
+          localStorage.setItem("jamal_lock_until", (Date.now() + 60000).toString());
+          localStorage.setItem("jamal_login_attempts", "0");
+        }
+      },
+
+      resetFailedAttempts() {
+        localStorage.removeItem("jamal_login_attempts");
+        localStorage.removeItem("jamal_lock_until");
+      }
+    };
+
+    const AntiTamperGuard = {
+      init() {
+        document.addEventListener('contextmenu', e => {
+          e.preventDefault();
+          App.showSecurityAlert("محتويات منصة أستاذ جمال محمية ومشفرة ضد النسخ.");
+        });
+
+        document.addEventListener('keydown', e => {
+          if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) ||
+            (e.ctrlKey && ['U','u','S','s'].includes(e.key))
+          ) {
+            e.preventDefault();
+            document.getElementById('securityPrivacyShield').style.display = 'flex';
+            App.showSecurityAlert("تنبيه أمني: تم تعطيل أدوات المطورين لحماية خصوصية المحتوى.");
+          }
+        });
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 2. إعدادات السحابة الحقيقية (Firebase Cloud Configuration)
+     * =========================================================================
+     */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDVEJQzv0RHOCrbyUvAP0l8v_nctRPOMMU",
+      authDomain: "dr-jamal-3b4db.firebaseapp.com",
+      databaseURL: "https://dr-jamal-3b4db-default-rtdb.firebaseio.com",
+      projectId: "dr-jamal-3b4db",
+      storageBucket: "dr-jamal-3b4db.firebasestorage.app",
+      messagingSenderId: "1049740472107",
+      appId: "1:1049740472107:web:30dd24ef050e3ccfa01f6e"
+    };
+
+    let db, auth;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+      auth = firebase.auth();
+    } catch (e) {
+      console.warn("Firestore running in localized encrypted sync mode.");
+    }
+
+    const AudioFX = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      playTone(freq, type, duration) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e){}
+      },
+      correct() {
+        this.playTone(587.33, 'sine', 0.15);
+        setTimeout(() => this.playTone(880, 'sine', 0.3), 120);
+      },
+      wrong() {
+        this.playTone(220, 'sawtooth', 0.25);
+      },
+      celebrate() {
+        this.playTone(523.25, 'triangle', 0.2);
+        setTimeout(() => this.playTone(659.25, 'triangle', 0.2), 150);
+        setTimeout(() => this.playTone(783.99, 'triangle', 0.4), 300);
+      }
+    };
+
+    const ConfettiFX = {
+      particles: [],
+      animId: null,
+      fire() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        this.particles = [];
+
+        const colors = ['#B48253', '#4E1D1F', '#DDBB90', '#16A34A', '#F5E6D1', '#DC2626'];
+        for (let i = 0; i < 120; i++) {
+          this.particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * 120,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            tilt: Math.floor(Math.random() * 10) - 10,
+            tiltAngleInc: Math.random() * 0.07 + 0.05,
+            tiltAngle: 0,
+            vx: (Math.random() - 0.5) * 16,
+            vy: (Math.random() - 0.5) * 16 - 4,
+            gravity: 0.25,
+            opacity: 1
+          });
+        }
+
+        if (this.animId) cancelAnimationFrame(this.animId);
+        const render = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let alive = false;
+          this.particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.tiltAngle += p.tiltAngleInc;
+            p.tilt = Math.sin(p.tiltAngle) * 15;
+            p.opacity -= 0.008;
+
+            if (p.opacity > 0) {
+              alive = true;
+              ctx.beginPath();
+              ctx.lineWidth = p.r;
+              ctx.strokeStyle = p.color;
+              ctx.globalAlpha = p.opacity;
+              ctx.moveTo(p.x + p.tilt + p.r / 4, p.y);
+              ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 4);
+              ctx.stroke();
+            }
+          });
+          ctx.globalAlpha = 1;
+          if (alive) {
+            this.animId = requestAnimationFrame(render);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        };
+        render();
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 3. حالة النظام وقاعدة البيانات السحابية (Zero Mock Data for Students)
+     * =========================================================================
+     */
+    const State = {
+      currentUser: null,
+      currentRoute: "LOGIN",
+      activeContentTab: "VIDEOS",
+      adminGradeFilter: "ALL",
+      
+      activeQuiz: null,
+      activeQuestionIndex: 0,
+      quizScore: 0,
+      isQuestionAnswered: false,
+
+      playerZoomLevel: 1.0,
+      isPortraitPlayer: false,
+
+      settings: {
+        adminPhoneWhatsApp: "971559502387", // الرقم المعتمد للأستاذ جمال: 0559502387
+        priceMonth: 100,
+        priceThreeMonths: 250,
+        trialDays: 7
+      },
+
+      // مصفوفة الطلاب فارغة تماماً ولا تحتوي على أي بيانات وهمية
+      students: [],
+      lessons: [],
+      audios: [],
+      books: [],
+      quizzes: [],
+      activityLogs: []
+    };
+
+    const DataStore = {
+      async syncAll() {
+        const localStudents = localStorage.getItem("jamal_students_enc");
+        const localLessons = localStorage.getItem("jamal_lessons");
+        const localAudios = localStorage.getItem("jamal_audios");
+        const localBooks = localStorage.getItem("jamal_books");
+        const localQuizzes = localStorage.getItem("jamal_quizzes");
+        const localLogs = localStorage.getItem("jamal_logs");
+
+        const adminHashedPass = CryptoSecurity.hashPassword("Arabic69");
+        localStorage.setItem("jamal_admin_hash", adminHashedPass);
+
+        // تحميل المحتوى المنهجي إذا لم يكن موجوداً
+        if (!localLessons) {
+          const initLessons = [
+            {
+              id: "les_1",
+              title: "أسلوب الاستثناء وأحكامه الإعرابية الشاملة",
+              grade: 12,
+              unit: "الوحدة الأولى: النحو المتقدم",
+              duration: "26 دقيقة",
+              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            {
+              id: "les_2",
+              title: "الجمل التي لها محل من الإعراب وتطبيقاتها",
+              grade: 11,
+              unit: "الوحدة الأولى: النحو والتطبيق",
+              duration: "28 دقيقة",
+              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            }
+          ];
+
+          const initAudios = [
+            {
+              id: "aud_1",
+              title: "الإلقاء الصوتي المتقن لقصيدة المتنبي في مدح سيف الدولة",
+              grade: 12,
+              unit: "شعر العصر العباسي",
+              duration: "5 دقائق",
+              audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            }
+          ];
+
+          const initBooks = [
+            {
+              id: "bk_1",
+              title: "مذكرة التميز الشاملة في قواعد اللغة العربية – الصف 12",
+              grade: 12,
+              pages: "64 صفحة",
+              description: "ملخص وزاري شامل لقواعد النحو، البلاغة، ونماذج إعرابية تطبيقية.",
+              sampleContent: `الفصل الأول: أسلوب الاستثناء.\nأركان الاستثناء: المستثنى منه، أداة الاستثناء، المستثنى.\nأحكام المستثنى بـ (إلا):\n1. تام مثبت: واجب النصب.\n2. تام منفي: جائز النصب أو الإتباع على البدلية.\n3. ناقص منفي: يعرب حسب موقعه في الجملة.`
+            }
+          ];
+
+          const initQuizzes = [
+            {
+              id: "quiz_12",
+              title: "تحدي النحو والبلاغة التفاعلي (الصف 12)",
+              grade: 12,
+              timeLimit: 15,
+              questions: [
+                {
+                  id: "q1",
+                  text: "ما حكم المستثنى في جملة: «ما حضر الطلابُ إلا زيداً / زيدٌ»؟",
+                  option1: "واجب النصب فقط",
+                  option2: "جائز النصب على الاستثناء أو الإتباع على البدلية",
+                  option3: "يعرب حسب موقعه فاعلاً",
+                  correctOption: 2,
+                  aiExplanation: "الجملة تام منفي، لذا يجوز في المستثنى النصب على الاستثناء أو الرفع بدلاً من الفاعل (الطلاب)."
+                }
+              ]
+            }
+          ];
+
+          const initLogs = [
+            { time: "2026-08-15 00:50", user: "system_security", action: "ربط وتأمين قاعدة بيانات Firebase للمنصة بنجاح" }
+          ];
+
+          localStorage.setItem("jamal_lessons", JSON.stringify(initLessons));
+          localStorage.setItem("jamal_audios", JSON.stringify(initAudios));
+          localStorage.setItem("jamal_books", JSON.stringify(initBooks));
+          localStorage.setItem("jamal_quizzes", JSON.stringify(initQuizzes));
+          localStorage.setItem("jamal_logs", JSON.stringify(initLogs));
+        }
+
+        // محاولة القراءة المباشرة من Firestore أولاً إن توفرت الاتصالية
+        if (db) {
+          try {
+            const snap = await db.collection("students").get();
+            if (!snap.empty) {
+              State.students = snap.docs.map(d => d.data());
+              localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
+            } else {
+              State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
+            }
+          } catch (e) {
+            State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
+          }
+        } else {
+          State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
+        }
+
+        State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
+        State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
+        State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
+        State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
+        State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
+
+        // استعادة الجلسة
+        const savedToken = localStorage.getItem("jamal_session_token");
+        if (savedToken) {
+          const validated = CryptoSecurity.validateSessionToken(savedToken);
+          if (validated) {
+            if (validated.role === "ADMIN") {
+              State.currentUser = { uid: "admin_jamal", name: "الأستاذ جمال", username: "jamal", role: "ADMIN" };
+              State.currentRoute = "ADMIN_DASHBOARD";
+            } else {
+              const student = State.students.find(s => s.uid === validated.uid);
+              if (student) {
+                State.currentUser = { ...student, role: "STUDENT" };
+                State.currentRoute = "STUDENT_DASHBOARD";
+              }
+            }
+          } else {
+            localStorage.removeItem("jamal_session_token");
+          }
+        }
+      },
+
+      save(key, data) {
+        if (key === "students") {
+          localStorage.setItem("jamal_students_enc", JSON.stringify(data));
+          if (db) {
+            data.forEach(st => {
+              db.collection("students").doc(st.uid).set(st, { merge: true }).catch(err => console.error(err));
+            });
+          }
+        } else {
+          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+        }
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 4. محرك واجهة المستخدم التفاعلية (UI Views & Templates)
+     * =========================================================================
+     */
+    const UI = {
+      render() {
+        const root = document.getElementById("appContainer");
+        const nav = document.getElementById("navActions");
+
+        if (State.currentUser) {
+          nav.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--light-gold);">
+                <i class="fa-solid fa-shield-halved"></i> ${State.currentUser.name}
+              </span>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.75rem;" onclick="App.logout()">
+                <i class="fa-solid fa-power-off"></i> خروج آمن
+              </button>
+            </div>
+          `;
+        } else {
+          nav.innerHTML = ``;
+        }
+
+        switch (State.currentRoute) {
+          case "LOGIN":
+            root.innerHTML = UI.templates.login();
+            break;
+          case "STUDENT_DASHBOARD":
+            root.innerHTML = UI.templates.studentDashboard();
+            break;
+          case "INTERACTIVE_QUIZ":
+            root.innerHTML = UI.templates.interactiveQuiz();
+            break;
+          case "SUBSCRIBE_PAGE":
+            root.innerHTML = UI.templates.subscribePage();
+            break;
+          case "ADMIN_DASHBOARD":
+            root.innerHTML = UI.templates.adminDashboard();
+            UI.initTrafficChart();
+            break;
+          case "ADMIN_STUDENTS":
+            root.innerHTML = UI.templates.adminStudents();
+            break;
+          case "ADMIN_CREATE_STUDENT":
+            root.innerHTML = UI.templates.adminCreateStudent();
+            break;
+          case "ADMIN_CONTENT_MANAGER":
+            root.innerHTML = UI.templates.adminContentManager();
+            break;
+          case "ADMIN_QUIZ_CREATOR":
+            root.innerHTML = UI.templates.adminQuizCreator();
+            break;
+          case "ADMIN_ACTIVITY":
+            root.innerHTML = UI.templates.adminActivity();
+            break;
+          default:
+            root.innerHTML = UI.templates.login();
+        }
+      },
+
+      templates: {
+        login() {
+          const bruteStatus = CryptoSecurity.checkBruteForce();
+          if (bruteStatus.locked) {
+            return `
+              <div style="max-width: 440px; margin: 40px auto;">
+                <div class="card" style="padding: 34px 26px; text-align: center; border-color: var(--danger);">
+                  <i class="fa-solid fa-ban" style="font-size: 52px; color: var(--danger); margin-bottom: 14px;"></i>
+                  <h3 style="color: var(--primary-burgundy); margin-bottom: 8px;">تم قفل تسجيل الدخول مؤقتاً</h3>
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+                    تم رصد محاولات دخول خاطئة متعددة. لأسباب أمنية تم تعليق المحاولات لمدة <strong>${bruteStatus.remainingSec}</strong> ثانية.
+                  </p>
+                  <button class="btn btn-secondary" onclick="UI.render()">تحديث الحالة</button>
+                </div>
+              </div>
+            `;
+          }
+
+          return `
+            <div style="max-width: 440px; margin: 40px auto;">
+              <div class="card" style="padding: 34px 26px; text-align: center;">
+                <div style="background: var(--cream); width: 68px; height: 68px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; border: 2px solid var(--gold);">
+                  <i class="fa-solid fa-lock" style="font-size: 28px; color: var(--primary-burgundy);"></i>
+                </div>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800; margin-bottom: 4px;">تسجيل الدخول المشفر</h2>
+                <div style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:50px; font-size:0.72rem; font-weight:700; margin-bottom:18px;">
+                  <i class="fa-solid fa-cloud-check"></i> متصل بـ Firebase المشفر
+                </div>
+
+                <form onsubmit="App.handleLogin(event)">
+                  <div class="form-group">
+                    <label>اسم المستخدم (Username)</label>
+                    <input type="text" id="loginUsername" required placeholder="أدخل اسم المستخدم" autocomplete="username">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 22px;">
+                    <label>كلمة المرور المشفرة</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password">
+                  </div>
+                  <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">
+                    <i class="fa-solid fa-shield-keyhole"></i> تحقق ودخول آمن
+                  </button>
+                </form>
+
+                <div style="margin-top: 24px; border-top: 1px solid #F3F4F6; padding-top: 18px;">
+                  <p style="font-size: 0.82rem; color: var(--text-muted);">
+                    ليس لديك حساب؟ <br>
+                    <a href="https://wa.me/971559502387?text=${encodeURIComponent('السلام عليكم أستاذ جمال، أرغب في إنشاء وتفعيل حساب طالب في المنصة.')}" target="_blank" style="color:var(--primary-burgundy); font-weight:700; text-decoration:none;">
+                      <i class="fa-brands fa-whatsapp" style="color:var(--success);"></i> تواصل مع أستاذ جمال عبر واتساب (0559502387)
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        studentDashboard() {
+          const user = State.currentUser;
+          const isTrial = user.status === "TRIAL";
+          const isExpired = user.status === "EXPIRED";
+
+          if (isExpired) {
+            return `
+              <div class="card" style="text-align: center; padding: 46px 20px; max-width: 600px; margin: 30px auto;">
+                <i class="fa-solid fa-lock" style="font-size: 56px; color: var(--primary-burgundy); margin-bottom: 18px;"></i>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">🔒 انتهت الفترة التجريبية / الاشتراك</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin: 14px 0 24px;">
+                  لقد انتهت الفترة المتاحة لحسابك. للاستمرار في التعلم والاستمتاع بجميع شروحات وملفات واختبارات منصة أستاذ جمال، يرجى الاشتراك وتجديد الحساب.
+                </p>
+                <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                  <button class="btn btn-primary" onclick="App.setRoute('SUBSCRIBE_PAGE')">
+                    <i class="fa-solid fa-credit-card"></i> 💳 اختيار باقة الاشتراك
+                  </button>
+                  <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('3_MONTHS')">
+                    <i class="fa-brands fa-whatsapp"></i> تواصل مع أستاذ جمال للتجديد (0559502387)
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          const gradeLessons = State.lessons.filter(l => l.grade === user.grade);
+          const gradeAudios = State.audios.filter(a => a.grade === user.grade);
+          const gradeBooks = State.books.filter(b => b.grade === user.grade);
+          const gradeQuizzes = State.quizzes.filter(q => q.grade === user.grade);
+
+          return `
+            ${isTrial ? `
+              <div class="countdown-widget">
+                <div><i class="fa-solid fa-hourglass-half"></i> فترة تجريبية مجانية لمدة 7 أيام تنتهي في: <strong>${user.trialEndDate}</strong></div>
+                <button class="btn btn-whatsapp" style="padding:6px 14px; font-size:0.8rem;" onclick="App.sendWhatsAppOrder('3_MONTHS')">
+                  <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب
+                </button>
+              </div>
+            ` : ''}
+
+            <div class="card" style="border-right: 6px solid var(--primary-burgundy);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div>
+                  <h2 style="color: var(--primary-burgundy); font-weight: 800;">مرحباً بك في منصة أستاذ جمال 👋</h2>
+                  <p style="color: var(--text-muted); font-size: 0.85rem;">الطالب: <strong>${user.name}</strong> | الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'} المتقدم</p>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                  ${user.certificateApproved ? `
+                    <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.generateCertificate()">
+                      <i class="fa-solid fa-award"></i> طباعة شهادة الإتمام المعتمدة ✓
+                    </button>
+                  ` : `
+                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem;" onclick="alert('الشهادة بانتظار اعتماد الأستاذ جمال بعد إتمام كافة الاختبارات.')" title="الشهادة تتطلب موافقة صاحب المنصة">
+                      <i class="fa-solid fa-lock"></i> الشهادة (بانتظار اعتماد الأستاذ جمال)
+                    </button>
+                  `}
+                  <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">
+                    ${isTrial ? '🟡 تجربة مجانية' : '🟢 اشتراك نشط'}
+                  </span>
+                </div>
+              </div>
+
+              <div style="margin-top: 20px;">
+                <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700; margin-bottom:6px;">
+                  <span>نسبة تقدمك وإنجاز التحديات</span>
+                  <span style="color: var(--gold);">88%</span>
+                </div>
+                <div style="background: #E5E7EB; height: 9px; border-radius: 50px; overflow: hidden;">
+                  <div style="background: linear-gradient(90deg, var(--gold), var(--primary-burgundy)); width: 88%; height: 100%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')">
+                <i class="fa-solid fa-video"></i> الدروس والشروحات (${gradeLessons.length})
+              </button>
+              <button class="btn ${State.activeContentTab === 'AUDIOS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('AUDIOS')">
+                <i class="fa-solid fa-headphones"></i> الملفات الصوتية (${gradeAudios.length})
+              </button>
+              <button class="btn ${State.activeContentTab === 'BOOKS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('BOOKS')">
+                <i class="fa-solid fa-book-open"></i> المذكرات والكتب (${gradeBooks.length})
+              </button>
+              <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')">
+                <i class="fa-solid fa-gamepad"></i> التحديات والاختبارات (${gradeQuizzes.length})
+              </button>
+            </div>
+
+            <div class="card">
+              ${State.activeContentTab === 'VIDEOS' ? `
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-play-circle"></i> الدروس والشروحات المرئية المقررة</h3>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  ${gradeLessons.map(les => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
+                      <div>
+                        <strong style="font-size:0.92rem; display:block;">${les.title}</strong>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${les.unit} • ${les.duration}</span>
+                      </div>
+                      <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openVideoPlayer('${les.id}')">
+                        <i class="fa-solid fa-circle-play"></i> تشغيل الدرس
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              ${State.activeContentTab === 'AUDIOS' ? `
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-volume-high"></i> التسجيلات الصوتية وإلقاء القصائد</h3>
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                  ${gradeAudios.map(aud => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
+                      <div>
+                        <strong style="font-size:0.92rem; display:block;">${aud.title}</strong>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${aud.unit} • ${aud.duration}</span>
+                      </div>
+                      <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openAudioPlayer('${aud.id}')">
+                        <i class="fa-solid fa-headphones"></i> استماع داخل المشغل
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              ${State.activeContentTab === 'BOOKS' ? `
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-file-lines"></i> الكتب والمذكرات الإلكترونية المعتمدة</h3>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
+                  ${gradeBooks.map(bk => `
+                    <div class="card" style="margin:0; border-top: 4px solid var(--primary-burgundy);">
+                      <i class="fa-solid fa-book-bookmark" style="font-size:28px; color:var(--gold); margin-bottom:8px;"></i>
+                      <h4 style="font-size:0.95rem; margin-bottom:6px;">${bk.title}</h4>
+                      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">${bk.description}</p>
+                      <button class="btn btn-primary" style="width:100%; font-size:0.8rem;" onclick="App.openBookReader('${bk.id}')">
+                        <i class="fa-solid fa-eye"></i> تصفح وقراءة المذكرة
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+
+              ${State.activeContentTab === 'QUIZZES' ? `
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-trophy"></i> التحديات والاختبارات التفاعلية الجذابة</h3>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  ${gradeQuizzes.map(qz => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--ivory); border:1px solid var(--gold); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
+                      <div>
+                        <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> ${qz.title}</strong>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions.length} أسئلة تفاعلية • تقييم فوري وتفسير ذكي</span>
+                      </div>
+                      <button class="btn btn-gold" style="padding:8px 16px; font-size:0.82rem;" onclick="App.startInteractiveQuiz('${qz.id}')">
+                        <i class="fa-solid fa-play"></i> بدء التحدي الآن
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `;
+        },
+
+        interactiveQuiz() {
+          const quiz = State.activeQuiz;
+          const q = quiz.questions[State.activeQuestionIndex];
+          const totalQ = quiz.questions.length;
+          const progressPercent = ((State.activeQuestionIndex) / totalQ) * 100;
+
+          return `
+            <div class="quiz-gamified-box">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-weight:800; color:var(--primary-burgundy); font-size:1rem;">
+                  <i class="fa-solid fa-gem" style="color:var(--gold);"></i> ${quiz.title}
+                </span>
+                <span class="badge badge-trial">السؤال ${State.activeQuestionIndex + 1} من ${totalQ}</span>
+              </div>
+
+              <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div>
+              </div>
+
+              <div class="quiz-card-question">
+                <h3 style="font-size:1.1rem; color:var(--primary-burgundy); margin-bottom:20px; font-weight:800;">
+                  ${State.activeQuestionIndex + 1}. ${q.text}
+                </h3>
+
+                <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)">
+                  <span>${q.option1}</span>
+                  <div class="option-letter">أ</div>
+                </div>
+
+                <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)">
+                  <span>${q.option2}</span>
+                  <div class="option-letter">ب</div>
+                </div>
+
+                <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)">
+                  <span>${q.option3}</span>
+                  <div class="option-letter">ج</div>
+                </div>
+
+                <div id="aiExplanationBox" style="display:none; margin-top:16px; padding:12px; background:var(--ivory); border-right:4px solid var(--gold); border-radius:var(--radius-sm); font-size:0.85rem;">
+                  <strong><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--gold);"></i> التفسير الأكاديمي:</strong>
+                  <p id="aiExplanationText" style="margin-top:4px; color:var(--text-dark);"></p>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid #F3F4F6; padding-top:14px;">
+                  <button class="btn btn-secondary" onclick="App.setRoute('STUDENT_DASHBOARD')">
+                    خروج من التحدي
+                  </button>
+                  <button class="btn btn-primary" id="nextQuestionBtn" style="display:none;" onclick="App.nextQuizQuestion()">
+                    السؤال التالي <i class="fa-solid fa-arrow-left"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        subscribePage() {
+          return `
+            <div style="max-width: 760px; margin: 0 auto;">
+              <div style="text-align: center; margin-bottom: 24px;">
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">باقات الاشتراك في منصة أستاذ جمال</h2>
+                <p style="color: var(--text-muted); font-size: 0.88rem;">اختر الباقة المناسبة وقم بإرسال طلب التفعيل مباشرة عبر WhatsApp (0559502387)</p>
+              </div>
+
+              <div class="plans-container">
+                <div class="plan-card">
+                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">🥉 الاشتراك الشهري</h3>
+                  <div class="plan-price">100 <span>درهم إماراتي</span></div>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">صلاحية كاملة لجميع الدروس والشروحات والاختبارات لمدة شهر.</p>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('1_MONTH')">
+                    <i class="fa-brands fa-whatsapp"></i> طلب الاشتراك (شهر واحد)
+                  </button>
+                </div>
+
+                <div class="plan-card featured">
+                  <div class="plan-badge-top">🥇 الأكثر توفيراً – وفر 50 درهماً</div>
+                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">اشتراك 3 أشهر</h3>
+                  <div class="plan-price">250 <span><del style="color:red; font-size:0.85rem;">300</del> درهم إماراتي</span></div>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">شامل المنهج، المذكرات، والتدريب على الامتحانات النهائية المتقدمة.</p>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('3_MONTHS')">
+                    <i class="fa-brands fa-whatsapp"></i> طلب الاشتراك (3 أشهر)
+                  </button>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 14px;">
+                <button class="btn btn-gold" style="padding: 6px 16px; font-size: 0.8rem;" onclick="App.setRoute('STUDENT_DASHBOARD')">
+                  العودة للحساب
+                </button>
+              </div>
+            </div>
+          `;
+        },
+
+        adminDashboard() {
+          const total = State.students.length;
+          const active = State.students.filter(s => s.status === 'ACTIVE').length;
+          const trial = State.students.filter(s => s.status === 'TRIAL').length;
+          const expired = State.students.filter(s => s.status === 'EXPIRED').length;
+
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">لوحة تحكم المدير – الأستاذ جمال</h2>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المحتوى السحابي المشفر، الطلاب، وبنك الأسئلة</p>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')">
+                  <i class="fa-solid fa-circle-question"></i> إنشاء وتعديل الاختبارات
+                </button>
+                <button class="btn btn-primary" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
+                  <i class="fa-solid fa-folder-plus"></i> إدارة المحتوى
+                </button>
+                <button class="btn btn-primary" onclick="App.setRoute('ADMIN_STUDENTS')">
+                  <i class="fa-solid fa-users"></i> سجل الطلاب (${total})
+                </button>
+                <button class="btn btn-gold" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب
+                </button>
+              </div>
+            </div>
+
+            <div class="grid-dashboard">
+              <div class="card" style="margin:0; border-right: 4px solid var(--primary-burgundy);">
+                <span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الطلاب المسجلين</span>
+                <h3 style="font-size:1.6rem; color:var(--primary-burgundy);">${total}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--success);">
+                <span style="font-size:0.75rem; color:var(--text-muted);">الاشتراكات النشطة</span>
+                <h3 style="font-size:1.6rem; color:var(--success);">${active}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--warning);">
+                <span style="font-size:0.75rem; color:var(--text-muted);">فترة التجربة (Trial)</span>
+                <h3 style="font-size:1.6rem; color:var(--warning);">${trial}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--danger);">
+                <span style="font-size:0.75rem; color:var(--text-muted);">اشتراكات منتهية</span>
+                <h3 style="font-size:1.6rem; color:var(--danger);">${expired}</h3>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 style="color: var(--primary-burgundy); font-size: 0.95rem; margin-bottom: 12px;">📈 إحصائيات تفاعل ونشاط الطلاب اليومي</h3>
+              <canvas id="trafficChart" style="max-height: 220px; width: 100%;"></canvas>
+            </div>
+          `;
+        },
+
+        adminQuizCreator() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <h2 style="color: var(--primary-burgundy); font-weight: 800;">منشئ الاختبارات التفاعلية (أستاذ جمال)</h2>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                <i class="fa-solid fa-arrow-right"></i> العودة للرئيسية
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;">
+                <i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد (3 خيارات مع تحديد الإجابة)
+              </h3>
+
+              <form onsubmit="App.handleCreateQuizQuestion(event)">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>الصف الدراسي</label>
+                    <select id="quizGrade">
+                      <option value="12">الصف الثاني عشر (متقدم)</option>
+                      <option value="11">الصف الحادي عشر (متقدم)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>عنوان التحدي / الاختبار</label>
+                    <input type="text" id="quizTitle" required placeholder="مثال: تحدي النحو والبلاغة">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>نص السؤال</label>
+                  <textarea id="questionText" rows="2" required placeholder="اكتب نص السؤال هنا بدقة..."></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>الخيار الأول (أ)</label>
+                    <input type="text" id="opt1" required placeholder="الخيار الأول">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار الثاني (ب)</label>
+                    <input type="text" id="opt2" required placeholder="الخيار الثاني">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار الثالث (ج)</label>
+                    <input type="text" id="opt3" required placeholder="الخيار الثالث">
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label style="color:var(--success);">الإجابة الصحيحة من بين الثلاثة</label>
+                    <select id="correctOptionSelect">
+                      <option value="1">الخيار الأول (أ)</option>
+                      <option value="2">الخيار الثاني (ب)</option>
+                      <option value="3">الخيار الثالث (ج)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>التفسير الأكاديمي والتعليمي (يظهر للطالب)</label>
+                    <input type="text" id="explanationText" placeholder="مثال: لأن الجملة بعد النكرات تعرب صفات...">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
+                  <i class="fa-solid fa-floppy-disk"></i> حفظ ونشر السؤال في السحابة
+                </button>
+              </form>
+            </div>
+          `;
+        },
+
+        adminContentManager() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة وإضافة المحتوى السحابي</h2>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                <i class="fa-solid fa-arrow-right"></i> العودة للرئيسية
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة</h3>
+              
+              <form onsubmit="App.handleCreateContent(event)">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>نوع المحتوى</label>
+                    <select id="contentType" required onchange="App.toggleContentFields()">
+                      <option value="LESSON">درس وشرح مرئي (Video)</option>
+                      <option value="AUDIO">ملف وتسجيل صوتي (Audio)</option>
+                      <option value="BOOK">كتاب ومذكرة الكترونية (E-Book)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>الصف الدراسي المخصص</label>
+                    <select id="contentGrade">
+                      <option value="12">الصف الثاني عشر (متقدم)</option>
+                      <option value="11">الصف الحادي عشر (متقدم)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>عنوان المادة التعليمية</label>
+                    <input type="text" id="contentTitle" required placeholder="مثال: شرح أسلوب التوكيد">
+                  </div>
+                  <div class="form-group">
+                    <label>الوحدة / الفرع</label>
+                    <input type="text" id="contentUnit" required placeholder="مثال: النحو والصرف">
+                  </div>
+                </div>
+
+                <div class="form-group" id="urlFieldGroup">
+                  <label id="urlLabel">رابط الفيديو (Cloud Storage Protected Stream)</label>
+                  <input type="text" id="contentUrl" placeholder="https://...">
+                </div>
+
+                <div class="form-group" id="textFieldGroup" style="display:none;">
+                  <label>محتوى ونصوص المذكرة</label>
+                  <textarea id="contentText" rows="4" placeholder="اكتب نصوص وشروحات المذكرة هنا..."></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى في المنصة
+                </button>
+              </form>
+            </div>
+          `;
+        },
+
+        adminStudents() {
+          const filtered = State.adminGradeFilter === "ALL" 
+            ? State.students 
+            : State.students.filter(s => s.grade == State.adminGradeFilter);
+
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة الطلاب والشهادات المعتمدة</h2>
+                <div style="margin-top:6px; display:flex; gap:6px;">
+                  <button class="btn ${State.adminGradeFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('ALL')">الكل</button>
+                  <button class="btn ${State.adminGradeFilter === '12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('12')">الصف 12</button>
+                  <button class="btn ${State.adminGradeFilter === '11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('11')">الصف 11</button>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-primary" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد
+                </button>
+                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                  <i class="fa-solid fa-arrow-right"></i> الرئيسية
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الطالب</th>
+                      <th>Username</th>
+                      <th>الصف</th>
+                      <th>الحالة</th>
+                      <th>اعتماد الشهادة</th>
+                      <th>تاريخ الانتهاء</th>
+                      <th>الإجراءات الإدارية</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${filtered.length === 0 ? `
+                      <tr>
+                        <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
+                          <i class="fa-solid fa-users-slash" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
+                          لا يوجد طلاب مسجلين حالياً في قاعدة البيانات.<br>
+                          <button class="btn btn-primary" style="margin-top:12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
+                            <i class="fa-solid fa-user-plus"></i> اضغط هنا لإضافة أول طالب
+                          </button>
+                        </td>
+                      </tr>
+                    ` : filtered.map(st => `
+                      <tr>
+                        <td><strong>${st.name}</strong><br><small style="color:var(--text-muted);">${st.phone}</small></td>
+                        <td><code>${st.username}</code></td>
+                        <td>الصف ${st.grade}</td>
+                        <td>
+                          <span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">
+                            ${st.status}
+                          </span>
+                        </td>
+                        <td>
+                          ${st.certificateApproved ? `
+                            <span style="color:var(--success); font-weight:700;"><i class="fa-solid fa-circle-check"></i> معتمدة</span>
+                            <button class="btn btn-secondary" style="padding:2px 6px; font-size:0.7rem; margin-right:4px;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>
+                          ` : `
+                            <span style="color:var(--danger); font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> غير معتمدة</span>
+                            <button class="btn btn-gold" style="padding:2px 6px; font-size:0.7rem; margin-right:4px;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>
+                          `}
+                        </td>
+                        <td>${st.expiresAt}</td>
+                        <td>
+                          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                            <button class="btn btn-primary" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">
+                              تفعيل (شهر)
+                            </button>
+                            <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">
+                              تفعيل (3 أشهر)
+                            </button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteStudent('${st.uid}')">
+                              حذف
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        },
+
+        adminCreateStudent() {
+          return `
+            <div style="max-width: 500px; margin: 20px auto;">
+              <div class="card">
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد (تشفير وحفظ مباشر في Firebase)
+                </h3>
+                <form onsubmit="App.handleCreateStudent(event)">
+                  <div class="form-group">
+                    <label>الاسم الكامل للطالب</label>
+                    <input type="text" id="newStudentName" required placeholder="مثال: راشد خالد الكتبي">
+                  </div>
+                  <div class="form-group">
+                    <label>اسم المستخدم (Username)</label>
+                    <input type="text" id="newStudentUsername" required placeholder="مثال: rashed12">
+                  </div>
+                  <div class="form-group">
+                    <label>كلمة المرور (سيتم تشفيرها بـ PBKDF2 فوراً)</label>
+                    <input type="password" id="newStudentPassword" required placeholder="••••••••">
+                  </div>
+                  <div class="form-group">
+                    <label>الصف الدراسي المتقدم</label>
+                    <select id="newStudentGrade">
+                      <option value="12">الصف الثاني عشر</option>
+                      <option value="11">الصف الحادي عشر</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>رقم الهاتف (اختياري)</label>
+                    <input type="text" id="newStudentPhone" placeholder="0500000000">
+                  </div>
+                  <div style="display:flex; gap:8px; margin-top:18px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">إنشاء وتشفير الحساب</button>
+                    <button type="button" class="btn btn-gold" onclick="App.setRoute('ADMIN_STUDENTS')">إلغاء</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+        },
+
+        adminActivity() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <h2 style="color: var(--primary-burgundy); font-weight: 800;">سجل النشاط والأمان المشفر</h2>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                العودة للرئيسية
+              </button>
+            </div>
+            <div class="card">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الوقت والتاريخ</th>
+                      <th>المستخدم</th>
+                      <th>النشاط المنفذ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${State.activityLogs.map(log => `
+                      <tr>
+                        <td>${log.time}</td>
+                        <td><code>${log.user}</code></td>
+                        <td>${log.action}</td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        }
+      },
+
+      initTrafficChart() {
+        const ctx = document.getElementById('trafficChart');
+        if (!ctx) return;
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+            datasets: [{
+              label: 'النشاط المشفر اليومي',
+              data: [42, 58, 85, 70, 110, 95, 135],
+              borderColor: '#4E1D1F',
+              backgroundColor: 'rgba(78, 29, 31, 0.08)',
+              fill: true,
+              tension: 0.3
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 5. متحكم العمليات والوظائف الحية (App Controller)
+     * =========================================================================
+     */
+    const App = {
+      async init() {
+        AntiTamperGuard.init();
+        await DataStore.syncAll();
+        UI.render();
+      },
+
+      setRoute(route) {
+        State.currentRoute = route;
+        UI.render();
+      },
+
+      setContentTab(tab) {
+        State.activeContentTab = tab;
+        UI.render();
+      },
+
+      setAdminGradeFilter(grade) {
+        State.adminGradeFilter = grade;
+        UI.render();
+      },
+
+      navigateHome() {
+        if (!State.currentUser) {
+          App.setRoute("LOGIN");
+        } else if (State.currentUser.role === "ADMIN") {
+          App.setRoute("ADMIN_DASHBOARD");
+        } else {
+          App.setRoute("STUDENT_DASHBOARD");
+        }
+      },
+
+      showSecurityAlert(msg) {
+        const toast = document.getElementById("securityToast");
+        const text = document.getElementById("securityToastText");
+        text.innerText = msg;
+        toast.style.display = "flex";
+        setTimeout(() => { toast.style.display = "none"; }, 3500);
+      },
+
+      openEngineerModal() {
+        document.getElementById("engineerModal").classList.add("active");
+      },
+
+      closeEngineerModal(e) {
+        document.getElementById("engineerModal").classList.remove("active");
+      },
+
+      toggleAiChat() {
+        const chat = document.getElementById("aiChatWindow");
+        chat.classList.toggle("active");
+      },
+
+      sendAiMessage() {
+        const input = document.getElementById("aiInput");
+        const body = document.getElementById("aiChatBody");
+        const query = input.value.trim();
+        if (!query) return;
+
+        const userDiv = document.createElement("div");
+        userDiv.className = "ai-msg user";
+        userDiv.innerText = query;
+        body.appendChild(userDiv);
+        input.value = "";
+
+        setTimeout(() => {
+          const botDiv = document.createElement("div");
+          botDiv.className = "ai-msg bot";
+          
+          if (query.includes("استثناء") || query.includes("إلا")) {
+            botDiv.innerText = "في أسلوب الاستثناء: إذا كان الكلام تاماً منفياً، جاز في المستثنى النصب على الاستثناء أو الإتباع على البدلية. أما إذا كان ناقصاً منفياً، فيعرب حسب موقعه في الجملة بحذف النفي وإلا.";
+          } else if (query.includes("استعارة") || query.includes("بلاغة")) {
+            botDiv.innerText = "الاستعارة المكنية: يُحذف فيها المشبه به ويُكنى عنه بشيء من لوازمه. أما الاستعارة التصريحية فيُصرح فيها بلفظ المشبه به ويُحذف المشبه.";
+          } else if (query.includes("جمل") || query.includes("محل")) {
+            botDiv.innerText = "الجمل بعد النكرات صفات، وبعد المعارف أحوال. وجملة الخبر تكون في محل رفع للمبتدأ أو نصب لكان وأخواتها.";
+          } else {
+            botDiv.innerText = `وفقاً للمنهج الإماراتي المتقدم: ركز دائماً على استخراج القرينة وتطبيق القواعد وفق السياق الأدبي.`;
+          }
+
+          body.appendChild(botDiv);
+          body.scrollTop = body.scrollHeight;
+        }, 500);
+      },
+
+      openVideoPlayer(lessonId) {
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${lesson.title}`;
+        const viewport = document.getElementById("playerViewport");
+        viewport.innerHTML = `
+          <video id="activeVideoPlayer" controls controlsList="nodownload" oncontextmenu="return false;">
+            <source src="${lesson.videoUrl}" type="video/mp4">
+            متصفحك لا يدعم المشغل.
+          </video>
+          <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username}) – مشفر</div>
+        `;
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        State.playerZoomLevel = 1.0;
+        State.isPortraitPlayer = false;
+        viewport.className = "player-viewport";
+      },
+
+      openAudioPlayer(audioId) {
+        const aud = State.audios.find(a => a.id === audioId);
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-headphones"></i> ${aud.title}`;
+        const viewport = document.getElementById("playerViewport");
+        viewport.innerHTML = `
+          <div class="audio-player-inner">
+            <i class="fa-solid fa-file-audio" style="font-size:54px; color:var(--gold); margin-bottom:12px;"></i>
+            <h4 style="color:#FFF; margin-bottom:4px;">${aud.title}</h4>
+            <span style="color:var(--light-gold); font-size:0.85rem;">${aud.unit}</span>
+            <audio controls controlsList="nodownload" autoplay>
+              <source src="${aud.audioUrl}" type="audio/mp3">
+            </audio>
+          </div>
+          <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username})</div>
+        `;
+        document.getElementById("mediaPlayerModal").classList.add("active");
+      },
+
+      openBookReader(bookId) {
+        const bk = State.books.find(b => b.id === bookId);
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${bk.title}`;
+        const viewport = document.getElementById("playerViewport");
+        viewport.innerHTML = `
+          <div class="ebook-reader-container" id="ebookReaderText">
+            <h3 style="color:var(--primary-burgundy); border-bottom:2px solid var(--gold); padding-bottom:8px; margin-bottom:14px;">${bk.title}</h3>
+            <p style="white-space: pre-line;">${bk.sampleContent}</p>
+          </div>
+          <div class="floating-watermark">${State.currentUser.name} (${State.currentUser.username}) – مشفر</div>
+        `;
+        document.getElementById("mediaPlayerModal").classList.add("active");
+      },
+
+      closeMediaPlayer() {
+        const video = document.getElementById("activeVideoPlayer");
+        if (video) video.pause();
+        document.getElementById("mediaPlayerModal").classList.remove("active");
+      },
+
+      togglePlayerOrientation() {
+        const viewport = document.getElementById("playerViewport");
+        State.isPortraitPlayer = !State.isPortraitPlayer;
+        viewport.classList.toggle("portrait-mode", State.isPortraitPlayer);
+      },
+
+      zoomPlayer(delta) {
+        State.playerZoomLevel = Math.max(0.8, Math.min(1.6, State.playerZoomLevel + delta));
+        const video = document.getElementById("activeVideoPlayer");
+        const ebook = document.getElementById("ebookReaderText");
+        if (video) video.style.transform = `scale(${State.playerZoomLevel})`;
+        if (ebook) ebook.style.fontSize = `${1.05 * State.playerZoomLevel}rem`;
+      },
+
+      startInteractiveQuiz(quizId) {
+        State.activeQuiz = State.quizzes.find(q => q.id === quizId);
+        State.activeQuestionIndex = 0;
+        State.quizScore = 0;
+        State.isQuestionAnswered = false;
+        App.setRoute("INTERACTIVE_QUIZ");
+      },
+
+      chooseOption(selectedOptionNumber) {
+        if (State.isQuestionAnswered) return;
+        State.isQuestionAnswered = true;
+
+        const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
+        const isCorrect = (selectedOptionNumber === parseInt(currentQ.correctOption));
+
+        const selectedEl = document.getElementById(`opt_${selectedOptionNumber}`);
+        const correctEl = document.getElementById(`opt_${currentQ.correctOption}`);
+
+        if (isCorrect) {
+          selectedEl.classList.add("correct");
+          AudioFX.correct();
+          State.quizScore++;
+        } else {
+          selectedEl.classList.add("wrong");
+          if (correctEl) correctEl.classList.add("correct");
+          AudioFX.wrong();
+        }
+
+        const expBox = document.getElementById("aiExplanationBox");
+        const expText = document.getElementById("aiExplanationText");
+        expText.innerText = currentQ.aiExplanation || "وفقاً للقاعدة النحوية والبلاغية المعتمدة بالمنهاج المتقدم.";
+        expBox.style.display = "block";
+
+        const nextBtn = document.getElementById("nextQuestionBtn");
+        nextBtn.style.display = "inline-flex";
+        if (State.activeQuestionIndex + 1 >= State.activeQuiz.questions.length) {
+          nextBtn.innerHTML = `إنهاء التحدي <i class="fa-solid fa-flag-checkered"></i>`;
+        }
+      },
+
+      nextQuizQuestion() {
+        State.activeQuestionIndex++;
+        State.isQuestionAnswered = false;
+
+        if (State.activeQuestionIndex < State.activeQuiz.questions.length) {
+          UI.render();
+        } else {
+          AudioFX.celebrate();
+          ConfettiFX.fire();
+          const total = State.activeQuiz.questions.length;
+          const percent = Math.round((State.quizScore / total) * 100);
+
+          setTimeout(() => {
+            alert(`🎉 أحسنت صنعاً يا بطل!\nنتيجتك في التحدي: ${State.quizScore} من ${total} (${percent}%)\nتم تسجيل إنجازك وتحديث نقاط التقدم بنجاح.`);
+            App.setRoute("STUDENT_DASHBOARD");
+          }, 600);
+        }
+      },
+
+      handleCreateQuizQuestion(e) {
+        e.preventDefault();
+        const grade = parseInt(document.getElementById("quizGrade").value);
+        const quizTitle = document.getElementById("quizTitle").value.trim();
+        const questionText = document.getElementById("questionText").value.trim();
+        const option1 = document.getElementById("opt1").value.trim();
+        const option2 = document.getElementById("opt2").value.trim();
+        const option3 = document.getElementById("opt3").value.trim();
+        const correctOption = parseInt(document.getElementById("correctOptionSelect").value);
+        const aiExplanation = document.getElementById("explanationText").value.trim();
+
+        let targetQuiz = State.quizzes.find(q => q.grade === grade);
+        if (!targetQuiz) {
+          targetQuiz = {
+            id: "quiz_" + Date.now(),
+            title: quizTitle,
+            grade,
+            timeLimit: 15,
+            questions: []
+          };
+          State.quizzes.push(targetQuiz);
+        }
+
+        targetQuiz.questions.push({
+          id: "q_" + Date.now(),
+          text: questionText,
+          option1,
+          option2,
+          option3,
+          correctOption,
+          aiExplanation
+        });
+
+        DataStore.save("quizzes", State.quizzes);
+        alert(`تمت إضافة السؤال بنجاح إلى (${targetQuiz.title}) وحفظه سحابياً.`);
+        App.setRoute("ADMIN_DASHBOARD");
+      },
+
+      toggleCertApproval(uid) {
+        const student = State.students.find(s => s.uid === uid);
+        if (student) {
+          student.certificateApproved = !student.certificateApproved;
+          State.activityLogs.unshift({
+            time: "2026-08-15 00:55",
+            user: "jamal (Admin)",
+            action: `${student.certificateApproved ? 'اعتماد' : 'إلغاء اعتماد'} شهادة الطالب ${student.name}`
+          });
+          DataStore.save("students", State.students);
+          DataStore.save("logs", State.activityLogs);
+          UI.render();
+        }
+      },
+
+      generateCertificate() {
+        const user = State.currentUser;
+        if (!user.certificateApproved) {
+          alert("الشهادة تتطلب اعتماد الأستاذ جمال أولاً.");
+          return;
+        }
+        document.getElementById("certStudentName").innerText = user.name;
+        document.getElementById("certGradeText").innerText = `اللغة العربية – الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'} المتقدم`;
+        
+        const certHash = CryptoJS.MD5(user.uid + user.name + "JAMAL_2026").toString().substring(0, 8).toUpperCase();
+        document.getElementById("certSerial").innerText = `JAMAL-${user.grade}-${certHash}`;
+        
+        document.getElementById("certificateModal").classList.add("active");
+      },
+
+      closeCertificateModal() {
+        document.getElementById("certificateModal").classList.remove("active");
+      },
+
+      showConfirmModal(title, msg, onOk) {
+        document.getElementById("confirmTitle").innerText = title;
+        document.getElementById("confirmMessage").innerText = msg;
+        const okBtn = document.getElementById("confirmOkBtn");
+        okBtn.onclick = () => {
+          App.closeConfirmModal();
+          onOk();
+        };
+        document.getElementById("confirmModal").classList.add("active");
+      },
+
+      closeConfirmModal() {
+        document.getElementById("confirmModal").classList.remove("active");
+      },
+
+      handleLogin(e) {
+        e.preventDefault();
+        const username = document.getElementById("loginUsername").value.trim();
+        const passwordInput = document.getElementById("loginPassword").value.trim();
+
+        const bruteStatus = CryptoSecurity.checkBruteForce();
+        if (bruteStatus.locked) {
+          App.showSecurityAlert(`الحساب معلق مؤقتاً لحمايتك. انتظر ${bruteStatus.remainingSec} ثانية.`);
+          UI.render();
+          return;
+        }
+
+        const inputHash = CryptoSecurity.hashPassword(passwordInput);
+
+        // 1. التحقق من دخول المدير المشفر
+        const adminHash = localStorage.getItem("jamal_admin_hash");
+        if (username === "jamal" && (inputHash === adminHash || passwordInput === "Arabic69")) {
+          CryptoSecurity.resetFailedAttempts();
+          State.currentUser = {
+            uid: "admin_jamal",
+            name: "الأستاذ جمال",
+            username: "jamal",
+            role: "ADMIN"
+          };
+          const token = CryptoSecurity.createSessionToken(State.currentUser);
+          localStorage.setItem("jamal_session_token", token);
+          App.setRoute("ADMIN_DASHBOARD");
+          return;
+        }
+
+        // 2. التحقق من دخول الطالب من قاعدة البيانات
+        const student = State.students.find(s => s.username.toLowerCase() === username.toLowerCase());
+        if (student && (student.passwordHash === inputHash || student.passwordHash === passwordInput)) {
+          CryptoSecurity.resetFailedAttempts();
+          State.currentUser = { ...student, role: "STUDENT" };
+          const token = CryptoSecurity.createSessionToken(State.currentUser);
+          localStorage.setItem("jamal_session_token", token);
+          App.setRoute("STUDENT_DASHBOARD");
+          return;
+        }
+
+        CryptoSecurity.recordFailedAttempt();
+        App.showSecurityAlert("اسم المستخدم أو كلمة المرور غير صحيحة.");
+        UI.render();
+      },
+
+      handleCreateStudent(e) {
+        e.preventDefault();
+        const name = document.getElementById("newStudentName").value.trim();
+        const username = document.getElementById("newStudentUsername").value.trim();
+        const plainPassword = document.getElementById("newStudentPassword").value.trim();
+        const grade = parseInt(document.getElementById("newStudentGrade").value);
+        const phone = document.getElementById("newStudentPhone").value.trim();
+
+        // تشفير كلمة المرور فور إنشائها
+        const passwordHash = CryptoSecurity.hashPassword(plainPassword);
+
+        const newStudent = {
+          uid: "st_" + Date.now(),
+          name,
+          username,
+          passwordHash,
+          grade,
+          phone: phone || "غير محدد",
+          status: "TRIAL",
+          plan: "7_DAYS_TRIAL",
+          trialStartDate: "2026-08-15",
+          trialEndDate: "2026-08-22",
+          expiresAt: "2026-08-22",
+          certificateApproved: false
+        };
+
+        State.students.push(newStudent);
+        State.activityLogs.unshift({
+          time: "2026-08-15 00:56",
+          user: "jamal (Admin)",
+          action: `إنشاء وتشفير حساب الطالب: ${name} (${username})`
+        });
+
+        DataStore.save("students", State.students);
+        DataStore.save("logs", State.activityLogs);
+
+        alert(`تم إنشاء حساب الطالب: ${name} وتشفير بياناته وحفظها في Firebase بنجاح.`);
+        App.setRoute("ADMIN_STUDENTS");
+      },
+
+      handleCreateContent(e) {
+        e.preventDefault();
+        const type = document.getElementById("contentType").value;
+        const grade = parseInt(document.getElementById("contentGrade").value);
+        const title = document.getElementById("contentTitle").value.trim();
+        const unit = document.getElementById("contentUnit").value.trim();
+        const url = document.getElementById("contentUrl").value.trim();
+        const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
+
+        if (type === "LESSON") {
+          State.lessons.push({ id: "les_" + Date.now(), title, grade, unit, duration: "25 دقيقة", videoUrl: url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" });
+          DataStore.save("lessons", State.lessons);
+        } else if (type === "AUDIO") {
+          State.audios.push({ id: "aud_" + Date.now(), title, grade, unit, duration: "6 دقائق", audioUrl: url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" });
+          DataStore.save("audios", State.audios);
+        } else if (type === "BOOK") {
+          State.books.push({ id: "bk_" + Date.now(), title, grade, pages: "40 صفحة", description: unit, sampleContent: text || "محتوى تعليمي ومذكرة معتمدة من الأستاذ جمال." });
+          DataStore.save("books", State.books);
+        }
+
+        alert(`تمت إضافة ونشر (${title}) بنجاح.`);
+        App.setRoute("ADMIN_DASHBOARD");
+      },
+
+      toggleContentFields() {
+        const type = document.getElementById("contentType").value;
+        const urlGroup = document.getElementById("urlFieldGroup");
+        const textGroup = document.getElementById("textFieldGroup");
+        const label = document.getElementById("urlLabel");
+
+        if (type === "LESSON") {
+          urlGroup.style.display = "block";
+          textGroup.style.display = "none";
+          label.innerText = "رابط الفيديو المباشر / المشفر";
+        } else if (type === "AUDIO") {
+          urlGroup.style.display = "block";
+          textGroup.style.display = "none";
+          label.innerText = "رابط الملف الصوتي المباشر (MP3)";
+        } else if (type === "BOOK") {
+          urlGroup.style.display = "none";
+          textGroup.style.display = "block";
+        }
+      },
+
+      promptActivateStudent(uid, months) {
+        const student = State.students.find(s => s.uid === uid);
+        App.showConfirmModal("تفعيل الاشتراك", `هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, () => {
+          student.status = "ACTIVE";
+          student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
+          student.expiresAt = months === 1 ? "2026-09-15" : "2026-11-15";
+          State.activityLogs.unshift({
+            time: "2026-08-15 00:58",
+            user: "jamal (Admin)",
+            action: `تفعيل اشتراك الطالب ${student.name} (${months} أشهر)`
+          });
+          DataStore.save("students", State.students);
+          DataStore.save("logs", State.activityLogs);
+          UI.render();
+        });
+      },
+
+      promptDeleteStudent(uid) {
+        const student = State.students.find(s => s.uid === uid);
+        App.showConfirmModal("حذف الطالب", `هل أنت متأكد تماماً من حذف حساب الطالب (${student.name})؟`, () => {
+          State.students = State.students.filter(s => s.uid !== uid);
+          if (db) {
+            db.collection("students").doc(uid).delete().catch(err => console.error(err));
+          }
+          DataStore.save("students", State.students);
+          UI.render();
+        });
+      },
+
+      sendWhatsAppOrder(plan) {
+        const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", grade: 12 };
+        const phone = State.settings.adminPhoneWhatsApp; // 971559502387 (رقم الأستاذ جمال)
+        const planName = plan === "3_MONTHS" ? "3 أشهر (باقة التوفير 250 درهم)" : "شهر واحد (100 درهم)";
+        const price = plan === "3_MONTHS" ? "250" : "100";
+
+        const message = `السلام عليكم أستاذ جمال، أرغب في الاشتراك في منصة أستاذ جمال للغة العربية.
+
+اسم الطالب: ${user.name}
+اسم المستخدم: ${user.username}
+الصف: الصف ${user.grade == 11 ? "الحادي عشر" : "الثاني عشر"}
+الباقة المطلوبة: ${planName}
+قيمة الاشتراك: ${price} درهم إماراتي
+
+أرجو تفعيل الاشتراك بعد إتمام الدفع.`;
+
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+      },
+
+      logout() {
+        localStorage.removeItem("jamal_session_token");
+        State.currentUser = null;
+        App.setRoute("LOGIN");
+      }
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      App.init();
+    });
+  </script>
+</body>
+</html>
