@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>منصة أستاذ جمال | اللغة العربية – المنهج الإماراتي المتقدم</title>
+  <title>منصة أستاذ جمال | اللغة العربية – المنهج الإماراتي والسوداني</title>
   
   <!-- خط Noto Kufi Arabic ومكتبات FontAwesome و Chart.js -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -216,6 +216,7 @@
     .badge-trial { background: #FEF3C7; color: var(--warning); border: 1px solid #FCD34D; }
     .badge-active { background: #DCFCE7; color: var(--success); border: 1px solid #86EFAC; }
     .badge-expired { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
+    .badge-curriculum { background: var(--cream); color: var(--primary-burgundy); border: 1px solid var(--gold); }
 
     .grid-dashboard {
       display: grid;
@@ -224,7 +225,6 @@
       margin-bottom: 20px;
     }
 
-    /* شريط البحث المطور */
     .search-box-wrapper {
       position: relative;
       margin-bottom: 18px;
@@ -308,7 +308,6 @@
       font-weight: 400;
     }
 
-    /* مشغل الوسائط الداخلي */
     .player-modal-content {
       position: relative;
       background: #000;
@@ -361,7 +360,6 @@
       background: #000;
     }
 
-    /* زر عائم يظهر أثناء التدوير لجميع الوسائط (فيديو، صوت، كتب) */
     .floating-reset-orientation-btn {
       position: absolute;
       top: 18px;
@@ -887,7 +885,7 @@
       <i class="fa-solid fa-graduation-cap brand-logo-icon"></i>
       <div class="brand-text">
         <h1>منصة أستاذ جمال</h1>
-        <span>اللغة العربية – المنهج الإماراتي المتقدم</span>
+        <span>اللغة العربية – المنهج الإماراتي والسوداني المعتمد</span>
       </div>
     </div>
     <div id="navActions"></div>
@@ -907,7 +905,7 @@
     </div>
     <div class="ai-chat-body" id="aiChatBody">
       <div class="ai-msg bot">
-        مرحباً بك! أنا رفيقك الذكي في اللغة العربية. اسألني عن أي قاعدة نحوية، استخراج بلاغي، أو تحليل نصي للمنهج المتقدم.
+        مرحباً بك! أنا رفيقك الذكي في اللغة العربية للمنهج الإماراتي المتقدم والمنهاج السوداني للشهادة الثانوية. اسألني عن أي قاعدة نحوية أو استخراج بلاغي.
       </div>
     </div>
     <div class="ai-chat-footer">
@@ -925,7 +923,6 @@
         <div class="player-toolbar">
           <span id="playerMediaTitle" style="font-weight: 700; color: var(--light-gold);"></span>
           <div class="player-toolbar-controls">
-            <!-- زر التدوير / الرجوع للوضع الطبيعي -->
             <button class="btn btn-secondary" id="rotateToggleBtn" style="padding:4px 10px; font-size:0.75rem;" onclick="App.toggleDeviceRotation()" title="تدوير أو الرجوع للوضع الطبيعي">
               <i class="fa-solid fa-rotate"></i> <span id="rotateBtnText">تدوير عرضي</span>
             </button>
@@ -939,7 +936,6 @@
         </div>
 
         <div class="player-viewport" id="playerViewport">
-          <!-- زر عائم يظهر أثناء التدوير للرجوع الفوري للوضع الطبيعي (لكل الوسائط) -->
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
             <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
           </button>
@@ -959,10 +955,11 @@
         <input type="hidden" id="editContentType">
         
         <div class="form-group">
-          <label>الصف الدراسي</label>
-          <select id="editContentGrade">
-            <option value="12">الصف الثاني عشر</option>
-            <option value="11">الصف الحادي عشر</option>
+          <label>المنهاج والصف الدراسي</label>
+          <select id="editContentTarget" required>
+            <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
+            <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
+            <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
           </select>
         </div>
 
@@ -992,7 +989,7 @@
         </div>
 
         <div style="display:flex; gap:8px; margin-top:16px;">
-          <button type="submit" class="btn btn-primary" style="flex:1;">حفظ التعديلات في Firebase</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">حفظ التعديلات سحابياً</button>
           <button type="button" class="btn btn-secondary" onclick="App.closeEditModal()">إلغاء</button>
         </div>
       </form>
@@ -1007,13 +1004,13 @@
           <i class="fa-solid fa-award"></i>
         </div>
         <h2 style="font-weight: 900; font-size: 1.45rem; margin-bottom: 2px;">شهادة إتمام وتفوق معتمدة</h2>
-        <span style="font-size: 0.85rem; color: var(--gold); font-weight: 700; display: block; margin-bottom: 18px;">منصة أستاذ جمال للغة العربية – المنهج الإماراتي المتقدم</span>
+        <span style="font-size: 0.85rem; color: var(--gold); font-weight: 700; display: block; margin-bottom: 18px;">منصة أستاذ جمال للغة العربية – التعليم المعتمد</span>
         
         <p style="font-size: 0.95rem; margin-bottom: 6px;">تشهد إدارة المنصة بأن الطالب / الطالبة:</p>
         <h3 id="certStudentName" style="font-size: 1.35rem; color: var(--primary-burgundy); font-weight: 800; border-bottom: 2px dashed var(--gold); display: inline-block; padding: 0 20px 4px; margin-bottom: 12px;"></h3>
         
         <p style="font-size: 0.92rem; line-height: 1.8; margin-bottom: 20px;">
-          قد أتم بنجاح واقتدار متطلبات منهاج <strong id="certGradeText"></strong>، بعد اجتياز كافة التقييمات والاختبارات التفاعلية بنجاح واعتماد النتيجة رسمياً.
+          قد أتم بنجاح واقتدار متطلبات مقرر <strong id="certGradeText"></strong>، بعد اجتياز كافة التقييمات والاختبارات بنجاح واعتماد النتيجة رسمياً من صاحب المنصة.
         </p>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; border-top: 1px solid var(--cream); padding-top: 12px;">
@@ -1064,7 +1061,7 @@
       </div>
 
       <div style="background: var(--bg-light); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 18px; font-size: 0.86rem; line-height: 1.7; color: var(--text-dark);">
-        متخصص في هندسة وتطوير المنصات التعليمية والتطبيقات التفاعلية الآمنة، تشفير المحتوى، وهياكل السحابة الذكية وفق المعايير العالمية.
+        متخصص في هندسة وتطوير المنصات التعليمية والتطبيقات التفاعلية الآمنة، تشفير المحتوى، وهياكل السحابة الذكية والمزامنة اللحظية بين مختلف الأجهزة.
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem; margin-bottom: 20px;">
@@ -1099,7 +1096,7 @@
     </div>
   </footer>
 
-  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase -->
+  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase والمزامنة اللحظية -->
   <script>
     /**
      * =========================================================================
@@ -1123,6 +1120,7 @@
           uid: user.uid,
           role: user.role,
           username: user.username,
+          curriculum: user.curriculum,
           grade: user.grade,
           expiresAt: Date.now() + (8 * 60 * 60 * 1000),
           fingerprint: navigator.userAgent.substring(0, 30)
@@ -1317,15 +1315,15 @@
 
     /**
      * =========================================================================
-     * 3. حالة النظام وقاعدة البيانات السحابية (Firebase Cloud Sync)
+     * 3. حالة النظام وقاعدة البيانات السحابية الحية (Live Real-time Cloud Sync)
      * =========================================================================
      */
     const State = {
       currentUser: null,
       currentRoute: "LOGIN",
       activeContentTab: "VIDEOS",
-      adminGradeFilter: "ALL",
-      adminContentTab: "LIST", // 'LIST' أو 'ADD'
+      adminTargetFilter: "ALL", // 'ALL', 'UAE_12', 'UAE_11', 'SUDAN_12'
+      adminContentTab: "LIST",
       studentSearchQuery: "",
       adminSearchQuery: "",
       
@@ -1353,20 +1351,18 @@
 
     const DataStore = {
       async syncAll() {
-        const localLessons = localStorage.getItem("jamal_lessons");
-        const localAudios = localStorage.getItem("jamal_audios");
-        const localBooks = localStorage.getItem("jamal_books");
-        const localQuizzes = localStorage.getItem("jamal_quizzes");
-        const localLogs = localStorage.getItem("jamal_logs");
-
         const adminHashedPass = CryptoSecurity.hashPassword("Arabic69");
         localStorage.setItem("jamal_admin_hash", adminHashedPass);
 
+        // تحميل المحتويات الافتراضية إذا كانت السحابة فارغة
+        const localLessons = localStorage.getItem("jamal_lessons");
         if (!localLessons) {
           const initLessons = [
             {
               id: "les_1",
               title: "أسلوب الاستثناء وأحكامه الإعرابية الشاملة",
+              target: "UAE_12",
+              curriculum: "UAE",
               grade: 12,
               unit: "الوحدة الأولى: النحو المتقدم",
               duration: "26 دقيقة",
@@ -1375,10 +1371,22 @@
             {
               id: "les_2",
               title: "الجمل التي لها محل من الإعراب وتطبيقاتها",
+              target: "UAE_11",
+              curriculum: "UAE",
               grade: 11,
               unit: "الوحدة الأولى: النحو والتطبيق",
               duration: "28 دقيقة",
               videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+            },
+            {
+              id: "les_3",
+              title: "قواعد النحو والصرف المقررة للشهادة الثانوية السودانية",
+              target: "SUDAN_12",
+              curriculum: "SUDAN",
+              grade: 12,
+              unit: "المنهاج السوداني: قواعد اللغة والأدب",
+              duration: "35 دقيقة",
+              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
             }
           ];
 
@@ -1386,10 +1394,22 @@
             {
               id: "aud_1",
               title: "الإلقاء الصوتي المتقن لقصيدة المتنبي في مدح سيف الدولة",
+              target: "UAE_12",
+              curriculum: "UAE",
               grade: 12,
               unit: "شعر العصر العباسي",
               duration: "5 دقائق",
               audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+            },
+            {
+              id: "aud_2",
+              title: "نصوص وقصائد الأدب المقررة للشهادة السودانية",
+              target: "SUDAN_12",
+              curriculum: "SUDAN",
+              grade: 12,
+              unit: "الأدب والنصوص السودانية",
+              duration: "7 دقائق",
+              audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
             }
           ];
 
@@ -1398,6 +1418,8 @@
               id: "bk_1",
               title: "مذكرة التميز الشاملة في قواعد اللغة العربية – الصف 12",
               format: "PDF",
+              target: "UAE_12",
+              curriculum: "UAE",
               grade: 12,
               fileUrl: "",
               description: "ملخص وزاري شامل لقواعد النحو، البلاغة، ونماذج إعرابية تطبيقية.",
@@ -1405,19 +1427,23 @@
             },
             {
               id: "bk_2",
-              title: "عرض تقديمي شامل: مهارات البلاغة والبيان – الصف 11",
-              format: "PPTX",
-              grade: 11,
+              title: "دليل الطالب الشامل في اللغة العربية – الشهادة السودانية",
+              format: "PDF",
+              target: "SUDAN_12",
+              curriculum: "SUDAN",
+              grade: 12,
               fileUrl: "",
-              description: "شرائح تفاعلية لشرح التشبيه والاستعارة والمحسنات البديعية.",
-              sampleContent: `الشريحة 1: مقدمة في علم البلاغة والبيان.\nالشريحة 2: أنواع التشبيه (مفرد، تمثيلي، ضمني).\nالشريحة 3: الاستعارة المكنية والتصريحية وتدريبات تطبيقية.`
+              description: "شامل لمنهاج الصف الثالث الثانوي: النحو، البلاغة، الأدب والنصوص، وتدريبات امتحانات الشهادة السودانية.",
+              sampleContent: `مقرر الشهادة السودانية:\n1. النحو والصرف: الممنوع من الصرف، التوكيد، البدل، أسلوب النداء والتعجب.\n2. البلاغة: علم البيان وعلم البديع.\n3. الأدب والنصوص: عصور الأدب العربي والمدارس الشعرية الحديثة.`
             }
           ];
 
           const initQuizzes = [
             {
-              id: "quiz_12",
-              title: "تحدي النحو والبلاغة التفاعلي (الصف 12)",
+              id: "quiz_uae_12",
+              title: "تحدي النحو والبلاغة (المنهج الإماراتي - الصف 12)",
+              target: "UAE_12",
+              curriculum: "UAE",
               grade: 12,
               timeLimit: 15,
               questions: [
@@ -1431,32 +1457,51 @@
                   aiExplanation: "الجملة تام منفي، لذا يجوز في المستثنى النصب على الاستثناء أو الرفع بدلاً من الفاعل (الطلاب)."
                 }
               ]
+            },
+            {
+              id: "quiz_sudan_12",
+              title: "امتحان تقييمي شامل (المنهاج السوداني - الشهادة الثانوية)",
+              target: "SUDAN_12",
+              curriculum: "SUDAN",
+              grade: 12,
+              timeLimit: 20,
+              questions: [
+                {
+                  id: "qs1",
+                  text: "في المنهاج السوداني: يُجر الممنوع من الصرف بالفتحة نيابة عن الكسرة بشرط:",
+                  option1: "أن يكون معرفاً بأل",
+                  option2: "أن يكون مجرداً من (أل) والإضافة",
+                  option3: "أن يكون مضافاً إلى معرفة",
+                  correctOption: 2,
+                  aiExplanation: "يشترط في جر الممنوع من الصرف بالفتحة أن يكون خالياً من أل التعريف وغير مضاف."
+                }
+              ]
             }
-          ];
-
-          const initLogs = [
-            { time: "2026-08-16 00:01", user: "system_security", action: "ربط وتأمين قاعدة بيانات Firebase للمنصة بنجاح" }
           ];
 
           localStorage.setItem("jamal_lessons", JSON.stringify(initLessons));
           localStorage.setItem("jamal_audios", JSON.stringify(initAudios));
           localStorage.setItem("jamal_books", JSON.stringify(initBooks));
           localStorage.setItem("jamal_quizzes", JSON.stringify(initQuizzes));
-          localStorage.setItem("jamal_logs", JSON.stringify(initLogs));
         }
 
+        // تفعيل المستمع اللحظي (Real-time Listener) للطلاب من Firestore
         if (db) {
-          try {
-            const snap = await db.collection("students").get();
-            if (!snap.empty) {
-              State.students = snap.docs.map(d => d.data());
-              localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
-            } else {
-              State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
-            }
-          } catch (e) {
+          db.collection("students").onSnapshot(snapshot => {
+            State.students = snapshot.docs.map(doc => doc.data());
+            localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
+            UI.render();
+          }, () => {
             State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
-          }
+          });
+
+          db.collection("lessons").onSnapshot(snapshot => {
+            if (!snapshot.empty) {
+              State.lessons = snapshot.docs.map(doc => doc.data());
+              localStorage.setItem("jamal_lessons", JSON.stringify(State.lessons));
+              UI.render();
+            }
+          });
         } else {
           State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
         }
@@ -1467,6 +1512,7 @@
         State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
         State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
 
+        // استعادة الجلسة
         const savedToken = localStorage.getItem("jamal_session_token");
         if (savedToken) {
           const validated = CryptoSecurity.validateSessionToken(savedToken);
@@ -1495,6 +1541,9 @@
               db.collection("students").doc(st.uid).set(st, { merge: true }).catch(err => console.error(err));
             });
           }
+        } else if (key === "lessons" && db) {
+          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+          data.forEach(l => db.collection("lessons").doc(l.id).set(l, { merge: true }).catch(err => console.error(err)));
         } else if (key === "logs") {
           localStorage.setItem("jamal_logs", JSON.stringify(data));
           if (db && data.length > 0) {
@@ -1578,7 +1627,7 @@
                   <i class="fa-solid fa-ban" style="font-size: 52px; color: var(--danger); margin-bottom: 14px;"></i>
                   <h3 style="color: var(--primary-burgundy); margin-bottom: 8px;">تم قفل تسجيل الدخول مؤقتاً</h3>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
-                    تم رصد محاولات دخول خاطئة متعددة. تم تعليق المحاولات لمدة <strong>${bruteStatus.remainingSec}</strong> ثانية.
+                    تم رصد محاولات دخول خاطئة متعددة. تم تعليق المحاولات لمدة <strong>${bruteStatus.remainingSec}</strong> ثانية لحماية حسابك.
                   </p>
                   <button class="btn btn-secondary" onclick="UI.render()">تحديث الحالة</button>
                 </div>
@@ -1594,7 +1643,7 @@
                 </div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800; margin-bottom: 4px;">تسجيل الدخول المشفر</h2>
                 <div style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:50px; font-size:0.72rem; font-weight:700; margin-bottom:18px;">
-                  <i class="fa-solid fa-cloud-check"></i> متصل بـ Firebase المشفر
+                  <i class="fa-solid fa-cloud-bolt"></i> مزامنة سحابية فورية نشطة
                 </div>
 
                 <form onsubmit="App.handleLogin(event)">
@@ -1649,14 +1698,23 @@
             `;
           }
 
-          // تطبيق فلتر البحث الذكي للطالب
+          // عزل وفرز المحتوى بدقة حسب منهاج وصف الطالب المسجل
+          const userTarget = user.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${user.grade}`;
           const q = State.studentSearchQuery.toLowerCase().trim();
-          const filterFn = item => !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+          const filterFn = item => {
+            const matchTarget = item.target === userTarget || (item.curriculum === user.curriculum && item.grade == user.grade);
+            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+            return matchTarget && matchSearch;
+          };
 
-          const gradeLessons = State.lessons.filter(l => l.grade === user.grade && filterFn(l));
-          const gradeAudios = State.audios.filter(a => a.grade === user.grade && filterFn(a));
-          const gradeBooks = State.books.filter(b => b.grade === user.grade && filterFn(b));
-          const gradeQuizzes = State.quizzes.filter(qz => qz.grade === user.grade && filterFn(qz));
+          const gradeLessons = State.lessons.filter(filterFn);
+          const gradeAudios = State.audios.filter(filterFn);
+          const gradeBooks = State.books.filter(filterFn);
+          const gradeQuizzes = State.quizzes.filter(filterFn);
+
+          const curriculumTitle = user.curriculum === 'SUDAN' 
+            ? 'المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)' 
+            : `المنهج الإماراتي المتقدم – الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'}`;
 
           return `
             ${isTrial ? `
@@ -1672,7 +1730,7 @@
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                 <div>
                   <h2 style="color: var(--primary-burgundy); font-weight: 800;">مرحباً بك في منصة أستاذ جمال 👋</h2>
-                  <p style="color: var(--text-muted); font-size: 0.85rem;">الطالب: <strong>${user.name}</strong> | الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'} المتقدم</p>
+                  <p style="color: var(--text-muted); font-size: 0.85rem;">الطالب: <strong>${user.name}</strong> | <span class="badge badge-curriculum">${curriculumTitle}</span></p>
                 </div>
                 <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
                   ${user.certificateApproved ? `
@@ -1680,7 +1738,7 @@
                       <i class="fa-solid fa-award"></i> طباعة شهادة الإتمام المعتمدة A4 ✓
                     </button>
                   ` : `
-                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem;" onclick="alert('الشهادة بانتظار اعتماد الأستاذ جمال بعد إتمام كافة الاختبارات.')" title="الشهادة تتطلب موافقة صاحب المنصة">
+                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem;" onclick="alert('الشهادة بانتظار اعتماد الأستاذ جمال بعد إتمام كافة التقييمات.')" title="الشهادة تتطلب موافقة صاحب المنصة">
                       <i class="fa-solid fa-lock"></i> الشهادة (بانتظار اعتماد الأستاذ جمال)
                     </button>
                   `}
@@ -1692,7 +1750,7 @@
 
               <div style="margin-top: 20px;">
                 <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700; margin-bottom:6px;">
-                  <span>نسبة تقدمك وإنجاز التحديات</span>
+                  <span>نسبة تقدمك وإنجاز التحديات في المنهاج</span>
                   <span style="color: var(--gold);">88%</span>
                 </div>
                 <div style="background: #E5E7EB; height: 9px; border-radius: 50px; overflow: hidden;">
@@ -1704,7 +1762,7 @@
             <!-- شريط البحث الذكي للطالب -->
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" placeholder="🔍 ابحث في دروسك، المذكرات، التسجيلات، أو الاختبارات..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
+              <input type="text" placeholder="🔍 ابحث في دروس ومذكرات واختبارات منهاجك المقررة..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
             </div>
 
             <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
@@ -1726,7 +1784,7 @@
               ${State.activeContentTab === 'VIDEOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-play-circle"></i> الدروس والشروحات المرئية المقررة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeLessons.map(les => `
+                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد شروحات مطابقة لبحثك في هذا المنهاج.</p>' : gradeLessons.map(les => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${les.title}</strong>
@@ -1743,7 +1801,7 @@
               ${State.activeContentTab === 'AUDIOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-volume-high"></i> التسجيلات الصوتية وإلقاء القصائد</h3>
                 <div style="display:flex; flex-direction:column; gap:14px;">
-                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeAudios.map(aud => `
+                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد تسجيلات مطابقة لبحثك في هذا المنهاج.</p>' : gradeAudios.map(aud => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${aud.title}</strong>
@@ -1760,7 +1818,7 @@
               ${State.activeContentTab === 'BOOKS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-folder-open"></i> المذكرات والعروض التقديمية والملفات المعتمدة</h3>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px; grid-column:1/-1;">لا توجد نتائج تطابق بحثك.</p>' : gradeBooks.map(bk => `
+                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px; grid-column:1/-1;">لا توجد مذكرات مطابقة لبحثك في هذا المنهاج.</p>' : gradeBooks.map(bk => `
                     <div class="card" style="margin:0; border-top: 4px solid var(--primary-burgundy);">
                       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                         <i class="fa-solid ${bk.format === 'PPTX' ? 'fa-file-powerpoint' : (bk.format === 'DOCX' ? 'fa-file-word' : 'fa-file-pdf')}" style="font-size:28px; color:var(--gold);"></i>
@@ -1779,7 +1837,7 @@
               ${State.activeContentTab === 'QUIZZES' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-trophy"></i> التحديات والاختبارات التفاعلية الجذابة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد نتائج تطابق بحثك.</p>' : gradeQuizzes.map(qz => `
+                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد اختبارات مطابقة لبحثك في هذا المنهاج.</p>' : gradeQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--ivory); border:1px solid var(--gold); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> ${qz.title}</strong>
@@ -1875,7 +1933,7 @@
                   <div class="plan-badge-top">🥇 الأكثر توفيراً – وفر 50 درهماً</div>
                   <h3 style="color: var(--primary-burgundy); font-weight: 700;">اشتراك 3 أشهر</h3>
                   <div class="plan-price">250 <span><del style="color:red; font-size:0.85rem;">300</del> درهم إماراتي</span></div>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">شامل المنهج، المذكرات، والتدريب على الامتحانات النهائية المتقدمة.</p>
+                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">شامل المنهاج والمذكرات والتدريب على الامتحانات النهائية.</p>
                   <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('3_MONTHS')">
                     <i class="fa-brands fa-whatsapp"></i> طلب الاشتراك (3 أشهر)
                   </button>
@@ -1902,14 +1960,14 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
               <div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800;">لوحة تحكم المدير – الأستاذ جمال</h2>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المحتوى السحابي المشفر، الطلاب، وبنك الأسئلة</p>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة ومزامنة المحتوى السحابي لحظياً (المنهج الإماراتي والسوداني)</p>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="btn btn-primary" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
-                  <i class="fa-solid fa-folder-open"></i> إدارة وتعديل المحتوى المنشور
+                  <i class="fa-solid fa-folder-open"></i> إدارة المحتوى المنشور
                 </button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')">
-                  <i class="fa-solid fa-circle-question"></i> إنشاء وتعديل الاختبارات
+                  <i class="fa-solid fa-circle-question"></i> إنشاء الاختبارات
                 </button>
                 <button class="btn btn-primary" onclick="App.setRoute('ADMIN_STUDENTS')">
                   <i class="fa-solid fa-users"></i> سجل الطلاب (${total})
@@ -1943,7 +2001,7 @@
             </div>
 
             <div class="card">
-              <h3 style="color: var(--primary-burgundy); font-size: 0.95rem; margin-bottom: 12px;">📈 إحصائيات تفاعل ونشاط الطلاب اليومي</h3>
+              <h3 style="color: var(--primary-burgundy); font-size: 0.95rem; margin-bottom: 12px;">📈 إحصائيات تفاعل ونشاط الطلاب اليومي عبر مختلف الأجهزة</h3>
               <canvas id="trafficChart" style="max-height: 220px; width: 100%;"></canvas>
             </div>
           `;
@@ -1960,16 +2018,17 @@
 
             <div class="card">
               <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;">
-                <i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد (3 خيارات مع تحديد الإجابة)
+                <i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد (تحديد المنهاج، الصف، و 3 خيارات)
               </h3>
 
               <form onsubmit="App.handleCreateQuizQuestion(event)">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
                   <div class="form-group">
-                    <label>الصف الدراسي</label>
-                    <select id="quizGrade">
-                      <option value="12">الصف الثاني عشر (متقدم)</option>
-                      <option value="11">الصف الحادي عشر (متقدم)</option>
+                    <label>المنهاج والصف الدراسي</label>
+                    <select id="quizTarget" required>
+                      <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
+                      <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
+                      <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
                     </select>
                   </div>
                   <div class="form-group">
@@ -2022,7 +2081,6 @@
         },
 
         adminContentManager() {
-          // دمج وتصفية كافة المحتويات (فيديوهات، ملفات صوتية، كتب ومذكرات)
           const allContent = [
             ...State.lessons.map(l => ({ ...l, type: 'LESSON', typeLabel: 'فيديو', icon: 'fa-video' })),
             ...State.audios.map(a => ({ ...a, type: 'AUDIO', typeLabel: 'صوت', icon: 'fa-headphones' })),
@@ -2031,9 +2089,9 @@
 
           const q = State.adminSearchQuery.toLowerCase().trim();
           const filteredContent = allContent.filter(item => {
-            const matchGrade = State.adminGradeFilter === 'ALL' || item.grade == State.adminGradeFilter;
+            const matchTarget = State.adminTargetFilter === 'ALL' || item.target === State.adminTargetFilter;
             const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
-            return matchGrade && matchSearch;
+            return matchTarget && matchSearch;
           });
 
           return `
@@ -2055,9 +2113,8 @@
             </div>
 
             ${State.adminContentTab === 'ADD' ? `
-              <!-- نموذج إضافة محتوى جديد -->
               <div class="card">
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة</h3>
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة للمنهاج</h3>
                 <form onsubmit="App.handleCreateContent(event)">
                   <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
                     <div class="form-group">
@@ -2071,10 +2128,11 @@
                       </select>
                     </div>
                     <div class="form-group">
-                      <label>الصف الدراسي المخصص</label>
-                      <select id="contentGrade">
-                        <option value="12">الصف الثاني عشر (متقدم)</option>
-                        <option value="11">الصف الحادي عشر (متقدم)</option>
+                      <label>المنهاج والصف المستهدف</label>
+                      <select id="contentTarget" required>
+                        <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
+                        <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
+                        <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
                       </select>
                     </div>
                     <div class="form-group">
@@ -2103,22 +2161,22 @@
                   </div>
 
                   <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى في المنصة
+                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى سحابياً
                   </button>
                 </form>
               </div>
             ` : `
-              <!-- جدول إدارة وتعديل وحذف المحتوى المنشور مع شريط البحث والفلترة -->
               <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
                   <div class="search-box-wrapper" style="flex:1; min-width:240px; margin-bottom:0;">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="🔍 ابحث في المحتويات المنشورة..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)">
                   </div>
-                  <div style="display:flex; gap:6px;">
-                    <button class="btn ${State.adminGradeFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('ALL')">الكل</button>
-                    <button class="btn ${State.adminGradeFilter === '12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('12')">الصف 12</button>
-                    <button class="btn ${State.adminGradeFilter === '11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('11')">الصف 11</button>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>
+                    <button class="btn ${State.adminTargetFilter === 'UAE_12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('UAE_12')">إماراتي 12</button>
+                    <button class="btn ${State.adminTargetFilter === 'UAE_11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('UAE_11')">إماراتي 11</button>
+                    <button class="btn ${State.adminTargetFilter === 'SUDAN_12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('SUDAN_12')">سوداني 3 ثانوي</button>
                   </div>
                 </div>
 
@@ -2128,7 +2186,7 @@
                       <tr>
                         <th>المادة التعليمية</th>
                         <th>النوع</th>
-                        <th>الصف</th>
+                        <th>المنهاج والصف</th>
                         <th>الوحدة / الفرع</th>
                         <th>الإجراءات</th>
                       </tr>
@@ -2148,7 +2206,7 @@
                               <i class="fa-solid ${item.icon}"></i> ${item.typeLabel}
                             </span>
                           </td>
-                          <td>الصف ${item.grade}</td>
+                          <td>${item.target === 'SUDAN_12' ? 'سوداني (3 ثانوي)' : (item.grade == 11 ? 'إماراتي (11)' : 'إماراتي (12)')}</td>
                           <td>${item.unit || 'عام'}</td>
                           <td>
                             <div style="display:flex; gap:4px;">
@@ -2171,18 +2229,22 @@
         },
 
         adminStudents() {
-          const filtered = State.adminGradeFilter === "ALL" 
+          const filtered = State.adminTargetFilter === "ALL" 
             ? State.students 
-            : State.students.filter(s => s.grade == State.adminGradeFilter);
+            : State.students.filter(s => {
+                const target = s.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${s.grade}`;
+                return target === State.adminTargetFilter;
+              });
 
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
               <div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة الطلاب والشهادات المعتمدة</h2>
-                <div style="margin-top:6px; display:flex; gap:6px;">
-                  <button class="btn ${State.adminGradeFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('ALL')">الكل</button>
-                  <button class="btn ${State.adminGradeFilter === '12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('12')">الصف 12</button>
-                  <button class="btn ${State.adminGradeFilter === '11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminGradeFilter('11')">الصف 11</button>
+                <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
+                  <button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>
+                  <button class="btn ${State.adminTargetFilter === 'UAE_12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('UAE_12')">إماراتي 12</button>
+                  <button class="btn ${State.adminTargetFilter === 'UAE_11' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('UAE_11')">إماراتي 11</button>
+                  <button class="btn ${State.adminTargetFilter === 'SUDAN_12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('SUDAN_12')">سوداني 3 ثانوي</button>
                 </div>
               </div>
               <div style="display:flex; gap:8px;">
@@ -2202,7 +2264,7 @@
                     <tr>
                       <th>الطالب</th>
                       <th>Username</th>
-                      <th>الصف</th>
+                      <th>المنهاج والصف</th>
                       <th>الحالة</th>
                       <th>اعتماد الشهادة</th>
                       <th>تاريخ الانتهاء</th>
@@ -2214,9 +2276,9 @@
                       <tr>
                         <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
                           <i class="fa-solid fa-users-slash" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
-                          لا يوجد طلاب مسجلين حالياً في قاعدة البيانات.<br>
+                          لا يوجد طلاب مسجلين حالياً في هذا المنهاج.<br>
                           <button class="btn btn-primary" style="margin-top:12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
-                            <i class="fa-solid fa-user-plus"></i> اضغط هنا لإضافة أول طالب
+                            <i class="fa-solid fa-user-plus"></i> اضغط هنا لإضافة طالب
                           </button>
                         </td>
                       </tr>
@@ -2224,7 +2286,11 @@
                       <tr>
                         <td><strong>${st.name}</strong><br><small style="color:var(--text-muted);">${st.phone}</small></td>
                         <td><code>${st.username}</code></td>
-                        <td>الصف ${st.grade}</td>
+                        <td>
+                          <span class="badge badge-curriculum">
+                            ${st.curriculum === 'SUDAN' ? 'سوداني (3 ثانوي)' : `إماراتي (${st.grade})`}
+                          </span>
+                        </td>
                         <td>
                           <span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">
                             ${st.status}
@@ -2267,27 +2333,28 @@
             <div style="max-width: 500px; margin: 20px auto;">
               <div class="card">
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
-                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد (تشفير وحفظ مباشر في Firebase)
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد (تحديد المنهاج والصف)
                 </h3>
                 <form onsubmit="App.handleCreateStudent(event)">
                   <div class="form-group">
+                    <label>المنهاج والصف الدراسي</label>
+                    <select id="newStudentTarget" required>
+                      <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر المتقدم</option>
+                      <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر المتقدم</option>
+                      <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
                     <label>الاسم الكامل للطالب</label>
-                    <input type="text" id="newStudentName" required placeholder="مثال: راشد خالد الكتبي">
+                    <input type="text" id="newStudentName" required placeholder="مثال: محمد أحمد علي">
                   </div>
                   <div class="form-group">
                     <label>اسم المستخدم (Username)</label>
-                    <input type="text" id="newStudentUsername" required placeholder="مثال: rashed12">
+                    <input type="text" id="newStudentUsername" required placeholder="مثال: mohamed12">
                   </div>
                   <div class="form-group">
                     <label>كلمة المرور (سيتم تشفيرها بـ PBKDF2 فوراً)</label>
                     <input type="password" id="newStudentPassword" required placeholder="••••••••">
-                  </div>
-                  <div class="form-group">
-                    <label>الصف الدراسي المتقدم</label>
-                    <select id="newStudentGrade">
-                      <option value="12">الصف الثاني عشر</option>
-                      <option value="11">الصف الحادي عشر</option>
-                    </select>
                   </div>
                   <div class="form-group">
                     <label>رقم الهاتف (اختياري)</label>
@@ -2350,8 +2417,8 @@
           data: {
             labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
             datasets: [{
-              label: 'النشاط المشفر اليومي',
-              data: [42, 58, 85, 70, 110, 95, 135],
+              label: 'النشاط اللحظي عبر مختلف الأجهزة',
+              data: [45, 62, 90, 75, 118, 102, 145],
               borderColor: '#4E1D1F',
               backgroundColor: 'rgba(78, 29, 31, 0.08)',
               fill: true,
@@ -2393,8 +2460,8 @@
         UI.render();
       },
 
-      setAdminGradeFilter(grade) {
-        State.adminGradeFilter = grade;
+      setAdminTargetFilter(target) {
+        State.adminTargetFilter = target;
         UI.render();
       },
 
@@ -2483,13 +2550,13 @@
           botDiv.className = "ai-msg bot";
           
           if (query.includes("استثناء") || query.includes("إلا")) {
-            botDiv.innerText = "في أسلوب الاستثناء: إذا كان الكلام تاماً منفياً، جاز في المستثنى النصب على الاستثناء أو الإتباع على البدلية. أما إذا كان ناقصاً منفياً، فيعرب حسب موقعه في الجملة بحذف النفي وإلا.";
+            botDiv.innerText = "في أسلوب الاستثناء: إذا كان الكلام تاماً منفياً، جاز في المستثنى النصب على الاستثناء أو الإتباع على البدلية. أما إذا كان ناقصاً منفياً، فيعرب حسب موقعه في الجملة.";
+          } else if (query.includes("ممنوع") || query.includes("صرف") || query.includes("سودان")) {
+            botDiv.innerText = "في المنهاج السوداني: يُجر الممنوع من الصرف بالفتحة نيابة عن الكسرة إذا كان مجرداً من (أل) والإضافة، ويجر بالكسرة إذا عُرّف بأل أو أضيف.";
           } else if (query.includes("استعارة") || query.includes("بلاغة")) {
             botDiv.innerText = "الاستعارة المكنية: يُحذف فيها المشبه به ويُكنى عنه بشيء من لوازمه. أما الاستعارة التصريحية فيُصرح فيها بلفظ المشبه به ويُحذف المشبه.";
-          } else if (query.includes("جمل") || query.includes("محل")) {
-            botDiv.innerText = "الجمل بعد النكرات صفات، وبعد المعارف أحوال. وجملة الخبر تكون في محل رفع للمبتدأ أو نصب لكان وأخواتها.";
           } else {
-            botDiv.innerText = `وفقاً للمنهج الإماراتي المتقدم: ركز دائماً على استخراج القرينة وتطبيق القواعد وفق السياق الأدبي.`;
+            botDiv.innerText = `وفقاً للمنهاج المقرر المعتمد: ركز دائماً على استخراج القواعد الإعرابية والقرائن البلاغية بدقة.`;
           }
 
           body.appendChild(botDiv);
@@ -2510,7 +2577,7 @@
             <source src="${lesson.videoUrl}" type="video/mp4">
             متصفحك لا يدعم المشغل.
           </video>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي</div>
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي ومزامن</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
         App.resetToNormalOrientation();
@@ -2620,7 +2687,6 @@
         document.getElementById("mediaPlayerModal").classList.remove("active");
       },
 
-      // تعديل وحذف المحتوى من قبل الأستاذ جمال
       openEditModal(contentId, type) {
         let item;
         if (type === 'LESSON') item = State.lessons.find(l => l.id === contentId);
@@ -2631,7 +2697,7 @@
 
         document.getElementById('editContentId').value = item.id;
         document.getElementById('editContentType').value = type;
-        document.getElementById('editContentGrade').value = item.grade;
+        document.getElementById('editContentTarget').value = item.target || (item.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${item.grade}`);
         document.getElementById('editContentTitle').value = item.title;
         document.getElementById('editContentUnit').value = item.unit || '';
         document.getElementById('editContentUrl').value = item.videoUrl || item.audioUrl || item.fileUrl || '';
@@ -2655,21 +2721,24 @@
         e.preventDefault();
         const id = document.getElementById('editContentId').value;
         const type = document.getElementById('editContentType').value;
-        const grade = parseInt(document.getElementById('editContentGrade').value);
+        const target = document.getElementById('editContentTarget').value;
         const title = document.getElementById('editContentTitle').value.trim();
         const unit = document.getElementById('editContentUnit').value.trim();
         const url = document.getElementById('editContentUrl').value.trim();
         const text = document.getElementById('editContentText').value.trim();
 
+        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
+        const grade = target === 'UAE_11' ? 11 : 12;
+
         if (type === 'LESSON') {
           const item = State.lessons.find(l => l.id === id);
-          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.videoUrl = url; DataStore.save('lessons', State.lessons); }
+          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.videoUrl = url; DataStore.save('lessons', State.lessons); }
         } else if (type === 'AUDIO') {
           const item = State.audios.find(a => a.id === id);
-          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.audioUrl = url; DataStore.save('audios', State.audios); }
+          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.audioUrl = url; DataStore.save('audios', State.audios); }
         } else if (type === 'BOOK') {
           const item = State.books.find(b => b.id === id);
-          if (item) { item.grade = grade; item.title = title; item.unit = unit; item.fileUrl = url; item.sampleContent = text; DataStore.save('books', State.books); }
+          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.fileUrl = url; item.sampleContent = text; DataStore.save('books', State.books); }
         }
 
         State.activityLogs.unshift({
@@ -2744,7 +2813,7 @@
 
         const expBox = document.getElementById("aiExplanationBox");
         const expText = document.getElementById("aiExplanationText");
-        expText.innerText = currentQ.aiExplanation || "وفقاً للقاعدة النحوية والبلاغية المعتمدة بالمنهاج المتقدم.";
+        expText.innerText = currentQ.aiExplanation || "وفقاً للقاعدة النحوية والبلاغية المعتمدة بالمنهاج.";
         expBox.style.display = "block";
 
         const nextBtn = document.getElementById("nextQuestionBtn");
@@ -2775,7 +2844,7 @@
 
       handleCreateQuizQuestion(e) {
         e.preventDefault();
-        const grade = parseInt(document.getElementById("quizGrade").value);
+        const target = document.getElementById("quizTarget").value;
         const quizTitle = document.getElementById("quizTitle").value.trim();
         const questionText = document.getElementById("questionText").value.trim();
         const option1 = document.getElementById("opt1").value.trim();
@@ -2784,11 +2853,16 @@
         const correctOption = parseInt(document.getElementById("correctOptionSelect").value);
         const aiExplanation = document.getElementById("explanationText").value.trim();
 
-        let targetQuiz = State.quizzes.find(q => q.grade === grade);
+        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
+        const grade = target === 'UAE_11' ? 11 : 12;
+
+        let targetQuiz = State.quizzes.find(q => q.target === target);
         if (!targetQuiz) {
           targetQuiz = {
             id: "quiz_" + Date.now(),
             title: quizTitle,
+            target,
+            curriculum,
             grade,
             timeLimit: 15,
             questions: []
@@ -2833,10 +2907,15 @@
           return;
         }
         document.getElementById("certStudentName").innerText = user.name;
-        document.getElementById("certGradeText").innerText = `اللغة العربية – الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'} المتقدم`;
+        
+        const certDesc = user.curriculum === 'SUDAN' 
+          ? 'اللغة العربية – المنهاج السوداني (الشهادة الثانوية)' 
+          : `اللغة العربية – المنهج الإماراتي المتقدم (الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'})`;
+
+        document.getElementById("certGradeText").innerText = certDesc;
         
         const certHash = CryptoJS.MD5(user.uid + user.name + "JAMAL_2026").toString().substring(0, 8).toUpperCase();
-        document.getElementById("certSerial").innerText = `JAMAL-${user.grade}-${certHash}`;
+        document.getElementById("certSerial").innerText = `JAMAL-${user.curriculum}-${certHash}`;
         
         document.getElementById("certificateModal").classList.add("active");
       },
@@ -2907,11 +2986,14 @@
 
       handleCreateStudent(e) {
         e.preventDefault();
+        const target = document.getElementById("newStudentTarget").value;
         const name = document.getElementById("newStudentName").value.trim();
         const username = document.getElementById("newStudentUsername").value.trim();
         const plainPassword = document.getElementById("newStudentPassword").value.trim();
-        const grade = parseInt(document.getElementById("newStudentGrade").value);
         const phone = document.getElementById("newStudentPhone").value.trim();
+
+        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
+        const grade = target === 'UAE_11' ? 11 : 12;
 
         const passwordHash = CryptoSecurity.hashPassword(plainPassword);
 
@@ -2920,13 +3002,15 @@
           name,
           username,
           passwordHash,
+          target,
+          curriculum,
           grade,
           phone: phone || "غير محدد",
           status: "TRIAL",
           plan: "7_DAYS_TRIAL",
-          trialStartDate: "2026-08-16",
-          trialEndDate: "2026-08-23",
-          expiresAt: "2026-08-23",
+          trialStartDate: "2026-08-18",
+          trialEndDate: "2026-08-25",
+          expiresAt: "2026-08-25",
           certificateApproved: false
         };
 
@@ -2934,38 +3018,41 @@
         State.activityLogs.unshift({
           time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
           user: "jamal (Admin)",
-          action: `إنشاء وتشفير حساب الطالب: ${name} (${username})`
+          action: `إنشاء وتشفير حساب الطالب: ${name} (${username}) - [${curriculum === 'SUDAN' ? 'المنهاج السوداني' : 'المنهج الإماراتي'}]`
         });
 
         DataStore.save("students", State.students);
         DataStore.save("logs", State.activityLogs);
 
-        alert(`تم إنشاء حساب الطالب: ${name} وتشفير بياناته وحفظها في Firebase بنجاح.`);
+        alert(`تم إنشاء وتشفير حساب الطالب: ${name} وحفظه في Firebase بنجاح للمنهاج المختار.`);
         App.setRoute("ADMIN_STUDENTS");
       },
 
       handleCreateContent(e) {
         e.preventDefault();
         const type = document.getElementById("contentType").value;
-        const grade = parseInt(document.getElementById("contentGrade").value);
+        const target = document.getElementById("contentTarget").value;
         const title = document.getElementById("contentTitle").value.trim();
         const unit = document.getElementById("contentUnit").value.trim();
         const url = document.getElementById("contentUrl").value.trim();
         const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
 
+        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
+        const grade = target === 'UAE_11' ? 11 : 12;
+
         if (type === "LESSON") {
-          State.lessons.push({ id: "les_" + Date.now(), title, grade, unit, duration: "25 دقيقة", videoUrl: url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" });
+          State.lessons.push({ id: "les_" + Date.now(), title, target, curriculum, grade, unit, duration: "25 دقيقة", videoUrl: url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" });
           DataStore.save("lessons", State.lessons);
         } else if (type === "AUDIO") {
-          State.audios.push({ id: "aud_" + Date.now(), title, grade, unit, duration: "6 دقائق", audioUrl: url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" });
+          State.audios.push({ id: "aud_" + Date.now(), title, target, curriculum, grade, unit, duration: "6 دقائق", audioUrl: url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" });
           DataStore.save("audios", State.audios);
         } else if (type.startsWith("BOOK")) {
           const format = type === "BOOK_PPTX" ? "PPTX" : (type === "BOOK_DOCX" ? "DOCX" : "PDF");
-          State.books.push({ id: "bk_" + Date.now(), title, format, grade, fileUrl: url, description: unit, sampleContent: text || "محتوى تعليمي ومذكرة معتمدة من الأستاذ جمال." });
+          State.books.push({ id: "bk_" + Date.now(), title, format, target, curriculum, grade, fileUrl: url, description: unit, sampleContent: text || "محتوى تعليمي ومذكرة معتمدة من الأستاذ جمال." });
           DataStore.save("books", State.books);
         }
 
-        alert(`تمت إضافة ونشر (${title}) بنجاح.`);
+        alert(`تمت إضافة ونشر (${title}) بنجاح للمنهاج المحدد.`);
         App.setRoute("ADMIN_CONTENT_MANAGER");
       },
 
@@ -2995,7 +3082,7 @@
         App.showConfirmModal("تفعيل الاشتراك", `هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, () => {
           student.status = "ACTIVE";
           student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
-          student.expiresAt = months === 1 ? "2026-09-16" : "2026-11-16";
+          student.expiresAt = months === 1 ? "2026-09-18" : "2026-11-18";
           State.activityLogs.unshift({
             time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
             user: "jamal (Admin)",
@@ -3020,16 +3107,18 @@
       },
 
       sendWhatsAppOrder(plan) {
-        const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", grade: 12 };
+        const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", curriculum: "UAE", grade: 12 };
         const phone = State.settings.adminPhoneWhatsApp; // 971559502387 (رقم الأستاذ جمال)
         const planName = plan === "3_MONTHS" ? "3 أشهر (باقة التوفير 250 درهم)" : "شهر واحد (100 درهم)";
         const price = plan === "3_MONTHS" ? "250" : "100";
+
+        const curText = user.curriculum === 'SUDAN' ? 'المنهاج السوداني (الصف الثالث الثانوي)' : `المنهج الإماراتي (الصف ${user.grade})`;
 
         const message = `السلام عليكم أستاذ جمال، أرغب في الاشتراك في منصة أستاذ جمال للغة العربية.
 
 اسم الطالب: ${user.name}
 اسم المستخدم: ${user.username}
-الصف: الصف ${user.grade == 11 ? "الحادي عشر" : "الثاني عشر"}
+المنهاج والصف: ${curText}
 الباقة المطلوبة: ${planName}
 قيمة الاشتراك: ${price} درهم إماراتي
 
