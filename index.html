@@ -340,8 +340,8 @@
     .player-viewport {
       position: relative;
       width: 100%;
-      min-height: 400px;
-      height: 60vh;
+      min-height: 420px;
+      height: 65vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1096,7 +1096,7 @@
     </div>
   </footer>
 
-  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase والمزامنة اللحظية -->
+  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase والمزامنة اللحظية الحقيقية -->
   <script>
     /**
      * =========================================================================
@@ -1315,7 +1315,7 @@
 
     /**
      * =========================================================================
-     * 3. حالة النظام وقاعدة البيانات السحابية الحية (Live Real-time Cloud Sync)
+     * 3. حالة النظام وقاعدة البيانات السحابية الحقيقية (صفر بيانات وهمية)
      * =========================================================================
      */
     const State = {
@@ -1341,6 +1341,7 @@
         trialDays: 7
       },
 
+      // مصفوفات حقيقية ونظيفة بدون بيانات وهمية
       students: [],
       lessons: [],
       audios: [],
@@ -1354,165 +1355,71 @@
         const adminHashedPass = CryptoSecurity.hashPassword("Arabic69");
         localStorage.setItem("jamal_admin_hash", adminHashedPass);
 
-        // تحميل المحتويات الافتراضية إذا كانت السحابة فارغة
-        const localLessons = localStorage.getItem("jamal_lessons");
-        if (!localLessons) {
-          const initLessons = [
-            {
-              id: "les_1",
-              title: "أسلوب الاستثناء وأحكامه الإعرابية الشاملة",
-              target: "UAE_12",
-              curriculum: "UAE",
-              grade: 12,
-              unit: "الوحدة الأولى: النحو المتقدم",
-              duration: "26 دقيقة",
-              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-            },
-            {
-              id: "les_2",
-              title: "الجمل التي لها محل من الإعراب وتطبيقاتها",
-              target: "UAE_11",
-              curriculum: "UAE",
-              grade: 11,
-              unit: "الوحدة الأولى: النحو والتطبيق",
-              duration: "28 دقيقة",
-              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-            },
-            {
-              id: "les_3",
-              title: "قواعد النحو والصرف المقررة للشهادة الثانوية السودانية",
-              target: "SUDAN_12",
-              curriculum: "SUDAN",
-              grade: 12,
-              unit: "المنهاج السوداني: قواعد اللغة والأدب",
-              duration: "35 دقيقة",
-              videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4"
-            }
-          ];
-
-          const initAudios = [
-            {
-              id: "aud_1",
-              title: "الإلقاء الصوتي المتقن لقصيدة المتنبي في مدح سيف الدولة",
-              target: "UAE_12",
-              curriculum: "UAE",
-              grade: 12,
-              unit: "شعر العصر العباسي",
-              duration: "5 دقائق",
-              audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
-            },
-            {
-              id: "aud_2",
-              title: "نصوص وقصائد الأدب المقررة للشهادة السودانية",
-              target: "SUDAN_12",
-              curriculum: "SUDAN",
-              grade: 12,
-              unit: "الأدب والنصوص السودانية",
-              duration: "7 دقائق",
-              audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
-            }
-          ];
-
-          const initBooks = [
-            {
-              id: "bk_1",
-              title: "مذكرة التميز الشاملة في قواعد اللغة العربية – الصف 12",
-              format: "PDF",
-              target: "UAE_12",
-              curriculum: "UAE",
-              grade: 12,
-              fileUrl: "",
-              description: "ملخص وزاري شامل لقواعد النحو، البلاغة، ونماذج إعرابية تطبيقية.",
-              sampleContent: `الفصل الأول: أسلوب الاستثناء.\nأركان الاستثناء: المستثنى منه، أداة الاستثناء، المستثنى.\nأحكام المستثنى بـ (إلا):\n1. تام مثبت: واجب النصب.\n2. تام منفي: جائز النصب أو الإتباع على البدلية.\n3. ناقص منفي: يعرب حسب موقعه في الجملة.`
-            },
-            {
-              id: "bk_2",
-              title: "دليل الطالب الشامل في اللغة العربية – الشهادة السودانية",
-              format: "PDF",
-              target: "SUDAN_12",
-              curriculum: "SUDAN",
-              grade: 12,
-              fileUrl: "",
-              description: "شامل لمنهاج الصف الثالث الثانوي: النحو، البلاغة، الأدب والنصوص، وتدريبات امتحانات الشهادة السودانية.",
-              sampleContent: `مقرر الشهادة السودانية:\n1. النحو والصرف: الممنوع من الصرف، التوكيد، البدل، أسلوب النداء والتعجب.\n2. البلاغة: علم البيان وعلم البديع.\n3. الأدب والنصوص: عصور الأدب العربي والمدارس الشعرية الحديثة.`
-            }
-          ];
-
-          const initQuizzes = [
-            {
-              id: "quiz_uae_12",
-              title: "تحدي النحو والبلاغة (المنهج الإماراتي - الصف 12)",
-              target: "UAE_12",
-              curriculum: "UAE",
-              grade: 12,
-              timeLimit: 15,
-              questions: [
-                {
-                  id: "q1",
-                  text: "ما حكم المستثنى في جملة: «ما حضر الطلابُ إلا زيداً / زيدٌ»؟",
-                  option1: "واجب النصب فقط",
-                  option2: "جائز النصب على الاستثناء أو الإتباع على البدلية",
-                  option3: "يعرب حسب موقعه فاعلاً",
-                  correctOption: 2,
-                  aiExplanation: "الجملة تام منفي، لذا يجوز في المستثنى النصب على الاستثناء أو الرفع بدلاً من الفاعل (الطلاب)."
-                }
-              ]
-            },
-            {
-              id: "quiz_sudan_12",
-              title: "امتحان تقييمي شامل (المنهاج السوداني - الشهادة الثانوية)",
-              target: "SUDAN_12",
-              curriculum: "SUDAN",
-              grade: 12,
-              timeLimit: 20,
-              questions: [
-                {
-                  id: "qs1",
-                  text: "في المنهاج السوداني: يُجر الممنوع من الصرف بالفتحة نيابة عن الكسرة بشرط:",
-                  option1: "أن يكون معرفاً بأل",
-                  option2: "أن يكون مجرداً من (أل) والإضافة",
-                  option3: "أن يكون مضافاً إلى معرفة",
-                  correctOption: 2,
-                  aiExplanation: "يشترط في جر الممنوع من الصرف بالفتحة أن يكون خالياً من أل التعريف وغير مضاف."
-                }
-              ]
-            }
-          ];
-
-          localStorage.setItem("jamal_lessons", JSON.stringify(initLessons));
-          localStorage.setItem("jamal_audios", JSON.stringify(initAudios));
-          localStorage.setItem("jamal_books", JSON.stringify(initBooks));
-          localStorage.setItem("jamal_quizzes", JSON.stringify(initQuizzes));
-        }
-
-        // تفعيل المستمع اللحظي (Real-time Listener) للطلاب من Firestore
+        // تفعيل المستمعات السحابية المباشرة (Firestore Live onSnapshot Listeners)
         if (db) {
+          // مزامنة الطلاب الحقيقيين لحظياً
           db.collection("students").onSnapshot(snapshot => {
-            State.students = snapshot.docs.map(doc => doc.data());
+            State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
             UI.render();
           }, () => {
             State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
           });
 
+          // مزامنة الدروس والفيديوهات الحقيقية لحظياً
           db.collection("lessons").onSnapshot(snapshot => {
-            if (!snapshot.empty) {
-              State.lessons = snapshot.docs.map(doc => doc.data());
-              localStorage.setItem("jamal_lessons", JSON.stringify(State.lessons));
-              UI.render();
-            }
+            State.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("jamal_lessons", JSON.stringify(State.lessons));
+            UI.render();
+          }, () => {
+            State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
+          });
+
+          // مزامنة الملفات الصوتية الحقيقية لحظياً
+          db.collection("audios").onSnapshot(snapshot => {
+            State.audios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("jamal_audios", JSON.stringify(State.audios));
+            UI.render();
+          }, () => {
+            State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
+          });
+
+          // مزامنة الكتب والمذكرات (PDF, Word, PPTX) لحظياً
+          db.collection("books").onSnapshot(snapshot => {
+            State.books = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("jamal_books", JSON.stringify(State.books));
+            UI.render();
+          }, () => {
+            State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
+          });
+
+          // مزامنة الاختبارات وبنك الأسئلة الحقيقي لحظياً
+          db.collection("quizzes").onSnapshot(snapshot => {
+            State.quizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("jamal_quizzes", JSON.stringify(State.quizzes));
+            UI.render();
+          }, () => {
+            State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
+          });
+
+          // مزامنة سجلات الأمان والتنبيهات لحظياً
+          db.collection("activity_logs").onSnapshot(snapshot => {
+            State.activityLogs = snapshot.docs.map(doc => doc.data());
+            localStorage.setItem("jamal_logs", JSON.stringify(State.activityLogs));
+            UI.render();
+          }, () => {
+            State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
           });
         } else {
           State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
+          State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
+          State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
+          State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
+          State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
+          State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
         }
 
-        State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
-        State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
-        State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
-        State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
-        State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
-
-        // استعادة الجلسة
+        // استعادة الجلسة المشفرة إن كانت سارية
         const savedToken = localStorage.getItem("jamal_session_token");
         if (savedToken) {
           const validated = CryptoSecurity.validateSessionToken(savedToken);
@@ -1544,6 +1451,15 @@
         } else if (key === "lessons" && db) {
           localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
           data.forEach(l => db.collection("lessons").doc(l.id).set(l, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "audios" && db) {
+          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+          data.forEach(a => db.collection("audios").doc(a.id).set(a, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "books" && db) {
+          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+          data.forEach(b => db.collection("books").doc(b.id).set(b, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "quizzes" && db) {
+          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+          data.forEach(q => db.collection("quizzes").doc(q.id).set(q, { merge: true }).catch(err => console.error(err)));
         } else if (key === "logs") {
           localStorage.setItem("jamal_logs", JSON.stringify(data));
           if (db && data.length > 0) {
@@ -1643,7 +1559,7 @@
                 </div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800; margin-bottom: 4px;">تسجيل الدخول المشفر</h2>
                 <div style="display:inline-flex; align-items:center; gap:6px; background:#DCFCE7; color:#15803D; padding:3px 10px; border-radius:50px; font-size:0.72rem; font-weight:700; margin-bottom:18px;">
-                  <i class="fa-solid fa-cloud-bolt"></i> مزامنة سحابية فورية نشطة
+                  <i class="fa-solid fa-cloud-bolt"></i> مزامنة سحابية حية مع Firebase
                 </div>
 
                 <form onsubmit="App.handleLogin(event)">
@@ -1698,7 +1614,7 @@
             `;
           }
 
-          // عزل وفرز المحتوى بدقة حسب منهاج وصف الطالب المسجل
+          // عزل وفرز المحتوى الحقيقي بدقة للمنهاج والصف فقط
           const userTarget = user.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${user.grade}`;
           const q = State.studentSearchQuery.toLowerCase().trim();
           const filterFn = item => {
@@ -1784,11 +1700,11 @@
               ${State.activeContentTab === 'VIDEOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-play-circle"></i> الدروس والشروحات المرئية المقررة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد شروحات مطابقة لبحثك في هذا المنهاج.</p>' : gradeLessons.map(les => `
+                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-film" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يقم الأستاذ جمال بإضافة فيديوهات لهذا المنهاج بعد.</p>' : gradeLessons.map(les => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${les.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${les.unit} • ${les.duration}</span>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${les.unit} • ${les.duration || 'درس مسجل'}</span>
                       </div>
                       <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openVideoPlayer('${les.id}')">
                         <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو المطور
@@ -1800,12 +1716,12 @@
 
               ${State.activeContentTab === 'AUDIOS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-volume-high"></i> التسجيلات الصوتية وإلقاء القصائد</h3>
-                <div style="display:flex; flex-direction:column; gap:14px;">
-                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد تسجيلات مطابقة لبحثك في هذا المنهاج.</p>' : gradeAudios.map(aud => `
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-headphones" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم إضافة ملفات صوتية لهذا المنهاج بعد.</p>' : gradeAudios.map(aud => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.92rem; display:block;">${aud.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${aud.unit} • ${aud.duration}</span>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${aud.unit} • ${aud.duration || 'تسجيل صوتي'}</span>
                       </div>
                       <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openAudioPlayer('${aud.id}')">
                         <i class="fa-solid fa-headphones"></i> استماع محمي
@@ -1818,7 +1734,7 @@
               ${State.activeContentTab === 'BOOKS' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-folder-open"></i> المذكرات والعروض التقديمية والملفات المعتمدة</h3>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px; grid-column:1/-1;">لا توجد مذكرات مطابقة لبحثك في هذا المنهاج.</p>' : gradeBooks.map(bk => `
+                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px; grid-column:1/-1;"><i class="fa-solid fa-file-lines" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم إضافة مذكرات أو ملفات لهذا المنهاج بعد.</p>' : gradeBooks.map(bk => `
                     <div class="card" style="margin:0; border-top: 4px solid var(--primary-burgundy);">
                       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                         <i class="fa-solid ${bk.format === 'PPTX' ? 'fa-file-powerpoint' : (bk.format === 'DOCX' ? 'fa-file-word' : 'fa-file-pdf')}" style="font-size:28px; color:var(--gold);"></i>
@@ -1837,11 +1753,11 @@
               ${State.activeContentTab === 'QUIZZES' ? `
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-trophy"></i> التحديات والاختبارات التفاعلية الجذابة</h3>
                 <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:20px;">لا توجد اختبارات مطابقة لبحثك في هذا المنهاج.</p>' : gradeQuizzes.map(qz => `
+                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-trophy" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم نشر اختبارات تفاعلية لهذا المنهاج بعد.</p>' : gradeQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--ivory); border:1px solid var(--gold); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
                       <div>
                         <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> ${qz.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions.length} أسئلة تفاعلية • تقييم فوري وتفسير ذكي</span>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة تفاعلية • تقييم فوري وتفسير ذكي</span>
                       </div>
                       <button class="btn btn-gold" style="padding:8px 16px; font-size:0.82rem;" onclick="App.startInteractiveQuiz('${qz.id}')">
                         <i class="fa-solid fa-play"></i> بدء التحدي الآن
@@ -2194,8 +2110,9 @@
                     <tbody>
                       ${filteredContent.length === 0 ? `
                         <tr>
-                          <td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">
-                            لا يوجد محتوى يطابق البحث أو الفلتر المختار.
+                          <td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">
+                            <i class="fa-solid fa-folder-open" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
+                            لم تقم بإضافة أي محتوى لهذا القسم حتى الآن. اضغط على (إضافة مادة جديدة) للبدء.
                           </td>
                         </tr>
                       ` : filteredContent.map(item => `
@@ -2276,7 +2193,7 @@
                       <tr>
                         <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
                           <i class="fa-solid fa-users-slash" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
-                          لا يوجد طلاب مسجلين حالياً في هذا المنهاج.<br>
+                          لا يوجد طلاب مسجلين حالياً في قاعدة البيانات.<br>
                           <button class="btn btn-primary" style="margin-top:12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
                             <i class="fa-solid fa-user-plus"></i> اضغط هنا لإضافة طالب
                           </button>
@@ -2389,12 +2306,12 @@
                     </tr>
                   </thead>
                   <tbody>
-                    ${State.activityLogs.map(log => {
-                      const isAlert = log.action.includes('محاولة') || log.action.includes('تنبيه');
+                    ${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-muted);">لا توجد تنبيهات أمنية مسجلة حالياً.</td></tr>' : State.activityLogs.map(log => {
+                      const isAlert = log.action && (log.action.includes('محاولة') || log.action.includes('تنبيه'));
                       return `
                         <tr style="${isAlert ? 'background:#FEF2F2;' : ''}">
-                          <td>${log.time}</td>
-                          <td><code>${log.user}</code></td>
+                          <td>${log.time || 'الآن'}</td>
+                          <td><code>${log.user || 'مستخدم'}</code></td>
                           <td style="${isAlert ? 'color:var(--danger); font-weight:700;' : ''}">
                             ${isAlert ? '<i class="fa-solid fa-triangle-exclamation"></i> ' : ''}${log.action}
                           </td>
@@ -2564,27 +2481,52 @@
         }, 500);
       },
 
+      // مشغل الفيديو الذكي والمحسن لجميع أنواع الروابط المضافة من الأستاذ جمال
       openVideoPlayer(lessonId) {
         const lesson = State.lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+
         document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${lesson.title}`;
         const viewport = document.getElementById("playerViewport");
+        const url = lesson.videoUrl || "";
+
+        let playerHtml = "";
+        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+          // تحويل رابط يوتيوب إلى تضمين آمن ومحمي
+          let videoId = "";
+          if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
+          else if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
+          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1" allowfullscreen></iframe>`;
+        } else if (url.includes("drive.google.com")) {
+          // تحويل رابط Google Drive إلى معاينة مباشرة
+          const driveEmbed = url.replace("/view", "/preview").replace("/edit", "/preview");
+          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="${driveEmbed}" allow="autoplay"></iframe>`;
+        } else {
+          // مشغل الفيديو المباشر الأصلي MP4
+          playerHtml = `
+            <video id="activeVideoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture oncontextmenu="return false;">
+              <source src="${url}" type="video/mp4">
+              متصفحك لا يدعم المشغل.
+            </video>
+          `;
+        }
         
         viewport.innerHTML = `
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
             <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
           </button>
-          <video id="activeVideoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture oncontextmenu="return false;">
-            <source src="${lesson.videoUrl}" type="video/mp4">
-            متصفحك لا يدعم المشغل.
-          </video>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي ومزامن</div>
+          ${playerHtml}
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي</div>
         `;
+
         document.getElementById("mediaPlayerModal").classList.add("active");
         App.resetToNormalOrientation();
       },
 
       openAudioPlayer(audioId) {
         const aud = State.audios.find(a => a.id === audioId);
+        if (!aud) return;
+
         document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-headphones"></i> ${aud.title}`;
         const viewport = document.getElementById("playerViewport");
         viewport.innerHTML = `
@@ -2607,6 +2549,8 @@
 
       openDocumentViewer(bookId) {
         const bk = State.books.find(b => b.id === bookId);
+        if (!bk) return;
+
         document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-lines"></i> ${bk.title} (${bk.format || 'PDF'})`;
         const viewport = document.getElementById("playerViewport");
 
@@ -2626,7 +2570,7 @@
             </button>
             <div class="doc-fallback-card">
               <h3 style="color:var(--primary-burgundy); border-bottom:2px solid var(--gold); padding-bottom:8px; margin-bottom:14px;">${bk.title}</h3>
-              <p style="white-space: pre-line; line-height: 2; font-size: 1.05rem;">${bk.sampleContent}</p>
+              <p style="white-space: pre-line; line-height: 2; font-size: 1.05rem;">${bk.sampleContent || 'تم رفع المذكرة بنجاح من قبل الأستاذ جمال.'}</p>
             </div>
             <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – مشفر</div>
           `;
@@ -2749,27 +2693,30 @@
         DataStore.save('logs', State.activityLogs);
 
         App.closeEditModal();
-        alert('تم حفظ وتحديث المادة بنجاح في السحابة.');
+        alert('تم حفظ وتحديث المادة بنجاح في Firebase.');
         UI.render();
       },
 
       promptDeleteContent(contentId, type) {
-        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً من المنصة؟", () => {
+        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً من المنصة وسحابة Firebase؟", () => {
           let deletedTitle = "";
           if (type === 'LESSON') {
             const item = State.lessons.find(l => l.id === contentId);
             deletedTitle = item ? item.title : "";
             State.lessons = State.lessons.filter(l => l.id !== contentId);
+            if (db) db.collection("lessons").doc(contentId).delete().catch(err => console.error(err));
             DataStore.save('lessons', State.lessons);
           } else if (type === 'AUDIO') {
             const item = State.audios.find(a => a.id === contentId);
             deletedTitle = item ? item.title : "";
             State.audios = State.audios.filter(a => a.id !== contentId);
+            if (db) db.collection("audios").doc(contentId).delete().catch(err => console.error(err));
             DataStore.save('audios', State.audios);
           } else if (type === 'BOOK') {
             const item = State.books.find(b => b.id === contentId);
             deletedTitle = item ? item.title : "";
             State.books = State.books.filter(b => b.id !== contentId);
+            if (db) db.collection("books").doc(contentId).delete().catch(err => console.error(err));
             DataStore.save('books', State.books);
           }
 
@@ -2881,7 +2828,7 @@
         });
 
         DataStore.save("quizzes", State.quizzes);
-        alert(`تمت إضافة السؤال بنجاح إلى (${targetQuiz.title}) وحفظه سحابياً.`);
+        alert(`تمت إضافة السؤال بنجاح إلى (${targetQuiz.title}) وحفظه في Firebase.`);
         App.setRoute("ADMIN_DASHBOARD");
       },
 
@@ -3041,18 +2988,21 @@
         const grade = target === 'UAE_11' ? 11 : 12;
 
         if (type === "LESSON") {
-          State.lessons.push({ id: "les_" + Date.now(), title, target, curriculum, grade, unit, duration: "25 دقيقة", videoUrl: url || "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" });
+          const newLesson = { id: "les_" + Date.now(), title, target, curriculum, grade, unit, duration: "درس مسجل", videoUrl: url };
+          State.lessons.push(newLesson);
           DataStore.save("lessons", State.lessons);
         } else if (type === "AUDIO") {
-          State.audios.push({ id: "aud_" + Date.now(), title, target, curriculum, grade, unit, duration: "6 دقائق", audioUrl: url || "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" });
+          const newAudio = { id: "aud_" + Date.now(), title, target, curriculum, grade, unit, duration: "تسجيل صوتي", audioUrl: url };
+          State.audios.push(newAudio);
           DataStore.save("audios", State.audios);
         } else if (type.startsWith("BOOK")) {
           const format = type === "BOOK_PPTX" ? "PPTX" : (type === "BOOK_DOCX" ? "DOCX" : "PDF");
-          State.books.push({ id: "bk_" + Date.now(), title, format, target, curriculum, grade, fileUrl: url, description: unit, sampleContent: text || "محتوى تعليمي ومذكرة معتمدة من الأستاذ جمال." });
+          const newBook = { id: "bk_" + Date.now(), title, format, target, curriculum, grade, fileUrl: url, description: unit, sampleContent: text };
+          State.books.push(newBook);
           DataStore.save("books", State.books);
         }
 
-        alert(`تمت إضافة ونشر (${title}) بنجاح للمنهاج المحدد.`);
+        alert(`تمت إضافة ونشر (${title}) بنجاح للمنهاج المحدد في قاعدة بيانات Firebase.`);
         App.setRoute("ADMIN_CONTENT_MANAGER");
       },
 
@@ -3065,11 +3015,11 @@
         if (type === "LESSON") {
           urlGroup.style.display = "block";
           textGroup.style.display = "none";
-          label.innerText = "رابط الفيديو المباشر / المشفر";
+          label.innerText = "رابط الفيديو المباشر (MP4 / YouTube / Google Drive)";
         } else if (type === "AUDIO") {
           urlGroup.style.display = "block";
           textGroup.style.display = "none";
-          label.innerText = "رابط الملف الصوتي المباشر (MP3)";
+          label.innerText = "رابط الملف الصوتي المباشر (MP3 / سحابي)";
         } else if (type.startsWith("BOOK")) {
           urlGroup.style.display = "block";
           textGroup.style.display = "block";
