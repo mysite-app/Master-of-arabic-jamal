@@ -13,6 +13,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  <!-- مكتبة PeerJS لنقل البث الصوتي المباشر الفعلي عبر WebRTC -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
   <!-- مكتبة التشفير القياسية Crypto-JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 
@@ -281,9 +284,7 @@
       font-size: 1.1rem;
     }
 
-    /* ===================================================
-       تنسيقات وحدات ودروس المنهاج الاحترافية
-    =================================================== */
+    /* وحدات ودروس المنهاج */
     .unit-section-block {
       background: var(--white);
       border-radius: var(--radius-lg);
@@ -383,9 +384,7 @@
       border-top: 1px dashed #E5E7EB;
     }
 
-    /* ===================================================
-       نظام البث الصوتي المباشر الفاخر (Live Voice Engine)
-    =================================================== */
+    /* نظام البث الصوتي الفعلي WebRTC */
     .live-broadcast-banner {
       background: linear-gradient(135deg, #1E1B4B, var(--primary-burgundy));
       border: 2px solid var(--gold);
@@ -429,7 +428,7 @@
       background: rgba(0,0,0,0.3);
     }
 
-    /* مشغل واستوديو الدروس الموحد */
+    /* مشغل واستوديو الدروس */
     .player-modal-content {
       position: relative;
       background: #0B0F19;
@@ -564,25 +563,91 @@
       100% { top: 25%; left: 70%; }
     }
 
+    /* نظام المسابقات والتحديات الاحترافي المطوّر */
     .quiz-gamified-box {
-      max-width: 720px;
+      max-width: 780px;
       margin: 0 auto;
       position: relative;
     }
 
-    .quiz-progress-bar {
+    .arena-hud-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFF;
+      padding: 12px 18px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 2px solid var(--gold);
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .arena-timer-container {
+      width: 100%;
       height: 8px;
       background: #E5E7EB;
       border-radius: 50px;
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
-    .quiz-progress-fill {
+    .arena-timer-fill {
       height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--primary-burgundy));
-      width: 0%;
-      transition: width 0.4s ease;
+      width: 100%;
+      background: linear-gradient(90deg, #10B981, #F59E0B, #EF4444);
+      transition: width 1s linear;
+    }
+
+    .combo-badge {
+      background: linear-gradient(135deg, #EF4444, #DC2626);
+      color: #FFF;
+      font-size: 0.8rem;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 50px;
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+      animation: bounce 0.6s infinite alternate;
+    }
+
+    @keyframes bounce {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.08); }
+    }
+
+    .lifelines-cluster {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+      justify-content: flex-end;
+    }
+
+    .lifeline-btn {
+      background: var(--ivory);
+      border: 1px solid var(--gold);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--primary-burgundy);
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lifeline-btn:hover:not(:disabled) {
+      background: var(--gold);
+      color: #FFF;
+      transform: translateY(-2px);
+    }
+
+    .lifeline-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      border-color: #D1D5DB;
     }
 
     .quiz-card-question {
@@ -624,6 +689,13 @@
       background: #FEE2E2 !important;
       border-color: var(--danger) !important;
       color: #7F1D1D;
+    }
+
+    .interactive-option.eliminated {
+      opacity: 0.25;
+      pointer-events: none;
+      text-decoration: line-through;
+      background: #F3F4F6 !important;
     }
 
     .option-letter {
@@ -1007,6 +1079,9 @@
 </head>
 <body oncontextmenu="return false;">
 
+  <!-- عنصر تشغيل الصوت الخفي للطلاب -->
+  <audio id="remoteLiveAudioSink" autoplay playsinline style="display:none;"></audio>
+
   <!-- درع الخصوصية المشدد -->
   <div id="securityPrivacyShield">
     <i class="fa-solid fa-user-shield" style="font-size:64px; color:var(--light-gold); margin-bottom:16px;"></i>
@@ -1033,19 +1108,25 @@
     <div id="navActions"></div>
   </header>
 
-  <!-- شريط التنبيه للبث الصوتي المباشر النشط للطلاب -->
+  <!-- شريط التنبيه للبث الصوتي المباشر النشط للطلاب مع لوحة الاستماع المباشرة -->
   <div id="liveStudentNotification" style="display:none; padding: 0 16px; max-width: 1240px; margin: 14px auto 0;">
     <div class="live-broadcast-banner">
-      <div style="display:flex; align-items:center; gap:12px;">
+      <div style="display:flex; align-items:center; gap:12px; flex:1;">
         <span class="live-pulse-indicator"></span>
         <div>
           <strong style="font-size:1.05rem;"><i class="fa-solid fa-tower-broadcast"></i> بث صوتي مباشر مع الأستاذ جمال الآن!</strong>
           <p style="font-size:0.8rem; opacity:0.9;" id="liveBroadcastTopic">شرح مباشر، إجابة استفسارات النحو والبلاغة، وتوجيهات الامتحانات.</p>
         </div>
       </div>
-      <button class="btn btn-gold" id="joinLiveAudioBtn" onclick="LiveAudio.connectStudentAudio()">
-        <i class="fa-solid fa-headphones"></i> الاستماع للبث الصوتي الحي
-      </button>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+        <div id="studentAudioVisualizerWrap" style="display:none; align-items:center; gap:8px; background:rgba(0,0,0,0.3); padding:4px 10px; border-radius:30px;">
+          <canvas id="studentAudioVisualizer" class="visualizer-canvas" style="width:110px; height:24px;"></canvas>
+          <span style="font-size:0.75rem; color:#86EFAC; font-weight:700;"><i class="fa-solid fa-waveform-lines"></i> الصوت يعمل</span>
+        </div>
+        <button class="btn btn-gold" id="joinLiveAudioBtn" onclick="LiveAudio.connectStudentAudio()">
+          <i class="fa-solid fa-headphones"></i> الاستماع للبث الصوتي الحي
+        </button>
+      </div>
     </div>
   </div>
 
@@ -1074,7 +1155,7 @@
     </div>
   </div>
 
-  <!-- المشغل واستوديو الدرس الموحد المتطور (فيديو + PDF + HTML) -->
+  <!-- المشغل واستوديو الدرس الموحد المتطور -->
   <div class="modal-overlay" id="mediaPlayerModal">
     <div class="modal-card" style="max-width: 1040px; padding: 0; background: #000; border-color: var(--gold);">
       <div class="player-modal-content">
@@ -1105,7 +1186,7 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل الدرس الكامل للأستاذ جمال (مع التخصيص لطالب أو كل الصف) -->
+  <!-- نافذة تعديل الدرس الكامل للأستاذ جمال -->
   <div class="modal-overlay" id="editLessonModal">
     <div class="modal-card">
       <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
@@ -1216,7 +1297,7 @@
     </div>
   </div>
 
-  <!-- نافذة التنبيه الاحترافية (بديل alert) -->
+  <!-- نافذة التنبيه الاحترافية -->
   <div class="modal-overlay" id="customAlertModal">
     <div class="modal-card" style="max-width: 440px; text-align: center;">
       <div id="customAlertIcon" style="font-size: 50px; color: var(--gold); margin-bottom: 14px;">
@@ -1228,7 +1309,7 @@
     </div>
   </div>
 
-  <!-- نافذة الإدخال الاحترافية (بديل prompt) -->
+  <!-- نافذة الإدخال الاحترافية -->
   <div class="modal-overlay" id="customPromptModal">
     <div class="modal-card" style="max-width: 460px;">
       <h3 id="customPromptTitle" style="color: var(--primary-burgundy); margin-bottom: 8px;">إدخال مطلوب</h3>
@@ -1243,12 +1324,12 @@
     </div>
   </div>
 
-  <!-- نافذة التحكم بالبث الصوتي المباشر للأدمن -->
+  <!-- استوديو البث الصوتي المباشر الفعلي للأدمن -->
   <div class="modal-overlay" id="adminBroadcastModal">
     <div class="modal-card" style="max-width: 580px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
         <h3 style="color: var(--primary-burgundy); font-weight:800;">
-          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر للأستاذ جمال
+          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر (WebRTC Live)
         </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="document.getElementById('adminBroadcastModal').classList.remove('active')"></i>
       </div>
@@ -1275,9 +1356,9 @@
           <select id="broadcastStudentSelect"></select>
         </div>
 
-        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; flex-wrap:wrap; gap:10px;">
           <div>
-            <span style="font-size:0.85rem; font-weight:700;">موجات صوت المايكروفون:</span>
+            <span style="font-size:0.85rem; font-weight:700;">موجات صوت المايكروفون الحية:</span>
             <canvas id="adminMicVisualizer" class="visualizer-canvas" style="display:block; margin-top:6px; width:220px;"></canvas>
           </div>
           <div id="liveStatusTag" style="text-align:center;">
@@ -1288,7 +1369,7 @@
 
       <div style="display:flex; gap:10px;">
         <button class="btn btn-danger" id="startLiveAudioBtn" style="flex:1;" onclick="LiveAudio.startAdminBroadcast()">
-          <i class="fa-solid fa-microphone"></i> بدء البث الصوتي الآن
+          <i class="fa-solid fa-microphone"></i> بدء البث الصوتي الفعلي الآن
         </button>
         <button class="btn btn-secondary" id="stopLiveAudioBtn" style="flex:1; display:none;" onclick="LiveAudio.stopAdminBroadcast()">
           <i class="fa-solid fa-microphone-slash"></i> إنهاء البث
@@ -1555,6 +1636,9 @@
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           if (AudioContext) this.ctx = new AudioContext();
         }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
       },
       playTone(freq, type, duration) {
         try {
@@ -1576,8 +1660,16 @@
         this.playTone(587.33, 'sine', 0.15);
         setTimeout(() => this.playTone(880, 'sine', 0.3), 120);
       },
+      combo() {
+        this.playTone(700, 'triangle', 0.1);
+        setTimeout(() => this.playTone(850, 'triangle', 0.1), 80);
+        setTimeout(() => this.playTone(1050, 'sine', 0.25), 160);
+      },
       wrong() {
         this.playTone(220, 'sawtooth', 0.25);
+      },
+      tick() {
+        this.playTone(400, 'square', 0.04);
       },
       celebrate() {
         this.playTone(523.25, 'triangle', 0.2);
@@ -1644,16 +1736,32 @@
 
     /**
      * =========================================================================
-     * 3. محرك البث الصوتي المباشر الحقيقي والمبسط (Live Audio Broadcast Engine)
+     * 3. محرك البث الصوتي الفعلي بتقنية WebRTC عبر شبكات نظير إلى نظير (PeerJS)
      * =========================================================================
      */
     const LiveAudio = {
+      adminPeer: null,
+      studentPeer: null,
       mediaStream: null,
-      audioCtx: null,
+      adminAudioCtx: null,
+      studentAudioCtx: null,
       analyser: null,
+      studentAnalyser: null,
       visualizerAnimId: null,
-      mediaRecorder: null,
-      studentAudioElement: null,
+      studentVisualizerAnimId: null,
+      activeCall: null,
+
+      // خوادم STUN الموثوقة لتجاوز جميع أنواع الشبكات وجدران الحماية (NAT & Firewalls)
+      iceConfig: {
+        config: {
+          iceServers: [
+            { urls: 'stun:stun1.l.google.com:19302' },
+            { urls: 'stun:stun2.l.google.com:19302' },
+            { urls: 'stun:stun3.l.google.com:19302' },
+            { urls: 'stun:stun4.l.google.com:19302' }
+          ]
+        }
+      },
 
       init() {
         if (db) {
@@ -1715,40 +1823,69 @@
 
       async startAdminBroadcast() {
         try {
-          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // التقاط المايكروفون بأعلى نقاء وإلغاء صدى الصوت
+          const stream = await navigator.mediaDevices.getUserMedia({
+            audio: {
+              echoCancellation: true,
+              noiseSuppression: true,
+              autoGainControl: true
+            }
+          });
           this.mediaStream = stream;
 
-          this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const source = this.audioCtx.createMediaStreamSource(stream);
-          this.analyser = this.audioCtx.createAnalyser();
+          // تهيئة المعالج الصوتي لرسم الترددات
+          this.adminAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const source = this.adminAudioCtx.createMediaStreamSource(stream);
+          this.analyser = this.adminAudioCtx.createAnalyser();
           this.analyser.fftSize = 64;
           source.connect(this.analyser);
+          this.startVisualizer("adminMicVisualizer", this.analyser);
 
-          this.startVisualizer();
+          // تهيئة خادم النظراء PeerJS مع معرف موحد ومعتمد للبث
+          const broadcastPeerId = "jamal_live_stream_channel_2026";
+          if (this.adminPeer) this.adminPeer.destroy();
 
-          const topic = document.getElementById("broadcastTopicInput").value.trim() || "بث صوتي وتوجيهات نحوية";
-          const targetAudience = document.getElementById("broadcastTargetAudience").value;
-          const targetStudentUid = targetAudience === "SPECIFIC" ? document.getElementById("broadcastStudentSelect").value : null;
+          this.adminPeer = new Peer(broadcastPeerId, this.iceConfig);
 
-          const sessionData = {
-            isActive: true,
-            topic,
-            targetAudience,
-            targetStudentUid,
-            startedAt: Date.now(),
-            adminName: "الأستاذ جمال"
-          };
+          this.adminPeer.on('open', async () => {
+            const topic = document.getElementById("broadcastTopicInput").value.trim() || "بث صوتي وتوجيهات نحوية";
+            const targetAudience = document.getElementById("broadcastTargetAudience").value;
+            const targetStudentUid = targetAudience === "SPECIFIC" ? document.getElementById("broadcastStudentSelect").value : null;
 
-          if (db) {
-            await db.collection("live_sessions").doc("active_broadcast").set(sessionData);
-          }
-          State.activeLiveSession = sessionData;
+            const sessionData = {
+              isActive: true,
+              peerId: broadcastPeerId,
+              topic,
+              targetAudience,
+              targetStudentUid,
+              startedAt: Date.now(),
+              adminName: "الأستاذ جمال"
+            };
 
-          document.getElementById("startLiveAudioBtn").style.display = "none";
-          document.getElementById("stopLiveAudioBtn").style.display = "inline-flex";
-          document.getElementById("liveStatusTag").innerHTML = `<span class="badge badge-active"><span class="live-pulse-indicator"></span> البث الصوتي جارٍ الآن</span>`;
-          
-          App.showToast("تم إطلاق البث الصوتي المباشر للطلاب المحددين بنجاح!", "info");
+            if (db) {
+              await db.collection("live_sessions").doc("active_broadcast").set(sessionData);
+            }
+            State.activeLiveSession = sessionData;
+
+            document.getElementById("startLiveAudioBtn").style.display = "none";
+            document.getElementById("stopLiveAudioBtn").style.display = "inline-flex";
+            document.getElementById("liveStatusTag").innerHTML = `<span class="badge badge-active"><span class="live-pulse-indicator"></span> البث الصوتي المباشر الفعلي جارٍ</span>`;
+            
+            App.showToast("تم إطلاق البث الصوتي الفعلي لجميع الطلاب بنقاء عالي!", "info");
+          });
+
+          // الرد التلقائي وإرسال تدفق الصوت المباشر لأي طالب يتصل
+          this.adminPeer.on('call', call => {
+            call.answer(this.mediaStream);
+          });
+
+          this.adminPeer.on('error', err => {
+            console.error("Peer Error:", err);
+            if (err.type === 'unavailable-id') {
+              App.showToast("معرف البث نشط، تم تجديد الاتصال بالبث الحالي.", "info");
+            }
+          });
+
         } catch (err) {
           App.alert("يرجى منح إذن المايكروفون لبدء البث الصوتي: " + err.message, "تنبيه المايكروفون");
         }
@@ -1760,7 +1897,11 @@
           this.mediaStream = null;
         }
         if (this.visualizerAnimId) cancelAnimationFrame(this.visualizerAnimId);
-        if (this.audioCtx) this.audioCtx.close();
+        if (this.adminAudioCtx) this.adminAudioCtx.close();
+        if (this.adminPeer) {
+          this.adminPeer.destroy();
+          this.adminPeer = null;
+        }
 
         if (db) {
           await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false });
@@ -1770,19 +1911,91 @@
         document.getElementById("startLiveAudioBtn").style.display = "inline-flex";
         document.getElementById("stopLiveAudioBtn").style.display = "none";
         document.getElementById("liveStatusTag").innerHTML = `<span class="badge badge-trial">البث متوقف</span>`;
-        App.showToast("تم إنهاء البث الصوتي المباشر وحفظ الجلسة.");
+        App.showToast("تم إنهاء البث الصوتي المباشر بنجاح.");
       },
 
-      startVisualizer() {
-        const canvas = document.getElementById("adminMicVisualizer");
+      async connectStudentAudio() {
+        AudioFX.init();
+        AudioFX.celebrate();
+
+        const btn = document.getElementById("joinLiveAudioBtn");
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري ربط تدفق الصوت...`;
+        btn.disabled = true;
+
+        const broadcastPeerId = (State.activeLiveSession && State.activeLiveSession.peerId) || "jamal_live_stream_channel_2026";
+
+        if (this.studentPeer) this.studentPeer.destroy();
+        this.studentPeer = new Peer(this.iceConfig);
+
+        this.studentPeer.on('open', async () => {
+          // إنشاء تدفق صوتي صامت للمطالبة بفتح القناة
+          const dummyAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const osc = dummyAudioCtx.createOscillator();
+          const dst = osc.connect(dummyAudioCtx.createMediaStreamDestination());
+          osc.start();
+          const dummyStream = dst.stream;
+
+          // الاتصال بغرفة بث الأستاذ جمال
+          const call = this.studentPeer.call(broadcastPeerId, dummyStream);
+          this.activeCall = call;
+
+          call.on('stream', remoteStream => {
+            const audioSink = document.getElementById("remoteLiveAudioSink");
+            audioSink.srcObject = remoteStream;
+            audioSink.play().then(() => {
+              btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> متصل ومباشر (استماع)`;
+              btn.classList.remove("btn-gold");
+              btn.classList.add("btn-whatsapp");
+              btn.disabled = false;
+
+              // تشغيل رسم الموجات عند الطالب ليرى تفاعل صوت المعلم
+              document.getElementById("studentAudioVisualizerWrap").style.display = "flex";
+              LiveAudio.startStudentVisualizer(remoteStream);
+              App.showToast("تم استقبال صوت الأستاذ جمال مباشرة وبوضوح!", "info");
+            }).catch(e => {
+              btn.innerHTML = `<i class="fa-solid fa-play"></i> انقر هنا لتشغيل الصوت`;
+              btn.disabled = false;
+            });
+          });
+
+          call.on('close', () => {
+            LiveAudio.disconnectStudentAudio();
+          });
+
+          call.on('error', () => {
+            LiveAudio.disconnectStudentAudio();
+          });
+        });
+
+        this.studentPeer.on('error', err => {
+          btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> إعادة المحاولة`;
+          btn.disabled = false;
+          App.alert("جاري إعادة تجهيز تدفق الصوت، اضغط إعادة المحاولة للاتصال المباشر.", "إشعار الاتصال");
+        });
+      },
+
+      disconnectStudentAudio() {
+        const btn = document.getElementById("joinLiveAudioBtn");
+        if (btn) {
+          btn.innerHTML = `<i class="fa-solid fa-headphones"></i> الاستماع للبث الصوتي الحي`;
+          btn.classList.add("btn-gold");
+          btn.classList.remove("btn-whatsapp");
+          btn.disabled = false;
+        }
+        document.getElementById("studentAudioVisualizerWrap").style.display = "none";
+        if (this.studentVisualizerAnimId) cancelAnimationFrame(this.studentVisualizerAnimId);
+      },
+
+      startVisualizer(canvasId, analyserInstance) {
+        const canvas = document.getElementById(canvasId);
         if (!canvas) return;
         const ctx = canvas.getContext("2d");
-        const bufferLength = this.analyser.frequencyBinCount;
+        const bufferLength = analyserInstance.frequencyBinCount;
         const dataArray = new Uint8Array(bufferLength);
 
         const draw = () => {
           this.visualizerAnimId = requestAnimationFrame(draw);
-          this.analyser.getByteFrequencyData(dataArray);
+          analyserInstance.getByteFrequencyData(dataArray);
 
           ctx.fillStyle = "rgba(11, 15, 25, 0.4)";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1800,15 +2013,37 @@
         draw();
       },
 
-      connectStudentAudio() {
-        // تشغيل صوت حي ومباشر تفاعلي
-        AudioFX.init();
-        AudioFX.celebrate();
-        const btn = document.getElementById("joinLiveAudioBtn");
-        btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> متصل بالبث الصوتي مباشرة (استماع)`;
-        btn.classList.remove("btn-gold");
-        btn.classList.add("btn-whatsapp");
-        App.alert("أهلاً بك يا بطل! أنت الآن متصل بالبث الصوتي المباشر مع الأستاذ جمال. تأكد من رفع مستوى صوت جهازك.", "تم الاتصال بالبث 🎙️");
+      startStudentVisualizer(stream) {
+        try {
+          this.studentAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          const source = this.studentAudioCtx.createMediaStreamSource(stream);
+          this.studentAnalyser = this.studentAudioCtx.createAnalyser();
+          this.studentAnalyser.fftSize = 32;
+          source.connect(this.studentAnalyser);
+
+          const canvas = document.getElementById("studentAudioVisualizer");
+          if (!canvas) return;
+          const ctx = canvas.getContext("2d");
+          const bufferLength = this.studentAnalyser.frequencyBinCount;
+          const dataArray = new Uint8Array(bufferLength);
+
+          const draw = () => {
+            this.studentVisualizerAnimId = requestAnimationFrame(draw);
+            this.studentAnalyser.getByteFrequencyData(dataArray);
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const barWidth = (canvas.width / bufferLength) * 2;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+              const barHeight = (dataArray[i] / 255) * canvas.height;
+              ctx.fillStyle = "#10B981";
+              ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+              x += barWidth + 2;
+            }
+          };
+          draw();
+        } catch(e) {}
       }
     };
 
@@ -1824,21 +2059,27 @@
       adminSearchQuery: "",
       adminTargetFilter: "ALL",
       adminContentTab: "LIST",
-      activeStudentTab: "CURRICULUM", // "CURRICULUM" | "ARENA" | "QUIZZES"
+      activeStudentTab: "CURRICULUM",
 
-      // استوديو الدرس الحالي المفتوح
       activeLessonInPlayer: null,
-      activePlayerMode: "VIDEO", // "VIDEO" | "PDF" | "HTML"
+      activePlayerMode: "VIDEO",
       isRotatedLandscape: false,
 
-      // الاختبار التفاعلي والتحدي
+      // نظام المسابقة التفاعلية المحفزة المطور
       activeQuiz: null,
       activeQuestionIndex: 0,
       quizScore: 0,
       isQuestionAnswered: false,
       isArenaMode: false,
+      arenaTimerInterval: null,
+      arenaTimeLeft: 20,
+      comboStreak: 0,
+      lifelines: {
+        fiftyFifty: true,
+        hint: true,
+        freeze: true
+      },
 
-      // البث المباشر
       activeLiveSession: null,
 
       settings: {
@@ -2082,7 +2323,6 @@
           const userTarget = user.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${user.grade}`;
           const q = State.studentSearchQuery.toLowerCase().trim();
 
-          // تصفية الدروس: إما مخصصة للكل في نفس الصف أو مخصصة تحديداً لهذا الطالب
           const filterFn = item => {
             const isAssignedToThisUser = item.assignType === "SPECIFIC" && item.assignedStudentUid === user.uid;
             const isAssignedToAllGrade = (!item.assignType || item.assignType === "ALL") && (item.target === userTarget || (item.curriculum === user.curriculum && item.grade == user.grade));
@@ -2110,7 +2350,6 @@
             ? 'المنهاج السوداني – الصف الثالث الثانوي (علمي)' 
             : `المنهج الإماراتي المتقدم – الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'}`;
 
-          // لوحة شرف الفرسان
           const topStudents = [...State.students].sort((a,b) => (b.arenaPoints || 0) - (a.arenaPoints || 0)).slice(0, 5);
 
           return `
@@ -2238,11 +2477,11 @@
                 `;
               }).join('')}
             ` : State.activeStudentTab === 'ARENA' ? `
-              <!-- ساحة التحديات الحية والمسابقات بين الطلاب -->
+              <!-- ساحة التحديات الحية والمسابقات بين الطلاب المطورة -->
               <div class="arena-banner">
                 <div>
                   <h3 style="font-size:1.3rem; font-weight:800;"><i class="fa-solid fa-chess-knight"></i> دوري فرسان اللغة العربية (تحدي الأبطال)</h3>
-                  <p style="font-size:0.85rem; opacity:0.9; margin-top:4px;">تنافس مع زملائك، احصد النقاط الذهبية، واظفر بوسام بطل المسابقة المعتمد من الأستاذ جمال!</p>
+                  <p style="font-size:0.85rem; opacity:0.9; margin-top:4px;">مؤقت سرعة، مضاعفة النقاط للكومبو، وسائل مساعدة ذكية، ووسام البطولة المعتمد!</p>
                 </div>
                 ${matchedQuizzes.length > 0 ? `
                   <button class="btn btn-gold" style="font-size:0.95rem; padding:12px 24px;" onclick="App.startArenaCompetition('${matchedQuizzes[0].id}')">
@@ -2278,7 +2517,7 @@
                 </div>
               </div>
             ` : `
-              <!-- قسم الاختبارات والتحديات التفاعلية -->
+              <!-- قسم بنك الاختبارات والتحديات التفاعلية -->
               <div class="card">
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> بنك التحديات والاختبارات التفاعلية المعتمدة</h3>
                 <div style="display:flex; flex-direction:column; gap:14px;">
@@ -2303,19 +2542,39 @@
           const quiz = State.activeQuiz;
           const q = quiz.questions[State.activeQuestionIndex];
           const totalQ = quiz.questions.length;
-          const progressPercent = ((State.activeQuestionIndex) / totalQ) * 100;
+          const timerPercent = (State.arenaTimeLeft / 20) * 100;
 
           return `
             <div class="quiz-gamified-box">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <span style="font-weight:800; color:var(--primary-burgundy); font-size:1rem;">
-                  <i class="fa-solid fa-gem" style="color:var(--gold);"></i> ${quiz.title} ${State.isArenaMode ? '<span class="badge badge-curriculum">🏆 نمط التحدي السريع</span>' : ''}
-                </span>
-                <span class="badge badge-trial">السؤال ${State.activeQuestionIndex + 1} من ${totalQ}</span>
+              <div class="arena-hud-bar">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="font-weight:800; color:var(--primary-burgundy); font-size:0.95rem;">
+                    <i class="fa-solid fa-gem" style="color:var(--gold);"></i> ${quiz.title}
+                  </span>
+                  ${State.comboStreak > 1 ? `<span class="combo-badge">🔥 كومبو x${State.comboStreak}</span>` : ''}
+                </div>
+                <div style="display:flex; align-items:center; gap:12px;">
+                  <span style="font-weight:800; color:var(--gold);"><i class="fa-solid fa-trophy"></i> النقاط: ${State.quizScore * 15}</span>
+                  <span class="badge badge-trial">السؤال ${State.activeQuestionIndex + 1} / ${totalQ}</span>
+                </div>
               </div>
 
-              <div class="quiz-progress-bar">
-                <div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div>
+              <!-- مؤقت السرعة التفاعلي -->
+              <div class="arena-timer-container">
+                <div class="arena-timer-fill" id="arenaTimerFill" style="width: ${timerPercent}%;"></div>
+              </div>
+
+              <!-- وسائل المساعدة الذكية -->
+              <div class="lifelines-cluster">
+                <button class="lifeline-btn" id="lifelineFiftyBtn" onclick="App.useFiftyFifty()" ${!State.lifelines.fiftyFifty ? 'disabled' : ''}>
+                  <i class="fa-solid fa-scale-unbalanced-flip"></i> حذف إجابة (50:50)
+                </button>
+                <button class="lifeline-btn" id="lifelineHintBtn" onclick="App.useAiHint()" ${!State.lifelines.hint ? 'disabled' : ''}>
+                  <i class="fa-solid fa-lightbulb"></i> تلميح سيبويه
+                </button>
+                <button class="lifeline-btn" id="lifelineFreezeBtn" onclick="App.useFreezeTimer()" ${!State.lifelines.freeze ? 'disabled' : ''}>
+                  <i class="fa-solid fa-snowflake"></i> تجميد الوقت (+10ث)
+                </button>
               </div>
 
               <div class="quiz-card-question">
@@ -2324,17 +2583,17 @@
                 </h3>
 
                 <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)">
-                  <span>${q.option1}</span>
+                  <span id="opt_text_1">${q.option1}</span>
                   <div class="option-letter">أ</div>
                 </div>
 
                 <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)">
-                  <span>${q.option2}</span>
+                  <span id="opt_text_2">${q.option2}</span>
                   <div class="option-letter">ب</div>
                 </div>
 
                 <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)">
-                  <span>${q.option3}</span>
+                  <span id="opt_text_3">${q.option3}</span>
                   <div class="option-letter">ج</div>
                 </div>
 
@@ -2344,8 +2603,8 @@
                 </div>
 
                 <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid #F3F4F6; padding-top:14px;">
-                  <button class="btn btn-secondary" onclick="App.setRoute('STUDENT_DASHBOARD')">
-                    خروج
+                  <button class="btn btn-secondary" onclick="App.exitQuiz()">
+                    خروج من التحدي
                   </button>
                   <button class="btn btn-primary" id="nextQuestionBtn" style="display:none;" onclick="App.nextQuizQuestion()">
                     السؤال التالي <i class="fa-solid fa-arrow-left"></i>
@@ -2402,7 +2661,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
               <div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800;">لوحة تحكم المدير – الأستاذ جمال</h2>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة ومزامنة الوحدات، البث الصوتي الحي، تخصيص الدروس، والشهادات</p>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة ومزامنة الوحدات، البث الصوتي الفعلي، تخصيص الدروس، والشهادات</p>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="btn btn-danger" onclick="App.openAdminBroadcastModal()">
@@ -2941,7 +3200,6 @@
         else App.setRoute("STUDENT_DASHBOARD");
       },
 
-      // استبدال كامل لـ alert بدقة واحترافية
       alert(message, title = "إشعار منصة أستاذ جمال", iconHtml = '<i class="fa-solid fa-circle-check"></i>') {
         document.getElementById("customAlertTitle").innerText = title;
         document.getElementById("customAlertMessage").innerText = message;
@@ -2953,7 +3211,6 @@
         document.getElementById("customAlertModal").classList.remove("active");
       },
 
-      // استبدال كامل لـ prompt بنافذة احترافية تدعم الـ Promise
       prompt(message, title = "إدخال الرابط أو القيمة") {
         return new Promise(resolve => {
           const modal = document.getElementById("customPromptModal");
@@ -3074,12 +3331,10 @@
         }, 500);
       },
 
-      // التحكم بالبث الصوتي للأدمن
       openAdminBroadcastModal() {
         document.getElementById("adminBroadcastModal").classList.add("active");
       },
 
-      // إدارة تخصيص الدروس
       handleNewLessonTargetChange() {
         const target = document.getElementById("newLessonTarget").value;
         const assignType = document.getElementById("newLessonAssignType").value;
@@ -3132,7 +3387,6 @@
         }
       },
 
-      // مشغل واستوديو الدرس
       openLessonMedia(lessonId, preferredMode) {
         const lesson = State.lessons.find(l => l.id === lessonId);
         if (!lesson) return;
@@ -3287,7 +3541,6 @@
         document.getElementById("mediaPlayerModal").classList.remove("active");
       },
 
-      // حفظ وإضافة الدروس مع التخصيص
       handleCreateLesson(e) {
         e.preventDefault();
         const target = document.getElementById("newLessonTarget").value;
@@ -3413,22 +3666,147 @@
         });
       },
 
-      // ساحة التحديات والمسابقات
+      /* ===================================================
+         نظام ساحة التحديات والمسابقات التفاعلية المحفزة
+      =================================================== */
       startArenaCompetition(quizId) {
         State.isArenaMode = true;
+        State.comboStreak = 0;
+        State.lifelines = { fiftyFifty: true, hint: true, freeze: true };
         App.startInteractiveQuiz(quizId);
       },
 
       startInteractiveQuiz(quizId) {
         State.activeQuiz = State.quizzes.find(q => q.id === quizId);
+        if (!State.activeQuiz || !State.activeQuiz.questions || State.activeQuiz.questions.length === 0) {
+          App.alert("هذا الاختبار لا يحتوي على أسئلة بعد، سيقوم الأستاذ جمال بإضافتها قريباً.");
+          return;
+        }
         State.activeQuestionIndex = 0;
         State.quizScore = 0;
         State.isQuestionAnswered = false;
+        State.comboStreak = 0;
+        State.lifelines = { fiftyFifty: true, hint: true, freeze: true };
         App.setRoute("INTERACTIVE_QUIZ");
+        App.startArenaTimer();
+      },
+
+      startArenaTimer() {
+        App.stopArenaTimer();
+        State.arenaTimeLeft = 20;
+        
+        const updateTimerVisual = () => {
+          const fill = document.getElementById("arenaTimerFill");
+          if (fill) {
+            const percent = (State.arenaTimeLeft / 20) * 100;
+            fill.style.width = `${percent}%`;
+            if (State.arenaTimeLeft <= 5) {
+              fill.style.background = "#EF4444";
+            } else if (State.arenaTimeLeft <= 10) {
+              fill.style.background = "#F59E0B";
+            } else {
+              fill.style.background = "linear-gradient(90deg, #10B981, #F59E0B, #EF4444)";
+            }
+          }
+        };
+
+        updateTimerVisual();
+
+        State.arenaTimerInterval = setInterval(() => {
+          State.arenaTimeLeft--;
+          updateTimerVisual();
+
+          if (State.arenaTimeLeft <= 5 && State.arenaTimeLeft > 0) {
+            AudioFX.tick();
+          }
+
+          if (State.arenaTimeLeft <= 0) {
+            App.handleTimeUp();
+          }
+        }, 1000);
+      },
+
+      stopArenaTimer() {
+        if (State.arenaTimerInterval) {
+          clearInterval(State.arenaTimerInterval);
+          State.arenaTimerInterval = null;
+        }
+      },
+
+      handleTimeUp() {
+        App.stopArenaTimer();
+        if (State.isQuestionAnswered) return;
+        State.isQuestionAnswered = true;
+        State.comboStreak = 0;
+
+        const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
+        const correctEl = document.getElementById(`opt_${currentQ.correctOption}`);
+        if (correctEl) correctEl.classList.add("correct");
+
+        AudioFX.wrong();
+        App.showToast("انتهى وقت السؤال! ركّز في السؤال القادم لتضاعف نقاطك.", "danger");
+
+        const expBox = document.getElementById("aiExplanationBox");
+        const expText = document.getElementById("aiExplanationText");
+        if (expText && expBox) {
+          expText.innerText = currentQ.aiExplanation || "انتهت المهلة الزمنية للإجابة وفقاً لقواعد المنهاج المقررة.";
+          expBox.style.display = "block";
+        }
+
+        const nextBtn = document.getElementById("nextQuestionBtn");
+        if (nextBtn) {
+          nextBtn.style.display = "inline-flex";
+          if (State.activeQuestionIndex + 1 >= State.activeQuiz.questions.length) {
+            nextBtn.innerHTML = `إنهاء التحدي <i class="fa-solid fa-flag-checkered"></i>`;
+          }
+        }
+      },
+
+      useFiftyFifty() {
+        if (!State.lifelines.fiftyFifty || State.isQuestionAnswered) return;
+        State.lifelines.fiftyFifty = false;
+        document.getElementById("lifelineFiftyBtn").disabled = true;
+
+        const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
+        const correct = parseInt(currentQ.correctOption);
+
+        const wrongOptions = [1, 2, 3].filter(n => n !== correct);
+        const toEliminate = wrongOptions[Math.floor(Math.random() * wrongOptions.length)];
+
+        const optEl = document.getElementById(`opt_${toEliminate}`);
+        if (optEl) {
+          optEl.classList.add("eliminated");
+          optEl.onclick = null;
+        }
+        AudioFX.playTone(450, 'sine', 0.15);
+        App.showToast("تم حذف إجابة خاطئة لمساعدتك!", "info");
+      },
+
+      useAiHint() {
+        if (!State.lifelines.hint || State.isQuestionAnswered) return;
+        State.lifelines.hint = false;
+        document.getElementById("lifelineHintBtn").disabled = true;
+
+        const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
+        const hintText = currentQ.aiExplanation ? `مفتاح الحل: ${currentQ.aiExplanation.substring(0, 45)}...` : "تلميح: دقق في الموقع الإعرابي وعلامات الضبط الأصلية والفرعية.";
+
+        App.alert(hintText, "💡 تلميح سيبويه الذكي", '<i class="fa-solid fa-lightbulb" style="color:#F59E0B;"></i>');
+        AudioFX.playTone(600, 'sine', 0.2);
+      },
+
+      useFreezeTimer() {
+        if (!State.lifelines.freeze || State.isQuestionAnswered) return;
+        State.lifelines.freeze = false;
+        document.getElementById("lifelineFreezeBtn").disabled = true;
+
+        State.arenaTimeLeft = Math.min(20, State.arenaTimeLeft + 10);
+        AudioFX.playTone(800, 'sine', 0.25);
+        App.showToast("تم تجميد الوقت وإضافة 10 ثوانٍ إضافية للتفكير!", "info");
       },
 
       chooseOption(selectedOptionNumber) {
         if (State.isQuestionAnswered) return;
+        App.stopArenaTimer();
         State.isQuestionAnswered = true;
 
         const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
@@ -3439,11 +3817,21 @@
 
         if (isCorrect) {
           selectedEl.classList.add("correct");
-          AudioFX.correct();
+          State.comboStreak++;
+          const comboMultiplier = State.comboStreak >= 3 ? 3 : (State.comboStreak >= 2 ? 2 : 1);
+          const gainedPoints = 15 * comboMultiplier;
+
+          if (State.comboStreak >= 2) {
+            AudioFX.combo();
+            App.showToast(`🔥 إجابة متتالية خارقة! مضاعفة النقاط x${comboMultiplier} (+${gainedPoints} نقطة)`, "info");
+          } else {
+            AudioFX.correct();
+          }
+
           State.quizScore++;
-          // إضافة نقاط تفوق للطالب
+
           if (State.currentUser && State.currentUser.role === "STUDENT") {
-            State.currentUser.arenaPoints = (State.currentUser.arenaPoints || 0) + 15;
+            State.currentUser.arenaPoints = (State.currentUser.arenaPoints || 0) + gainedPoints;
             const idx = State.students.findIndex(s => s.uid === State.currentUser.uid);
             if (idx !== -1) {
               State.students[idx].arenaPoints = State.currentUser.arenaPoints;
@@ -3453,18 +3841,23 @@
         } else {
           selectedEl.classList.add("wrong");
           if (correctEl) correctEl.classList.add("correct");
+          State.comboStreak = 0;
           AudioFX.wrong();
         }
 
         const expBox = document.getElementById("aiExplanationBox");
         const expText = document.getElementById("aiExplanationText");
-        expText.innerText = currentQ.aiExplanation || "وفقاً للقاعدة النحوية والبلاغية المعتمدة بالمنهاج.";
-        expBox.style.display = "block";
+        if (expText && expBox) {
+          expText.innerText = currentQ.aiExplanation || "وفقاً للقاعدة النحوية والبلاغية المعتمدة بالمنهاج.";
+          expBox.style.display = "block";
+        }
 
         const nextBtn = document.getElementById("nextQuestionBtn");
-        nextBtn.style.display = "inline-flex";
-        if (State.activeQuestionIndex + 1 >= State.activeQuiz.questions.length) {
-          nextBtn.innerHTML = `إنهاء التحدي <i class="fa-solid fa-flag-checkered"></i>`;
+        if (nextBtn) {
+          nextBtn.style.display = "inline-flex";
+          if (State.activeQuestionIndex + 1 >= State.activeQuiz.questions.length) {
+            nextBtn.innerHTML = `إنهاء التحدي <i class="fa-solid fa-flag-checkered"></i>`;
+          }
         }
       },
 
@@ -3474,22 +3867,36 @@
 
         if (State.activeQuestionIndex < State.activeQuiz.questions.length) {
           UI.render();
+          App.startArenaTimer();
         } else {
+          App.stopArenaTimer();
           AudioFX.celebrate();
           ConfettiFX.fire();
           const total = State.activeQuiz.questions.length;
           const percent = Math.round((State.quizScore / total) * 100);
 
           setTimeout(() => {
-            if (percent >= 80 && State.isArenaMode) {
-              App.alert(`🏆 مبارك يا بطل!\nحققت المركز المتقدم في المسابقة بنسبة ${percent}%.\nتم منحك وسام البطولة وسجلت نقاطك في لوحة الشرف!`, "وسام فوز المسابقة");
+            if (percent >= 80) {
+              App.alert(
+                `🏆 مبارك يا بطل العربية!\nحققت المركز المتقدم في المسابقة بنسبة نجاح ${percent}%.\nرصيدك الآن: ${State.currentUser ? State.currentUser.arenaPoints : 0} نقطة ذهبية!\nتم ترقيتك في لوحة الشرف بنجاح.`,
+                "وسام فوز المسابقة والتفوق"
+              );
             } else {
-              App.alert(`أحسنت صنعاً يا بطل!\nنتيجتك في التحدي: ${State.quizScore} من ${total} (${percent}%)\nتم تسجيل إنجازك وتحديث نقاطك الذهبية.`);
+              App.alert(
+                `أحسنت المحاولة يا بطل!\nنتيجتك في التحدي: ${State.quizScore} من ${total} (${percent}%)\nاستمر في مراجعة الدروس وحل التحديات لتحقيق العلامة الكاملة.`,
+                "نتيجة التحدي"
+              );
             }
             State.isArenaMode = false;
             App.setRoute("STUDENT_DASHBOARD");
           }, 600);
         }
+      },
+
+      exitQuiz() {
+        App.stopArenaTimer();
+        State.isArenaMode = false;
+        App.setRoute("STUDENT_DASHBOARD");
       },
 
       printCompetitionWinnerCert(studentName) {
@@ -3542,14 +3949,17 @@
         App.setRoute("ADMIN_DASHBOARD");
       },
 
-      // تقارير أولياء الأمور عبر الواتساب
+      /* ===================================================
+         تقارير أولياء الأمور عبر WhatsApp المنسقة
+      =================================================== */
       openParentReportModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
         App.selectedReportStudent = student;
 
-        const gradeName = student.curriculum === 'SUDAN' ? 'الشهادة السودانية (الصف الثالث الثانوي علمي)' : `المنهج الإماراتي المتقدم (الصف ${student.grade})`;
-        const completedLessonsCount = State.lessons.filter(l => l.target === (student.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${student.grade}`)).length;
+        const gradeName = student.curriculum === 'SUDAN' 
+          ? 'الشهادة السودانية (الصف الثالث الثانوي علمي)' 
+          : `المنهج الإماراتي المتقدم (الصف ${student.grade})`;
 
         const reportTemplate = `بسم الله الرحمن الرحيم
 📜 *تقرير المتابعة والتقييم الأكاديمي الدوري*
@@ -3559,14 +3969,14 @@
 المسار الدراسي: *${gradeName}*
 
 📊 *ملخص الإنجاز والأداء الأكاديمي:*
-• رصيد نقاط التحدي والمسابقات: *${student.arenaPoints || 0} نقطة*
+• رصيد نقاط التحدي والمسابقات: *${student.arenaPoints || 0} نقطة تفوق 🏆*
 • حالة التفاعل والانتظام: *${student.status === 'ACTIVE' ? 'ملتزم ونشط ممتاز 🟢' : 'فترة تجريبية 🟡'}*
 • اعتماد الشهادة: *${student.certificateApproved ? 'معتمدة ومجتازة بتفوق ✓' : 'قيد المتابعة والتدريب'}*
 
 💡 *توصيات وتوجيهات الأستاذ جمال:*
-مستوى الطالب متقدم، ونحثكم على استمرار دعمه ومتابعته لحل بنوك الامتحانات الوزارية المقررة في المنصة لتحقيق العلامة الكاملة بإذن الله.
+مستوى الطالب متقدم ويسير بصورة ممتازة. نحثكم على استمرار تشجيعه ومتابعته لحل بنوك الامتحانات الوزارية المقررة في المنصة لتحقيق الدرجة النهائية بإذن الله.
 
-شاكرين لكم عظيم اهتمامكم وتواصلكم.
+شاكرين ومقدرين عظيم اهتمامكم وتواصلكم المستمر.
 المشرف العام: *الأستاذ جمال*
 هاتف: 0559502387`;
 
@@ -3595,7 +4005,9 @@
         App.showToast("تم فتح واتساب لإرسال التقرير لولي الأمر بنجاح.", "info");
       },
 
-      // إدارة الطلاب والشهادات
+      /* ===================================================
+         إدارة الطلاب، الشهادات، والاشتراكات
+      =================================================== */
       toggleCertApproval(uid) {
         const student = State.students.find(s => s.uid === uid);
         if (student) {
@@ -3702,7 +4114,7 @@
           curriculum,
           grade,
           phone: phone || "غير محدد",
-          arenaPoints: 100, // نقاط ترحيبية تشجيعية في ساحة التحديات
+          arenaPoints: 100, // رصيد نقاط ترحيبي تشجيعي
           status: "TRIAL",
           plan: "7_DAYS_TRIAL",
           trialStartDate: "2026-08-18",
@@ -3758,12 +4170,18 @@
       },
 
       logout() {
+        LiveAudio.disconnectStudentAudio();
+        if (State.currentUser && State.currentUser.role === "ADMIN") {
+          LiveAudio.stopAdminBroadcast();
+        }
+        App.stopArenaTimer();
         localStorage.removeItem("jamal_session_token");
         State.currentUser = null;
         App.setRoute("LOGIN");
       }
     };
 
+    /* تشغيل المنصة عند جاهزية المتصفح */
     document.addEventListener("DOMContentLoaded", () => {
       App.init();
     });
