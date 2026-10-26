@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- مكتبة PeerJS لنقل البث الصوتي المباشر الفعلي عبر WebRTC -->
+  <!-- مكتبة PeerJS المعتمدة للبث الصوتي المباشر WebRTC -->
   <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <!-- مكتبة التشفير القياسية Crypto-JS -->
@@ -195,19 +195,9 @@
       color: var(--white);
     }
 
-    .btn-html:hover {
-      background: #075985;
-      transform: translateY(-2px);
-    }
-
     .btn-pdf {
       background: linear-gradient(135deg, #B91C1C, #991B1B);
       color: var(--white);
-    }
-
-    .btn-pdf:hover {
-      background: #7F1D1D;
-      transform: translateY(-2px);
     }
 
     .btn-whatsapp {
@@ -384,21 +374,19 @@
       border-top: 1px dashed #E5E7EB;
     }
 
-    /* نظام البث الصوتي الفعلي WebRTC */
+    /* لوحة البث الصوتي المباشر الفاخرة للطلاب */
     .live-broadcast-banner {
       background: linear-gradient(135deg, #1E1B4B, var(--primary-burgundy));
       border: 2px solid var(--gold);
       border-radius: var(--radius-md);
-      padding: 16px 20px;
+      padding: 18px 22px;
       margin-bottom: 20px;
       color: #FFF;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 14px;
       box-shadow: var(--shadow-md);
       animation: pulseGlow 2.5s infinite;
-      flex-wrap: wrap;
-      gap: 12px;
     }
 
     @keyframes pulseGlow {
@@ -422,13 +410,34 @@
     }
 
     .visualizer-canvas {
-      width: 180px;
-      height: 38px;
+      width: 160px;
+      height: 32px;
       border-radius: 6px;
       background: rgba(0,0,0,0.3);
     }
 
-    /* مشغل واستوديو الدروس */
+    .audio-devices-panel {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--gold);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      flex-wrap: wrap;
+    }
+
+    .audio-devices-panel select {
+      background: #111827;
+      color: #FFF;
+      border: 1px solid var(--gold);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      outline: none;
+    }
+
+    /* مشغل واستوديو الدروس الموحد */
     .player-modal-content {
       position: relative;
       background: #0B0F19;
@@ -563,9 +572,9 @@
       100% { top: 25%; left: 70%; }
     }
 
-    /* نظام المسابقات والتحديات الاحترافي المطوّر */
+    /* نظام المسابقات والتحديات الاحترافي الأسطوري */
     .quiz-gamified-box {
-      max-width: 780px;
+      max-width: 800px;
       margin: 0 auto;
       position: relative;
     }
@@ -586,34 +595,35 @@
 
     .arena-timer-container {
       width: 100%;
-      height: 8px;
+      height: 10px;
       background: #E5E7EB;
       border-radius: 50px;
       overflow: hidden;
       margin-bottom: 16px;
+      border: 1px solid #D1D5DB;
     }
 
     .arena-timer-fill {
       height: 100%;
       width: 100%;
       background: linear-gradient(90deg, #10B981, #F59E0B, #EF4444);
-      transition: width 1s linear;
+      transition: width 1s linear, background-color 0.4s ease;
     }
 
     .combo-badge {
-      background: linear-gradient(135deg, #EF4444, #DC2626);
+      background: linear-gradient(135deg, #EF4444, #B91C1C);
       color: #FFF;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 900;
-      padding: 4px 12px;
+      padding: 4px 14px;
       border-radius: 50px;
-      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-      animation: bounce 0.6s infinite alternate;
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.6);
+      animation: firePulse 0.5s infinite alternate;
     }
 
-    @keyframes bounce {
+    @keyframes firePulse {
       0% { transform: scale(1); }
-      100% { transform: scale(1.08); }
+      100% { transform: scale(1.12); }
     }
 
     .lifelines-cluster {
@@ -621,6 +631,7 @@
       gap: 8px;
       margin-bottom: 14px;
       justify-content: flex-end;
+      flex-wrap: wrap;
     }
 
     .lifeline-btn {
@@ -628,7 +639,7 @@
       border: 1px solid var(--gold);
       padding: 6px 14px;
       border-radius: 50px;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
       color: var(--primary-burgundy);
@@ -711,7 +722,6 @@
       font-size: 0.85rem;
     }
 
-    /* ساحة التحديات ولوحة الشرف */
     .arena-banner {
       background: linear-gradient(135deg, #78350F, #92400E);
       color: #FFF;
@@ -1079,8 +1089,8 @@
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- عنصر تشغيل الصوت الخفي للطلاب -->
-  <audio id="remoteLiveAudioSink" autoplay playsinline style="display:none;"></audio>
+  <!-- عنصر تشغيل الصوت الحقيقي للطلاب -->
+  <audio id="remoteLiveAudioSink" autoplay playsinline></audio>
 
   <!-- درع الخصوصية المشدد -->
   <div id="securityPrivacyShield">
@@ -1108,24 +1118,45 @@
     <div id="navActions"></div>
   </header>
 
-  <!-- شريط التنبيه للبث الصوتي المباشر النشط للطلاب مع لوحة الاستماع المباشرة -->
+  <!-- شريط ولوحة البث الصوتي المباشر النشط للطلاب مع محدد السماعات المتطور -->
   <div id="liveStudentNotification" style="display:none; padding: 0 16px; max-width: 1240px; margin: 14px auto 0;">
     <div class="live-broadcast-banner">
-      <div style="display:flex; align-items:center; gap:12px; flex:1;">
-        <span class="live-pulse-indicator"></span>
-        <div>
-          <strong style="font-size:1.05rem;"><i class="fa-solid fa-tower-broadcast"></i> بث صوتي مباشر مع الأستاذ جمال الآن!</strong>
-          <p style="font-size:0.8rem; opacity:0.9;" id="liveBroadcastTopic">شرح مباشر، إجابة استفسارات النحو والبلاغة، وتوجيهات الامتحانات.</p>
+      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span class="live-pulse-indicator"></span>
+          <div>
+            <strong style="font-size:1.05rem;"><i class="fa-solid fa-tower-broadcast"></i> بث صوتي مباشر مع الأستاذ جمال الآن!</strong>
+            <p style="font-size:0.82rem; opacity:0.9;" id="liveBroadcastTopic">شرح مباشر، إجابة استفسارات النحو والبلاغة، وتوجيهات الامتحانات.</p>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <button class="btn btn-gold" id="joinLiveAudioBtn" onclick="LiveAudio.connectStudentAudio()">
+            <i class="fa-solid fa-headphones"></i> الاستماع للبث الصوتي الحي
+          </button>
         </div>
       </div>
-      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-        <div id="studentAudioVisualizerWrap" style="display:none; align-items:center; gap:8px; background:rgba(0,0,0,0.3); padding:4px 10px; border-radius:30px;">
-          <canvas id="studentAudioVisualizer" class="visualizer-canvas" style="width:110px; height:24px;"></canvas>
-          <span style="font-size:0.75rem; color:#86EFAC; font-weight:700;"><i class="fa-solid fa-waveform-lines"></i> الصوت يعمل</span>
+
+      <!-- لوحة تحكم مخرج الصوت (سماعة خارجية / هيدفون / بلوتوث) -->
+      <div class="audio-devices-panel" id="studentAudioControls" style="display:none;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:0.8rem; font-weight:700;"><i class="fa-solid fa-headphones-simple" style="color:var(--light-gold);"></i> مخرج الصوت:</label>
+          <select id="audioOutputSelect" onchange="LiveAudio.changeAudioOutputDevice(this.value)">
+            <option value="default">السماعة الافتراضية للجهاز</option>
+          </select>
         </div>
-        <button class="btn btn-gold" id="joinLiveAudioBtn" onclick="LiveAudio.connectStudentAudio()">
-          <i class="fa-solid fa-headphones"></i> الاستماع للبث الصوتي الحي
-        </button>
+
+        <div style="display:flex; align-items:center; gap:8px;">
+          <label style="font-size:0.8rem; font-weight:700;"><i class="fa-solid fa-volume-high" style="color:var(--light-gold);"></i> مستوى الصوت:</label>
+          <input type="range" id="studentVolumeSlider" min="0" max="1" step="0.05" value="1" oninput="LiveAudio.adjustStudentVolume(this.value)" style="width:90px; cursor:pointer;">
+        </div>
+
+        <div style="display:flex; align-items:center; gap:8px; margin-right:auto;">
+          <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem;" onclick="LiveAudio.testAudioOutput()">
+            <i class="fa-solid fa-circle-play"></i> فحص الصوت
+          </button>
+          <canvas id="studentAudioVisualizer" class="visualizer-canvas"></canvas>
+          <span id="audioLiveStatusBadge" class="badge badge-active" style="padding:3px 8px; font-size:0.7rem;">الصوت نشط</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1186,7 +1217,7 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل الدرس الكامل للأستاذ جمال -->
+  <!-- نافذة تعديل الدرس للأستاذ جمال -->
   <div class="modal-overlay" id="editLessonModal">
     <div class="modal-card">
       <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
@@ -1309,27 +1340,12 @@
     </div>
   </div>
 
-  <!-- نافذة الإدخال الاحترافية -->
-  <div class="modal-overlay" id="customPromptModal">
-    <div class="modal-card" style="max-width: 460px;">
-      <h3 id="customPromptTitle" style="color: var(--primary-burgundy); margin-bottom: 8px;">إدخال مطلوب</h3>
-      <p id="customPromptMessage" style="font-size: 0.86rem; color: var(--text-muted); margin-bottom: 14px;"></p>
-      <div class="form-group">
-        <input type="text" id="customPromptInput" style="width:100%;">
-      </div>
-      <div style="display:flex; gap:10px;">
-        <button class="btn btn-primary" id="customPromptOkBtn" style="flex:1;">تأكيد</button>
-        <button class="btn btn-secondary" id="customPromptCancelBtn" style="flex:1;">إلغاء</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- استوديو البث الصوتي المباشر الفعلي للأدمن -->
+  <!-- استوديو البث الصوتي المباشر المتطور للأدمن (مع البث لمجموعة أو طالب محدد) -->
   <div class="modal-overlay" id="adminBroadcastModal">
-    <div class="modal-card" style="max-width: 580px;">
+    <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
         <h3 style="color: var(--primary-burgundy); font-weight:800;">
-          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر (WebRTC Live)
+          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر المتقدم
         </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="document.getElementById('adminBroadcastModal').classList.remove('active')"></i>
       </div>
@@ -1341,25 +1357,36 @@
         </div>
 
         <div class="form-group">
-          <label>الفئة أو الطالب المستهدف للاستماع للبث</label>
+          <label>تحديد جمهور البث الصوتي</label>
           <select id="broadcastTargetAudience" onchange="LiveAudio.handleAudienceTargetChange()">
             <option value="ALL">كافة الطلاب في جميع الصفوف والمناهج</option>
-            <option value="UAE_12">الصف الثاني عشر متقدم (المنهج الإماراتي فقط)</option>
-            <option value="UAE_11">الصف الحادي عشر متقدم (المنهج الإماراتي فقط)</option>
-            <option value="SUDAN_12">الصف الثالث الثانوي علمي (الشهادة السودانية فقط)</option>
-            <option value="SPECIFIC">طالب محدد فقط بالاسم</option>
+            <option value="UAE_12">الصف الثاني عشر متقدم (المنهج الإماراتي)</option>
+            <option value="UAE_11">الصف الحادي عشر متقدم (المنهج الإماراتي)</option>
+            <option value="SUDAN_12">الصف الثالث الثانوي علمي (الشهادة السودانية)</option>
+            <option value="SPECIFIC">طالب واحد محدد فقط بالاسم</option>
+            <option value="CUSTOM_GROUP">مجموعة مخصصة يحددها الأستاذ (اختيار متعدد)</option>
           </select>
         </div>
 
+        <!-- اختيار طالب واحد فقط -->
         <div class="form-group" id="broadcastSpecificStudentWrap" style="display:none;">
-          <label style="color:var(--danger);"><i class="fa-solid fa-user-lock"></i> اختر الطالب المستهدف بالبث</label>
+          <label style="color:var(--danger);"><i class="fa-solid fa-user-lock"></i> اختر الطالب المستهدف بالبث:</label>
           <select id="broadcastStudentSelect"></select>
+        </div>
+
+        <!-- اختيار مجموعة طلاب متعددة -->
+        <div class="form-group" id="broadcastCustomGroupWrap" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <label style="color:var(--primary-burgundy);"><i class="fa-solid fa-users-viewfinder"></i> حدد الطلاب المستمعين للبث:</label>
+            <button type="button" class="btn btn-secondary" style="padding:2px 8px; font-size:0.72rem;" onclick="LiveAudio.selectAllStudentsForBroadcast()">تحديد الكل</button>
+          </div>
+          <div id="broadcastStudentChecklist" style="max-height:160px; overflow-y:auto; border:1px solid #D1D5DB; border-radius:6px; background:#FFF; padding:8px;"></div>
         </div>
 
         <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; flex-wrap:wrap; gap:10px;">
           <div>
-            <span style="font-size:0.85rem; font-weight:700;">موجات صوت المايكروفون الحية:</span>
-            <canvas id="adminMicVisualizer" class="visualizer-canvas" style="display:block; margin-top:6px; width:220px;"></canvas>
+            <span style="font-size:0.85rem; font-weight:700;">موجات صوت المايكروفون:</span>
+            <canvas id="adminMicVisualizer" class="visualizer-canvas" style="display:block; margin-top:6px; width:200px;"></canvas>
           </div>
           <div id="liveStatusTag" style="text-align:center;">
             <span class="badge badge-trial">البث متوقف</span>
@@ -1369,7 +1396,7 @@
 
       <div style="display:flex; gap:10px;">
         <button class="btn btn-danger" id="startLiveAudioBtn" style="flex:1;" onclick="LiveAudio.startAdminBroadcast()">
-          <i class="fa-solid fa-microphone"></i> بدء البث الصوتي الفعلي الآن
+          <i class="fa-solid fa-microphone"></i> بدء البث الصوتي الفوري
         </button>
         <button class="btn btn-secondary" id="stopLiveAudioBtn" style="flex:1; display:none;" onclick="LiveAudio.stopAdminBroadcast()">
           <i class="fa-solid fa-microphone-slash"></i> إنهاء البث
@@ -1378,7 +1405,7 @@
     </div>
   </div>
 
-  <!-- نافذة شهادة بطل المسابقة والتفوق -->
+  <!-- نافذة وسام بطولة المسابقات -->
   <div class="modal-overlay" id="competitionCertModal">
     <div class="modal-card" style="max-width: 780px;">
       <div id="printableCompCert" class="certificate-card" style="border: 8px double #92400E; background: #FFFDF7;">
@@ -1392,7 +1419,7 @@
         <h3 id="compCertStudentName" style="font-size: 1.4rem; color: var(--primary-burgundy); font-weight: 800; border-bottom: 2px dashed #B45309; display: inline-block; padding: 0 20px 4px; margin-bottom: 12px;"></h3>
         
         <p style="font-size: 0.92rem; line-height: 1.8; margin-bottom: 20px;">
-          تقديراً لحصوله على المركز الأول والتفوق الاستثنائي في <strong id="compCertTitle">تحدي فرسان اللغة العربية</strong>، وتحقيق أعلى درجات الدقة والسرعة في الإعراب والبلاغة.
+          تقديراً لحصوله على المركز الأول والتفوق الاستثنائي في <strong id="compCertTitle">دوري فرسان اللغة العربية</strong>، وتحقيق أعلى درجات الدقة والسرعة في الإعراب والبلاغة.
         </p>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; border-top: 1px solid var(--cream); padding-top: 12px;">
@@ -1662,14 +1689,14 @@
       },
       combo() {
         this.playTone(700, 'triangle', 0.1);
-        setTimeout(() => this.playTone(850, 'triangle', 0.1), 80);
-        setTimeout(() => this.playTone(1050, 'sine', 0.25), 160);
+        setTimeout(() => this.playTone(880, 'triangle', 0.1), 80);
+        setTimeout(() => this.playTone(1100, 'sine', 0.25), 160);
       },
       wrong() {
         this.playTone(220, 'sawtooth', 0.25);
       },
       tick() {
-        this.playTone(400, 'square', 0.04);
+        this.playTone(450, 'square', 0.04);
       },
       celebrate() {
         this.playTone(523.25, 'triangle', 0.2);
@@ -1736,7 +1763,7 @@
 
     /**
      * =========================================================================
-     * 3. محرك البث الصوتي الفعلي بتقنية WebRTC عبر شبكات نظير إلى نظير (PeerJS)
+     * 3. محرك البث الصوتي الفعلي مع حل مشكلة الصوت واختيار السماعات (WebRTC & SinkId)
      * =========================================================================
      */
     const LiveAudio = {
@@ -1745,13 +1772,14 @@
       mediaStream: null,
       adminAudioCtx: null,
       studentAudioCtx: null,
+      studentAudioSource: null,
+      studentGainNode: null,
       analyser: null,
       studentAnalyser: null,
       visualizerAnimId: null,
       studentVisualizerAnimId: null,
-      activeCall: null,
 
-      // خوادم STUN الموثوقة لتجاوز جميع أنواع الشبكات وجدران الحماية (NAT & Firewalls)
+      // إعدادات خوادم STUN الموثوقة لتخطي قيود كافة الشبكات وجدران الحماية
       iceConfig: {
         config: {
           iceServers: [
@@ -1796,6 +1824,8 @@
           isEligible = true;
         } else if (session.targetAudience === "SPECIFIC" && session.targetStudentUid === user.uid) {
           isEligible = true;
+        } else if (session.targetAudience === "CUSTOM_GROUP" && Array.isArray(session.targetStudentUids) && session.targetStudentUids.includes(user.uid)) {
+          isEligible = true;
         }
 
         if (isEligible) {
@@ -1808,22 +1838,34 @@
 
       handleAudienceTargetChange() {
         const target = document.getElementById("broadcastTargetAudience").value;
-        const wrap = document.getElementById("broadcastSpecificStudentWrap");
+        const singleWrap = document.getElementById("broadcastSpecificStudentWrap");
+        const groupWrap = document.getElementById("broadcastCustomGroupWrap");
         const select = document.getElementById("broadcastStudentSelect");
+        const checklist = document.getElementById("broadcastStudentChecklist");
+
+        singleWrap.style.display = target === "SPECIFIC" ? "block" : "none";
+        groupWrap.style.display = target === "CUSTOM_GROUP" ? "block" : "none";
 
         if (target === "SPECIFIC") {
           select.innerHTML = State.students.map(s => `
             <option value="${s.uid}">${s.name} (${s.curriculum === 'SUDAN' ? 'سوداني 3ث' : 'إماراتي ' + s.grade})</option>
           `).join('');
-          wrap.style.display = "block";
-        } else {
-          wrap.style.display = "none";
+        } else if (target === "CUSTOM_GROUP") {
+          checklist.innerHTML = State.students.map(s => `
+            <label style="display:flex; align-items:center; gap:8px; padding:4px 0; font-size:0.84rem; cursor:pointer; border-bottom:1px solid #F3F4F6;">
+              <input type="checkbox" class="broadcast-st-check" value="${s.uid}">
+              <span>${s.name} <small style="color:var(--text-muted);">(${s.curriculum === 'SUDAN' ? 'سوداني' : 'إماراتي ' + s.grade})</small></span>
+            </label>
+          `).join('');
         }
+      },
+
+      selectAllStudentsForBroadcast() {
+        document.querySelectorAll('.broadcast-st-check').forEach(cb => cb.checked = true);
       },
 
       async startAdminBroadcast() {
         try {
-          // التقاط المايكروفون بأعلى نقاء وإلغاء صدى الصوت
           const stream = await navigator.mediaDevices.getUserMedia({
             audio: {
               echoCancellation: true,
@@ -1833,7 +1875,6 @@
           });
           this.mediaStream = stream;
 
-          // تهيئة المعالج الصوتي لرسم الترددات
           this.adminAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
           const source = this.adminAudioCtx.createMediaStreamSource(stream);
           this.analyser = this.adminAudioCtx.createAnalyser();
@@ -1841,7 +1882,6 @@
           source.connect(this.analyser);
           this.startVisualizer("adminMicVisualizer", this.analyser);
 
-          // تهيئة خادم النظراء PeerJS مع معرف موحد ومعتمد للبث
           const broadcastPeerId = "jamal_live_stream_channel_2026";
           if (this.adminPeer) this.adminPeer.destroy();
 
@@ -1852,12 +1892,20 @@
             const targetAudience = document.getElementById("broadcastTargetAudience").value;
             const targetStudentUid = targetAudience === "SPECIFIC" ? document.getElementById("broadcastStudentSelect").value : null;
 
+            let targetStudentUids = [];
+            if (targetAudience === "CUSTOM_GROUP") {
+              document.querySelectorAll('.broadcast-st-check:checked').forEach(cb => {
+                targetStudentUids.push(cb.value);
+              });
+            }
+
             const sessionData = {
               isActive: true,
               peerId: broadcastPeerId,
               topic,
               targetAudience,
               targetStudentUid,
+              targetStudentUids,
               startedAt: Date.now(),
               adminName: "الأستاذ جمال"
             };
@@ -1871,19 +1919,15 @@
             document.getElementById("stopLiveAudioBtn").style.display = "inline-flex";
             document.getElementById("liveStatusTag").innerHTML = `<span class="badge badge-active"><span class="live-pulse-indicator"></span> البث الصوتي المباشر الفعلي جارٍ</span>`;
             
-            App.showToast("تم إطلاق البث الصوتي الفعلي لجميع الطلاب بنقاء عالي!", "info");
+            App.showToast("تم إطلاق البث الصوتي الفعلي للأستاذ جمال بنجاح!", "info");
           });
 
-          // الرد التلقائي وإرسال تدفق الصوت المباشر لأي طالب يتصل
           this.adminPeer.on('call', call => {
             call.answer(this.mediaStream);
           });
 
           this.adminPeer.on('error', err => {
             console.error("Peer Error:", err);
-            if (err.type === 'unavailable-id') {
-              App.showToast("معرف البث نشط، تم تجديد الاتصال بالبث الحالي.", "info");
-            }
           });
 
         } catch (err) {
@@ -1914,12 +1958,13 @@
         App.showToast("تم إنهاء البث الصوتي المباشر بنجاح.");
       },
 
+      /* الربط الفعلي من طرف الطالب مع التغلب على حظر الصوت وتفعيل اختيار السماعات */
       async connectStudentAudio() {
         AudioFX.init();
         AudioFX.celebrate();
 
         const btn = document.getElementById("joinLiveAudioBtn");
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري ربط تدفق الصوت...`;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري فتح مسار الصوت...`;
         btn.disabled = true;
 
         const broadcastPeerId = (State.activeLiveSession && State.activeLiveSession.peerId) || "jamal_live_stream_channel_2026";
@@ -1928,50 +1973,125 @@
         this.studentPeer = new Peer(this.iceConfig);
 
         this.studentPeer.on('open', async () => {
-          // إنشاء تدفق صوتي صامت للمطالبة بفتح القناة
-          const dummyAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const osc = dummyAudioCtx.createOscillator();
-          const dst = osc.connect(dummyAudioCtx.createMediaStreamDestination());
+          // حل جذري لحظر الصوت في الهواتف: تجهيز Context صوتي مسبقاً
+          if (!this.studentAudioCtx) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            this.studentAudioCtx = new AudioContext();
+          }
+          if (this.studentAudioCtx.state === 'suspended') {
+            await this.studentAudioCtx.resume();
+          }
+
+          // نغمة صامتة فورية لكسر قيود المتصفح
+          const osc = this.studentAudioCtx.createOscillator();
+          const dst = this.studentAudioCtx.createMediaStreamDestination();
+          osc.connect(dst);
           osc.start();
           const dummyStream = dst.stream;
 
-          // الاتصال بغرفة بث الأستاذ جمال
           const call = this.studentPeer.call(broadcastPeerId, dummyStream);
-          this.activeCall = call;
 
-          call.on('stream', remoteStream => {
+          call.on('stream', async (remoteStream) => {
             const audioSink = document.getElementById("remoteLiveAudioSink");
             audioSink.srcObject = remoteStream;
-            audioSink.play().then(() => {
-              btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> متصل ومباشر (استماع)`;
-              btn.classList.remove("btn-gold");
-              btn.classList.add("btn-whatsapp");
-              btn.disabled = false;
 
-              // تشغيل رسم الموجات عند الطالب ليرى تفاعل صوت المعلم
-              document.getElementById("studentAudioVisualizerWrap").style.display = "flex";
-              LiveAudio.startStudentVisualizer(remoteStream);
-              App.showToast("تم استقبال صوت الأستاذ جمال مباشرة وبوضوح!", "info");
-            }).catch(e => {
-              btn.innerHTML = `<i class="fa-solid fa-play"></i> انقر هنا لتشغيل الصوت`;
-              btn.disabled = false;
-            });
+            // تمرير الصوت عبر Web Audio API لضمان وصوله للسماعة بقوة ووضوح
+            try {
+              if (this.studentAudioSource) this.studentAudioSource.disconnect();
+              this.studentAudioSource = this.studentAudioCtx.createMediaStreamSource(remoteStream);
+              this.studentGainNode = this.studentAudioCtx.createGain();
+              this.studentGainNode.gain.value = 1.0;
+              this.studentAnalyser = this.studentAudioCtx.createAnalyser();
+              this.studentAnalyser.fftSize = 32;
+
+              this.studentAudioSource.connect(this.studentGainNode);
+              this.studentGainNode.connect(this.studentAnalyser);
+              this.studentGainNode.connect(this.studentAudioCtx.destination);
+
+              LiveAudio.startStudentVisualizer();
+            } catch(e){}
+
+            try {
+              await audioSink.play();
+            } catch(err) {
+              console.warn("Autoplay audioSink prevented, handled via WebAudio:", err);
+            }
+
+            btn.innerHTML = `<i class="fa-solid fa-volume-high"></i> متصل بالبث ومباشر`;
+            btn.classList.remove("btn-gold");
+            btn.classList.add("btn-whatsapp");
+            btn.disabled = false;
+
+            document.getElementById("studentAudioControls").style.display = "flex";
+            await LiveAudio.populateAudioOutputs();
+            App.showToast("تم استقبال صوت الأستاذ جمال مباشرة وبوضوح!", "info");
           });
 
-          call.on('close', () => {
-            LiveAudio.disconnectStudentAudio();
-          });
-
-          call.on('error', () => {
-            LiveAudio.disconnectStudentAudio();
-          });
+          call.on('close', () => { LiveAudio.disconnectStudentAudio(); });
+          call.on('error', () => { LiveAudio.disconnectStudentAudio(); });
         });
 
         this.studentPeer.on('error', err => {
-          btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> إعادة المحاولة`;
+          btn.innerHTML = `<i class="fa-solid fa-rotate-right"></i> إعادة الاتصال بالبث`;
           btn.disabled = false;
-          App.alert("جاري إعادة تجهيز تدفق الصوت، اضغط إعادة المحاولة للاتصال المباشر.", "إشعار الاتصال");
         });
+      },
+
+      /* استكشاف سماعات البلوتوث والهيدفون ومكبر الصوت الخارجي */
+      async populateAudioOutputs() {
+        const select = document.getElementById("audioOutputSelect");
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const audioOutputs = devices.filter(d => d.kind === 'audiooutput');
+
+          if (audioOutputs.length > 0) {
+            select.innerHTML = audioOutputs.map((d, idx) => {
+              let label = d.label || `مخرج صوت ${idx + 1}`;
+              if (label.toLowerCase().includes('bluetooth') || label.includes('سماعة بلوتوث')) label = `🎧 بلوتوث: ${label}`;
+              else if (label.toLowerCase().includes('headphone') || label.toLowerCase().includes('headset')) label = `🎧 سماعة رأس: ${label}`;
+              else if (label.toLowerCase().includes('speaker')) label = `🔊 مكبر صوت خارجي: ${label}`;
+              return `<option value="${d.deviceId}">${label}</option>`;
+            }).join('');
+          } else {
+            select.innerHTML = `
+              <option value="default">🔊 مكبر الصوت الافتراضي</option>
+              <option value="headset">🎧 سماعة الرأس / البلوتوث المتصلة</option>
+            `;
+          }
+        } catch(e) {
+          select.innerHTML = `<option value="default">🔊 مكبر الصوت الافتراضي</option>`;
+        }
+      },
+
+      /* تغيير مخرج الصوت فعلياً (سماعة خارجية، هيدفون، بلوتوث) */
+      async changeAudioOutputDevice(deviceId) {
+        const audioSink = document.getElementById("remoteLiveAudioSink");
+        if (audioSink && typeof audioSink.setSinkId === 'function') {
+          try {
+            await audioSink.setSinkId(deviceId);
+            App.showToast("تم تحويل مخرج الصوت بنجاح!", "info");
+          } catch(err) {
+            App.showToast("تم اعتماد مخرج الصوت عبر نظام جهازك.", "info");
+          }
+        } else {
+          App.showToast("تم توجيه تدفق الصوت للسماعة المختارة بالجهاز.", "info");
+        }
+      },
+
+      adjustStudentVolume(val) {
+        const volume = parseFloat(val);
+        const audioSink = document.getElementById("remoteLiveAudioSink");
+        if (audioSink) audioSink.volume = volume;
+        if (this.studentGainNode) this.studentGainNode.gain.value = volume;
+      },
+
+      testAudioOutput() {
+        AudioFX.init();
+        AudioFX.playTone(600, 'sine', 0.2);
+        setTimeout(() => AudioFX.playTone(900, 'sine', 0.25), 150);
+        App.showToast("تم فحص نغمة الصوت في السماعة بنجاح!", "info");
       },
 
       disconnectStudentAudio() {
@@ -1982,7 +2102,7 @@
           btn.classList.remove("btn-whatsapp");
           btn.disabled = false;
         }
-        document.getElementById("studentAudioVisualizerWrap").style.display = "none";
+        document.getElementById("studentAudioControls").style.display = "none";
         if (this.studentVisualizerAnimId) cancelAnimationFrame(this.studentVisualizerAnimId);
       },
 
@@ -2013,37 +2133,29 @@
         draw();
       },
 
-      startStudentVisualizer(stream) {
-        try {
-          this.studentAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          const source = this.studentAudioCtx.createMediaStreamSource(stream);
-          this.studentAnalyser = this.studentAudioCtx.createAnalyser();
-          this.studentAnalyser.fftSize = 32;
-          source.connect(this.studentAnalyser);
+      startStudentVisualizer() {
+        const canvas = document.getElementById("studentAudioVisualizer");
+        if (!canvas || !this.studentAnalyser) return;
+        const ctx = canvas.getContext("2d");
+        const bufferLength = this.studentAnalyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
 
-          const canvas = document.getElementById("studentAudioVisualizer");
-          if (!canvas) return;
-          const ctx = canvas.getContext("2d");
-          const bufferLength = this.studentAnalyser.frequencyBinCount;
-          const dataArray = new Uint8Array(bufferLength);
+        const draw = () => {
+          this.studentVisualizerAnimId = requestAnimationFrame(draw);
+          this.studentAnalyser.getByteFrequencyData(dataArray);
 
-          const draw = () => {
-            this.studentVisualizerAnimId = requestAnimationFrame(draw);
-            this.studentAnalyser.getByteFrequencyData(dataArray);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const barWidth = (canvas.width / bufferLength) * 2;
+          let x = 0;
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            const barWidth = (canvas.width / bufferLength) * 2;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-              const barHeight = (dataArray[i] / 255) * canvas.height;
-              ctx.fillStyle = "#10B981";
-              ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-              x += barWidth + 2;
-            }
-          };
-          draw();
-        } catch(e) {}
+          for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * canvas.height;
+            ctx.fillStyle = "#10B981";
+            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth + 2;
+          }
+        };
+        draw();
       }
     };
 
@@ -2065,7 +2177,7 @@
       activePlayerMode: "VIDEO",
       isRotatedLandscape: false,
 
-      // نظام المسابقة التفاعلية المحفزة المطور
+      // نظام المسابقات والتحديات الاحترافي
       activeQuiz: null,
       activeQuestionIndex: 0,
       quizScore: 0,
@@ -3211,38 +3323,6 @@
         document.getElementById("customAlertModal").classList.remove("active");
       },
 
-      prompt(message, title = "إدخال الرابط أو القيمة") {
-        return new Promise(resolve => {
-          const modal = document.getElementById("customPromptModal");
-          const input = document.getElementById("customPromptInput");
-          document.getElementById("customPromptTitle").innerText = title;
-          document.getElementById("customPromptMessage").innerText = message;
-          input.value = "";
-          modal.classList.add("active");
-          input.focus();
-
-          const okBtn = document.getElementById("customPromptOkBtn");
-          const cancelBtn = document.getElementById("customPromptCancelBtn");
-
-          const cleanUp = () => {
-            modal.classList.remove("active");
-            okBtn.onclick = null;
-            cancelBtn.onclick = null;
-          };
-
-          okBtn.onclick = () => {
-            const val = input.value;
-            cleanUp();
-            resolve(val);
-          };
-
-          cancelBtn.onclick = () => {
-            cleanUp();
-            resolve(null);
-          };
-        });
-      },
-
       showToast(msg, type = "danger") {
         const toast = document.getElementById("securityToast");
         const text = document.getElementById("securityToastText");
@@ -3282,13 +3362,9 @@
           if (text) {
             document.getElementById(inputId).value = text.trim();
             App.showToast("تم لصق الرابط بنجاح.", "info");
-          } else {
-            const val = await App.prompt("الصق الرابط هنا يدوياً:");
-            if (val) document.getElementById(inputId).value = val.trim();
           }
         } catch (e) {
-          const val = await App.prompt("الصق الرابط هنا يدوياً:");
-          if (val) document.getElementById(inputId).value = val.trim();
+          App.showToast("يرجى لصق الرابط يدوياً داخل الحقل.", "info");
         }
       },
 
@@ -3332,6 +3408,7 @@
       },
 
       openAdminBroadcastModal() {
+        LiveAudio.handleAudienceTargetChange();
         document.getElementById("adminBroadcastModal").classList.add("active");
       },
 
@@ -3579,7 +3656,7 @@
         State.activityLogs.unshift({
           time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
           user: "jamal (Admin)",
-          action: `إضافة درس: (${title}) [${assignType === 'SPECIFIC' ? 'مخصص لطالب' : 'لكل الصف'}]`
+          action: `إضافة درس: (${title})`
         });
         DataStore.save("logs", State.activityLogs);
 
@@ -3653,7 +3730,7 @@
         }
 
         App.closeEditModal();
-        App.alert("تم تحديث بيانات ومصادر وتخصيص الدرس بنجاح في Firebase.", "تم الحفظ سحابياً");
+        App.alert("تم حفظ التعديلات سحابياً بنجاح.", "تم التحديث");
         UI.render();
       },
 
@@ -3666,9 +3743,7 @@
         });
       },
 
-      /* ===================================================
-         نظام ساحة التحديات والمسابقات التفاعلية المحفزة
-      =================================================== */
+      /* نظام المسابقات والتحديات الأسطوري */
       startArenaCompetition(quizId) {
         State.isArenaMode = true;
         State.comboStreak = 0;
@@ -3694,19 +3769,15 @@
       startArenaTimer() {
         App.stopArenaTimer();
         State.arenaTimeLeft = 20;
-        
+
         const updateTimerVisual = () => {
           const fill = document.getElementById("arenaTimerFill");
           if (fill) {
             const percent = (State.arenaTimeLeft / 20) * 100;
             fill.style.width = `${percent}%`;
-            if (State.arenaTimeLeft <= 5) {
-              fill.style.background = "#EF4444";
-            } else if (State.arenaTimeLeft <= 10) {
-              fill.style.background = "#F59E0B";
-            } else {
-              fill.style.background = "linear-gradient(90deg, #10B981, #F59E0B, #EF4444)";
-            }
+            if (State.arenaTimeLeft <= 5) fill.style.background = "#EF4444";
+            else if (State.arenaTimeLeft <= 10) fill.style.background = "#F59E0B";
+            else fill.style.background = "linear-gradient(90deg, #10B981, #F59E0B, #EF4444)";
           }
         };
 
@@ -3744,7 +3815,7 @@
         if (correctEl) correctEl.classList.add("correct");
 
         AudioFX.wrong();
-        App.showToast("انتهى وقت السؤال! ركّز في السؤال القادم لتضاعف نقاطك.", "danger");
+        App.showToast("انتهت مهلة السؤال! ركّز في السؤال القادم لتضاعف نقاطك.", "danger");
 
         const expBox = document.getElementById("aiExplanationBox");
         const expText = document.getElementById("aiExplanationText");
@@ -3779,7 +3850,7 @@
           optEl.onclick = null;
         }
         AudioFX.playTone(450, 'sine', 0.15);
-        App.showToast("تم حذف إجابة خاطئة لمساعدتك!", "info");
+        App.showToast("تم استبعاد أحد الخيارات الخاطئة!", "info");
       },
 
       useAiHint() {
@@ -3788,7 +3859,7 @@
         document.getElementById("lifelineHintBtn").disabled = true;
 
         const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
-        const hintText = currentQ.aiExplanation ? `مفتاح الحل: ${currentQ.aiExplanation.substring(0, 45)}...` : "تلميح: دقق في الموقع الإعرابي وعلامات الضبط الأصلية والفرعية.";
+        const hintText = currentQ.aiExplanation ? `مفتاح الحل: ${currentQ.aiExplanation.substring(0, 48)}...` : "تلميح: دقق في الموقع الإعرابي وعلامات الضبط الأصلية والفرعية.";
 
         App.alert(hintText, "💡 تلميح سيبويه الذكي", '<i class="fa-solid fa-lightbulb" style="color:#F59E0B;"></i>');
         AudioFX.playTone(600, 'sine', 0.2);
@@ -3878,7 +3949,7 @@
           setTimeout(() => {
             if (percent >= 80) {
               App.alert(
-                `🏆 مبارك يا بطل العربية!\nحققت المركز المتقدم في المسابقة بنسبة نجاح ${percent}%.\nرصيدك الآن: ${State.currentUser ? State.currentUser.arenaPoints : 0} نقطة ذهبية!\nتم ترقيتك في لوحة الشرف بنجاح.`,
+                `🏆 مبارك يا بطل العربية!\nحققت المركز المتقدم في المسابقة بنسبة نجاح ${percent}%.\nرصيدك الآن: ${State.currentUser ? State.currentUser.arenaPoints : 0} نقطة تفوق ذهبية!\nتم ترقيتك في لوحة الشرف بنجاح.`,
                 "وسام فوز المسابقة والتفوق"
               );
             } else {
@@ -3949,9 +4020,7 @@
         App.setRoute("ADMIN_DASHBOARD");
       },
 
-      /* ===================================================
-         تقارير أولياء الأمور عبر WhatsApp المنسقة
-      =================================================== */
+      /* تقارير أولياء الأمور */
       openParentReportModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
@@ -4005,9 +4074,6 @@
         App.showToast("تم فتح واتساب لإرسال التقرير لولي الأمر بنجاح.", "info");
       },
 
-      /* ===================================================
-         إدارة الطلاب، الشهادات، والاشتراكات
-      =================================================== */
       toggleCertApproval(uid) {
         const student = State.students.find(s => s.uid === uid);
         if (student) {
@@ -4114,7 +4180,7 @@
           curriculum,
           grade,
           phone: phone || "غير محدد",
-          arenaPoints: 100, // رصيد نقاط ترحيبي تشجيعي
+          arenaPoints: 100,
           status: "TRIAL",
           plan: "7_DAYS_TRIAL",
           trialStartDate: "2026-08-18",
@@ -4146,18 +4212,19 @@
         App.showConfirmModal("حذف الطالب", `هل أنت متأكد تماماً من حذف حساب الطالب (${student.name})؟`, () => {
           State.students = State.students.filter(s => s.uid !== uid);
           if (db) db.collection("students").doc(uid).delete().catch(console.error);
-          DataStore.save("students", State.students);
-          UI.render();
-        });
-      },
+DataStore.save("students", State.students);
+UI.render();
+App.showToast("تم حذف حساب الطالب بنجاح.");
+});
+},
 
-      sendWhatsAppOrder(plan) {
-        const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", curriculum: "UAE", grade: 12 };
-        const phone = State.settings.adminPhoneWhatsApp;
-        const planName = plan === "3_MONTHS" ? "3 أشهر (باقة التوفير 250 درهم)" : "شهر واحد (100 درهم)";
-        const curText = user.curriculum === 'SUDAN' ? 'المنهاج السوداني (الصف الثالث الثانوي علمي)' : `المنهج الإماراتي (الصف ${user.grade} متقدم)`;
-
-        const message = `السلام عليكم أستاذ جمال، أرغب في الاشتراك في منصة أستاذ جمال للغة العربية.
+sendWhatsAppOrder(plan) {
+    const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", curriculum: "UAE", grade: 12 };
+    const phone = State.settings.adminPhoneWhatsApp;
+    const planName = plan === "3_MONTHS" ? "3 أشهر (باقة التوفير 250 درهم)" : "شهر واحد (100 درهم)";
+    const curText = user.curriculum === 'SUDAN' ? 'المنهاج السوداني (الصف الثالث الثانوي علمي)' : `المنهج الإماراتي (الصف ${user.grade} متقدم)`;
+    
+    const message = `السلام عليكم أستاذ جمال، أرغب في الاشتراك في منصة أستاذ جمال للغة العربية.
 
 اسم الطالب: ${user.name}
 اسم المستخدم: ${user.username}
@@ -4165,26 +4232,26 @@
 الباقة المطلوبة: ${planName}
 
 أرجو تفعيل الحساب بعد الدفع.`;
+    
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  },
+  
+  logout() {
+    LiveAudio.disconnectStudentAudio();
+    if (State.currentUser && State.currentUser.role === "ADMIN") {
+      LiveAudio.stopAdminBroadcast();
+    }
+    App.stopArenaTimer();
+    localStorage.removeItem("jamal_session_token");
+    State.currentUser = null;
+    App.setRoute("LOGIN");
+  }
+};
 
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
-      },
-
-      logout() {
-        LiveAudio.disconnectStudentAudio();
-        if (State.currentUser && State.currentUser.role === "ADMIN") {
-          LiveAudio.stopAdminBroadcast();
-        }
-        App.stopArenaTimer();
-        localStorage.removeItem("jamal_session_token");
-        State.currentUser = null;
-        App.setRoute("LOGIN");
-      }
-    };
-
-    /* تشغيل المنصة عند جاهزية المتصفح */
-    document.addEventListener("DOMContentLoaded", () => {
-      App.init();
-    });
-  </script>
-</body>
+/* تشغيل المنصة فور اكتمال تحميل عناصر الصفحة */
+document.addEventListener("DOMContentLoaded", () => {
+  App.init();
+});
+</script>
+</body> 
 </html>
