@@ -13,10 +13,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- مكتبة التشفير القياسية Crypto-JS لتوليد Hashes & Salted PBKDF2 -->
+  <!-- مكتبة التشفير القياسية Crypto-JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
 
-  <!-- حزم Firebase SDK الرسمية (App, Auth, Firestore) -->
+  <!-- حزم Firebase SDK الرسمية -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -36,6 +36,7 @@
       --danger: #DC2626;
       --success: #16A34A;
       --warning: #D97706;
+      --html-color: #0284C7;
       --radius-sm: 8px;
       --radius-md: 14px;
       --radius-lg: 22px;
@@ -154,9 +155,9 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 10px 20px;
+      padding: 9px 18px;
       border-radius: var(--radius-sm);
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 700;
       cursor: pointer;
       border: none;
@@ -183,6 +184,26 @@
 
     .btn-gold:hover {
       background: #845326;
+      transform: translateY(-2px);
+    }
+
+    .btn-html {
+      background: linear-gradient(135deg, #0284C7, #0369A1);
+      color: var(--white);
+    }
+
+    .btn-html:hover {
+      background: #075985;
+      transform: translateY(-2px);
+    }
+
+    .btn-pdf {
+      background: linear-gradient(135deg, #B91C1C, #991B1B);
+      color: var(--white);
+    }
+
+    .btn-pdf:hover {
+      background: #7F1D1D;
       transform: translateY(-2px);
     }
 
@@ -217,6 +238,9 @@
     .badge-active { background: #DCFCE7; color: var(--success); border: 1px solid #86EFAC; }
     .badge-expired { background: #FEE2E2; color: var(--danger); border: 1px solid #FCA5A5; }
     .badge-curriculum { background: var(--cream); color: var(--primary-burgundy); border: 1px solid var(--gold); }
+    .badge-html { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
+    .badge-pdf { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+    .badge-video { background: #EDE9FE; color: #6D28D9; border: 1px solid #DDD6FE; }
 
     .grid-dashboard {
       display: grid;
@@ -256,61 +280,112 @@
       font-size: 1.1rem;
     }
 
-    .plans-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 24px;
-      margin: 24px 0;
-    }
-
-    .plan-card {
-      border: 2px solid rgba(180, 130, 83, 0.3);
-      border-radius: var(--radius-lg);
-      padding: 28px 20px;
-      text-align: center;
+    /* ===================================================
+       تنسيقات وحدات ودروس المنهاج الاحترافية
+    =================================================== */
+    .unit-section-block {
       background: var(--white);
-      position: relative;
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(180, 130, 83, 0.25);
+      margin-bottom: 26px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
       transition: var(--transition);
     }
 
-    .plan-card.featured {
-      border-color: var(--gold);
-      background: linear-gradient(180deg, var(--white) 0%, var(--ivory) 100%);
+    .unit-section-block:hover {
       box-shadow: var(--shadow-md);
-      transform: scale(1.02);
+      border-color: var(--gold);
     }
 
-    .plan-badge-top {
-      position: absolute;
-      top: -14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--primary-burgundy);
-      color: var(--light-gold);
-      padding: 4px 16px;
-      border-radius: 50px;
-      font-size: 0.75rem;
+    .unit-header-bar {
+      background: linear-gradient(135deg, #FAF4EB, var(--ivory));
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--cream);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .unit-title-group h3 {
+      font-size: 1.18rem;
       font-weight: 800;
-      border: 1px solid var(--gold);
-      white-space: nowrap;
-    }
-
-    .plan-price {
-      font-size: 2.2rem;
-      font-weight: 900;
       color: var(--primary-burgundy);
-      margin: 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .plan-price span {
-      font-size: 0.9rem;
+    .unit-title-group span {
+      font-size: 0.8rem;
       color: var(--text-muted);
-      font-weight: 400;
+      margin-top: 2px;
+      display: block;
     }
 
+    .lessons-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+      padding: 22px;
+    }
+
+    .lesson-item-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transition);
+      position: relative;
+      border-top: 4px solid var(--gold);
+    }
+
+    .lesson-item-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
+    }
+
+    .lesson-badges-strip {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .lesson-item-card h4 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--primary-burgundy);
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .lesson-item-card p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .lesson-actions-cluster {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: auto;
+      padding-top: 14px;
+      border-top: 1px dashed #E5E7EB;
+    }
+
+    /* مشغل واستوديو الدروس الموحد */
     .player-modal-content {
       position: relative;
-      background: #000;
+      background: #0B0F19;
       border-radius: var(--radius-md);
       overflow: hidden;
       display: flex;
@@ -325,23 +400,46 @@
       justify-content: space-between;
       align-items: center;
       background: #111827;
-      padding: 10px 16px;
+      padding: 12px 18px;
       border-bottom: 1px solid #374151;
       font-size: 0.85rem;
       z-index: 100;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .player-toolbar-controls {
+    .player-media-tabs {
       display: flex;
+      gap: 6px;
       align-items: center;
-      gap: 8px;
+    }
+
+    .player-tab-btn {
+      background: #1F2937;
+      color: #D1D5DB;
+      border: 1px solid #374151;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .player-tab-btn.active {
+      background: var(--gold);
+      color: #FFF;
+      border-color: var(--light-gold);
     }
 
     .player-viewport {
       position: relative;
       width: 100%;
-      min-height: 420px;
-      height: 65vh;
+      min-height: 480px;
+      height: 72vh;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -391,17 +489,24 @@
       outline: none;
     }
 
+    .html-sandbox-frame, .pdf-embed-frame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #FFF;
+    }
+
     .floating-watermark {
       position: absolute;
       top: 25%;
       left: 25%;
-      color: rgba(255, 255, 255, 0.32);
+      color: rgba(255, 255, 255, 0.35);
       font-size: 1.15rem;
       font-weight: 800;
       pointer-events: none;
       user-select: none;
       transform: rotate(-15deg);
-      z-index: 50;
+      z-index: 90;
       animation: dynamicFloat 14s infinite alternate ease-in-out;
       text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
@@ -410,37 +515,6 @@
       0% { top: 15%; left: 15%; }
       50% { top: 60%; left: 45%; }
       100% { top: 25%; left: 70%; }
-    }
-
-    .document-viewer-frame {
-      width: 100%;
-      height: 70vh;
-      border: none;
-      background: #FDFBF7;
-    }
-
-    .doc-fallback-card {
-      padding: 30px;
-      text-align: center;
-      background: #FFFDF9;
-      color: var(--text-dark);
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-    }
-
-    .audio-player-inner {
-      width: 100%;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #1F2937, #111827);
-      text-align: center;
-    }
-
-    audio {
-      width: 100%;
-      height: 48px;
-      margin-top: 18px;
-      outline: none;
     }
 
     .quiz-gamified-box {
@@ -470,12 +544,6 @@
       border-radius: var(--radius-lg);
       padding: 28px;
       box-shadow: var(--shadow-sm);
-      animation: cardSlideIn 0.3s ease;
-    }
-
-    @keyframes cardSlideIn {
-      from { transform: translateX(30px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
     }
 
     .interactive-option {
@@ -561,7 +629,6 @@
       display: none;
       flex-direction: column;
       overflow: hidden;
-      animation: modalFadeIn 0.3s ease;
     }
 
     .ai-chat-window.active { display: flex; }
@@ -692,7 +759,7 @@
       font-size: 0.9rem;
     }
 
-    .form-group input:focus, .form-group select:focus {
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
       border-color: var(--gold);
     }
 
@@ -719,7 +786,7 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.78);
       display: none;
       align-items: center;
       justify-content: center;
@@ -739,14 +806,8 @@
       padding: 24px;
       box-shadow: var(--shadow-lg);
       position: relative;
-      animation: modalFadeIn 0.28s ease;
       max-height: 92vh;
       overflow-y: auto;
-    }
-
-    @keyframes modalFadeIn {
-      from { transform: translateY(20px) scale(0.97); opacity: 0; }
-      to { transform: translateY(0) scale(1); opacity: 1; }
     }
 
     .security-toast {
@@ -765,13 +826,6 @@
       gap: 10px;
       box-shadow: var(--shadow-lg);
       z-index: 9999;
-      animation: toastBounce 0.4s ease;
-    }
-
-    @keyframes toastBounce {
-      0% { top: -50px; }
-      70% { top: 25px; }
-      100% { top: 20px; }
     }
 
     footer.app-footer {
@@ -814,58 +868,41 @@
       transform: scale(1.03);
     }
 
-    @page {
-      size: A4 landscape;
-      margin: 0;
-    }
-
+    @page { size: A4 landscape; margin: 0; }
     @media print {
       body, html {
         background: #FFF !important;
-        width: 297mm;
-        height: 210mm;
-        margin: 0 !important;
-        padding: 0 !important;
+        width: 297mm; height: 210mm;
+        margin: 0 !important; padding: 0 !important;
         overflow: hidden !important;
       }
-      body * {
-        visibility: hidden !important;
-      }
-      #printableCert, #printableCert * {
-        visibility: visible !important;
-      }
+      body * { visibility: hidden !important; }
+      #printableCert, #printableCert * { visibility: visible !important; }
       #printableCert {
         position: fixed !important;
-        left: 10mm !important;
-        top: 10mm !important;
-        width: 277mm !important;
-        height: 190mm !important;
+        left: 10mm !important; top: 10mm !important;
+        width: 277mm !important; height: 190mm !important;
         padding: 24mm 20mm !important;
         border: 8px double #B48253 !important;
         box-shadow: none !important;
         background: #FFFDF9 !important;
-        page-break-inside: avoid !important;
-        page-break-after: avoid !important;
       }
-      .modal-overlay, .modal-card {
-        padding: 0 !important;
-        background: transparent !important;
-      }
+      .modal-overlay, .modal-card { padding: 0 !important; background: transparent !important; }
     }
 
     @media (max-width: 768px) {
       .main-wrapper { padding: 12px 8px; }
       header.app-header { padding: 10px 14px; }
       .footer-content { justify-content: center; text-align: center; }
-      th, td { padding: 8px 10px; font-size: 0.78rem; }
-      .plan-card.featured { transform: scale(1); }
+      .lessons-cards-grid { grid-template-columns: 1fr; padding: 14px; }
+      .player-viewport { height: 60vh; min-height: 360px; }
       .ai-chat-window { left: 12px; right: 12px; width: auto; bottom: 85px; }
     }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
-  <!-- واجهة التشويش الأمني الفوري عند محاولة التفتيش -->
+  <!-- درع الخصوصية المشدد -->
   <div id="securityPrivacyShield">
     <i class="fa-solid fa-user-shield" style="font-size:64px; color:var(--light-gold); margin-bottom:16px;"></i>
     <h2 style="font-size:1.4rem; font-weight:800;">تم تفعيل درع الخصوصية المشدد</h2>
@@ -893,7 +930,7 @@
 
   <main class="main-wrapper" id="appContainer"></main>
 
-  <!-- زر ونافذة المساعد الذكي AI -->
+  <!-- المساعد الذكي AI -->
   <div class="ai-fab-button" onclick="App.toggleAiChat()" title="المساعد النحوي والبلاغي الذكي">
     <i class="fa-solid fa-robot"></i>
   </div>
@@ -905,7 +942,7 @@
     </div>
     <div class="ai-chat-body" id="aiChatBody">
       <div class="ai-msg bot">
-        مرحباً بك! أنا رفيقك الذكي في اللغة العربية للمنهج الإماراتي المتقدم والمنهاج السوداني للشهادة الثانوية. اسألني عن أي قاعدة نحوية أو استخراج بلاغي.
+        مرحباً بك! أنا رفيقك الذكي في اللغة العربية. اسألني عن أي قاعدة نحوية، استخراج بلاغي، أو تحليل لنصوص المنهاج الإماراتي أو السوداني.
       </div>
     </div>
     <div class="ai-chat-footer">
@@ -916,13 +953,16 @@
     </div>
   </div>
 
-  <!-- المشغل الداخلي المحمي مع دعم التدوير والرجوع للوضع الطبيعي لجميع الوسائط -->
+  <!-- المشغل واستوديو الدرس الموحد المتطور (فيديو + PDF + HTML) -->
   <div class="modal-overlay" id="mediaPlayerModal">
-    <div class="modal-card" style="max-width: 900px; padding: 0; background: #000; border-color: var(--gold);">
+    <div class="modal-card" style="max-width: 1040px; padding: 0; background: #000; border-color: var(--gold);">
       <div class="player-modal-content">
         <div class="player-toolbar">
-          <span id="playerMediaTitle" style="font-weight: 700; color: var(--light-gold);"></span>
-          <div class="player-toolbar-controls">
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <span id="playerLessonTitle" style="font-weight: 800; color: var(--light-gold); font-size: 0.95rem;"></span>
+            <div class="player-media-tabs" id="playerMediaTabs"></div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
             <button class="btn btn-secondary" id="rotateToggleBtn" style="padding:4px 10px; font-size:0.75rem;" onclick="App.toggleDeviceRotation()" title="تدوير أو الرجوع للوضع الطبيعي">
               <i class="fa-solid fa-rotate"></i> <span id="rotateBtnText">تدوير عرضي</span>
             </button>
@@ -944,19 +984,18 @@
     </div>
   </div>
 
-  <!-- نافذة تعديل المحتوى للأستاذ جمال (Edit Content Modal) -->
-  <div class="modal-overlay" id="editContentModal">
+  <!-- نافذة تعديل الدرس الكامل للأستاذ جمال -->
+  <div class="modal-overlay" id="editLessonModal">
     <div class="modal-card">
       <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
-        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية
+        <i class="fa-solid fa-pen-to-square"></i> تعديل بيانات ومصادر الدرس التعليمي
       </h3>
-      <form onsubmit="App.handleSaveEditContent(event)">
-        <input type="hidden" id="editContentId">
-        <input type="hidden" id="editContentType">
+      <form onsubmit="App.handleSaveEditLesson(event)">
+        <input type="hidden" id="editLessonId">
         
         <div class="form-group">
           <label>المنهاج والصف الدراسي</label>
-          <select id="editContentTarget" required>
+          <select id="editLessonTarget" required>
             <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
             <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
             <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
@@ -964,28 +1003,48 @@
         </div>
 
         <div class="form-group">
-          <label>العنوان</label>
-          <input type="text" id="editContentTitle" required>
+          <label>الوحدة التعليمية التابع لها الدرس</label>
+          <input type="text" id="editLessonUnit" required placeholder="مثال: الوحدة الأولى: النحو والصرف">
         </div>
 
         <div class="form-group">
-          <label>الوحدة / الفرع</label>
-          <input type="text" id="editContentUnit" required>
+          <label>عنوان وموضوع الدرس</label>
+          <input type="text" id="editLessonTitle" required placeholder="مثال: أسلوب الاستثناء وأحكامه">
         </div>
 
-        <div class="form-group" id="editUrlGroup">
-          <label>رابط الملف أو الفيديو المشفر</label>
+        <div class="form-group">
+          <label><i class="fa-solid fa-video" style="color:var(--primary-burgundy);"></i> رابط فيديو الشرح (YouTube / MP4 / Google Drive)</label>
           <div class="input-with-paste">
-            <input type="text" id="editContentUrl">
-            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editContentUrl')">
+            <input type="text" id="editLessonVideoUrl" placeholder="https://...">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editLessonVideoUrl')">
               <i class="fa-solid fa-paste"></i>
             </button>
           </div>
         </div>
 
-        <div class="form-group" id="editTextGroup" style="display:none;">
-          <label>نصوص وشروحات المذكرة</label>
-          <textarea id="editContentText" rows="4"></textarea>
+        <div class="form-group">
+          <label><i class="fa-solid fa-file-pdf" style="color:var(--danger);"></i> رابط مذكرة / كتاب الدرس PDF</label>
+          <div class="input-with-paste">
+            <input type="text" id="editLessonPdfUrl" placeholder="https://.../file.pdf">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editLessonPdfUrl')">
+              <i class="fa-solid fa-paste"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label><i class="fa-solid fa-code" style="color:var(--html-color);"></i> رابط ملف / تطبيق تفاعلي HTML</label>
+          <div class="input-with-paste">
+            <input type="text" id="editLessonHtmlUrl" placeholder="https://.../index.html">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editLessonHtmlUrl')">
+              <i class="fa-solid fa-paste"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>توجيهات أو إضاءات تعليمية للدرس (اختياري)</label>
+          <textarea id="editLessonNotes" rows="3" placeholder="ملاحظات وتوجيهات الأستاذ جمال للطلاب حول هذا الدرس..."></textarea>
         </div>
 
         <div style="display:flex; gap:8px; margin-top:16px;">
@@ -996,7 +1055,7 @@
     </div>
   </div>
 
-  <!-- نافذة الشهادة المعتمدة المجهزة لطباعة A4 واحدة -->
+  <!-- نافذة الشهادة المعتمدة A4 -->
   <div class="modal-overlay" id="certificateModal">
     <div class="modal-card" style="max-width: 760px;">
       <div id="printableCert" class="certificate-card">
@@ -1010,7 +1069,7 @@
         <h3 id="certStudentName" style="font-size: 1.35rem; color: var(--primary-burgundy); font-weight: 800; border-bottom: 2px dashed var(--gold); display: inline-block; padding: 0 20px 4px; margin-bottom: 12px;"></h3>
         
         <p style="font-size: 0.92rem; line-height: 1.8; margin-bottom: 20px;">
-          قد أتم بنجاح واقتدار متطلبات مقرر <strong id="certGradeText"></strong>، بعد اجتياز كافة التقييمات والاختبارات بنجاح واعتماد النتيجة رسمياً من صاحب المنصة.
+          قد أتم بنجاح واقتدار متطلبات مقرر <strong id="certGradeText"></strong>، بعد دراسة كافة الوحدات والدروس واجتياز التقييمات بنجاح واعتماد النتيجة رسمياً من صاحب المنصة.
         </p>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; border-top: 1px solid var(--cream); padding-top: 12px;">
@@ -1034,7 +1093,7 @@
     </div>
   </div>
 
-  <!-- نافذة تأكيد الإجراءات -->
+  <!-- نافذة التأكيد -->
   <div class="modal-overlay" id="confirmModal">
     <div class="modal-card" style="max-width: 440px; text-align: center;">
       <div style="font-size: 48px; color: var(--gold); margin-bottom: 14px;">
@@ -1061,7 +1120,7 @@
       </div>
 
       <div style="background: var(--bg-light); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 18px; font-size: 0.86rem; line-height: 1.7; color: var(--text-dark);">
-        متخصص في هندسة وتطوير المنصات التعليمية والتطبيقات التفاعلية الآمنة، تشفير المحتوى، وهياكل السحابة الذكية والمزامنة اللحظية بين مختلف الأجهزة.
+        تطوير وبناء المنصات التعليمية المتطورة، التشفير وحماية الوسائط، والمزامنة اللحظية الشاملة للأجهزة والأنظمة الذكية.
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem; margin-bottom: 20px;">
@@ -1096,11 +1155,10 @@
     </div>
   </footer>
 
-  <!-- محرك الأمان والتشفير وإدارة المنصة المربوطة بـ Firebase والمزامنة اللحظية الحقيقية -->
   <script>
     /**
      * =========================================================================
-     * 1. محرك التشفير المتقدم وإدارة أمان الجلسات (Crypto & Security Engine)
+     * 1. محرك الأمان والتشفير (Security & Crypto Engine)
      * =========================================================================
      */
     const CryptoSecurity = {
@@ -1122,8 +1180,7 @@
           username: user.username,
           curriculum: user.curriculum,
           grade: user.grade,
-          expiresAt: Date.now() + (8 * 60 * 60 * 1000),
-          fingerprint: navigator.userAgent.substring(0, 30)
+          expiresAt: Date.now() + (8 * 60 * 60 * 1000)
         };
         return CryptoJS.AES.encrypt(JSON.stringify(payload), this.SALT_KEY).toString();
       },
@@ -1142,13 +1199,12 @@
       },
 
       checkBruteForce() {
-        const attempts = parseInt(localStorage.getItem("jamal_login_attempts") || "0");
         const lockUntil = parseInt(localStorage.getItem("jamal_lock_until") || "0");
         if (Date.now() < lockUntil) {
           const remainingSec = Math.ceil((lockUntil - Date.now()) / 1000);
           return { locked: true, remainingSec };
         }
-        return { locked: false, attempts };
+        return { locked: false };
       },
 
       recordFailedAttempt() {
@@ -1170,7 +1226,7 @@
       init() {
         document.addEventListener('contextmenu', e => {
           e.preventDefault();
-          App.recordSecurityViolation("محاولة نسخ أو تحميل عبر القائمة المنبثقة");
+          App.recordSecurityViolation("محاولة نسخ أو تنزيل محتوى");
           App.showSecurityAlert("محتويات منصة أستاذ جمال محمية ومشفرة ضد النسخ والتحميل.");
         });
 
@@ -1182,8 +1238,7 @@
           ) {
             e.preventDefault();
             document.getElementById('securityPrivacyShield').style.display = 'flex';
-            App.recordSecurityViolation(`محاولة فتح أدوات التفتيش (${e.key})`);
-            App.showSecurityAlert("تنبيه أمني: تم تعطيل أدوات المطورين لحماية خصوصية المحتوى.");
+            App.recordSecurityViolation(`محاولة فتح أدوات المطورين (${e.key})`);
           }
         });
       }
@@ -1210,7 +1265,7 @@
       db = firebase.firestore();
       auth = firebase.auth();
     } catch (e) {
-      console.warn("Firestore running in localized encrypted sync mode.");
+      console.warn("Firebase localized mode.");
     }
 
     const AudioFX = {
@@ -1260,14 +1315,12 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         this.particles = [];
-
-        const colors = ['#B48253', '#4E1D1F', '#DDBB90', '#16A34A', '#F5E6D1', '#DC2626'];
-        for (let i = 0; i < 120; i++) {
+        const colors = ['#B48253', '#4E1D1F', '#DDBB90', '#16A34A', '#0284C7', '#DC2626'];
+        for (let i = 0; i < 110; i++) {
           this.particles.push({
             x: canvas.width / 2,
             y: canvas.height / 2,
             r: Math.random() * 6 + 4,
-            d: Math.random() * 120,
             color: colors[Math.floor(Math.random() * colors.length)],
             tilt: Math.floor(Math.random() * 10) - 10,
             tiltAngleInc: Math.random() * 0.07 + 0.05,
@@ -1278,7 +1331,6 @@
             opacity: 1
           });
         }
-
         if (this.animId) cancelAnimationFrame(this.animId);
         const render = () => {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1290,7 +1342,6 @@
             p.tiltAngle += p.tiltAngleInc;
             p.tilt = Math.sin(p.tiltAngle) * 15;
             p.opacity -= 0.008;
-
             if (p.opacity > 0) {
               alive = true;
               ctx.beginPath();
@@ -1303,11 +1354,8 @@
             }
           });
           ctx.globalAlpha = 1;
-          if (alive) {
-            this.animId = requestAnimationFrame(render);
-          } else {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-          }
+          if (alive) this.animId = requestAnimationFrame(render);
+          else ctx.clearRect(0, 0, canvas.width, canvas.height);
         };
         render();
       }
@@ -1315,38 +1363,37 @@
 
     /**
      * =========================================================================
-     * 3. حالة النظام وقاعدة البيانات السحابية الحقيقية (صفر بيانات وهمية)
+     * 3. حالة النظام وقاعدة البيانات السحابية (الهيكلية الاحترافية الجديدة)
      * =========================================================================
      */
     const State = {
       currentUser: null,
       currentRoute: "LOGIN",
-      activeContentTab: "VIDEOS",
-      adminTargetFilter: "ALL", // 'ALL', 'UAE_12', 'UAE_11', 'SUDAN_12'
-      adminContentTab: "LIST",
       studentSearchQuery: "",
       adminSearchQuery: "",
-      
+      adminTargetFilter: "ALL",
+      adminContentTab: "LIST",
+      activeStudentTab: "CURRICULUM", // "CURRICULUM" or "QUIZZES"
+
+      // استوديو الدرس الحالي المفتوح
+      activeLessonInPlayer: null,
+      activePlayerMode: "VIDEO", // "VIDEO" | "PDF" | "HTML"
+      isRotatedLandscape: false,
+
+      // الاختبار التفاعلي
       activeQuiz: null,
       activeQuestionIndex: 0,
       quizScore: 0,
       isQuestionAnswered: false,
 
-      isRotatedLandscape: false,
-
       settings: {
-        adminPhoneWhatsApp: "971559502387", // الرقم المعتمد للأستاذ جمال: 0559502387
-        priceMonth: 100,
-        priceThreeMonths: 250,
-        trialDays: 7
+        adminPhoneWhatsApp: "971559502387"
       },
 
-      // مصفوفات حقيقية ونظيفة بدون بيانات وهمية
-      students: [],
+      // مصفوفة الدروس الشاملة المتطورة (تم إلغاء audios و books واستبدالها بنظام درس موحد يضم الفيديو والـ PDF والـ HTML)
       lessons: [],
-      audios: [],
-      books: [],
       quizzes: [],
+      students: [],
       activityLogs: []
     };
 
@@ -1355,18 +1402,8 @@
         const adminHashedPass = CryptoSecurity.hashPassword("Arabic69");
         localStorage.setItem("jamal_admin_hash", adminHashedPass);
 
-        // تفعيل المستمعات السحابية المباشرة (Firestore Live onSnapshot Listeners)
         if (db) {
-          // مزامنة الطلاب الحقيقيين لحظياً
-          db.collection("students").onSnapshot(snapshot => {
-            State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
-            UI.render();
-          }, () => {
-            State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
-          });
-
-          // مزامنة الدروس والفيديوهات الحقيقية لحظياً
+          // مزامنة الدروس المتكاملة (تحتوي على الفيديو، ملف PDF، ورابط HTML التفاعلي)
           db.collection("lessons").onSnapshot(snapshot => {
             State.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             localStorage.setItem("jamal_lessons", JSON.stringify(State.lessons));
@@ -1375,25 +1412,16 @@
             State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
           });
 
-          // مزامنة الملفات الصوتية الحقيقية لحظياً
-          db.collection("audios").onSnapshot(snapshot => {
-            State.audios = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem("jamal_audios", JSON.stringify(State.audios));
+          // مزامنة الطلاب
+          db.collection("students").onSnapshot(snapshot => {
+            State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("jamal_students_enc", JSON.stringify(State.students));
             UI.render();
           }, () => {
-            State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
+            State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
           });
 
-          // مزامنة الكتب والمذكرات (PDF, Word, PPTX) لحظياً
-          db.collection("books").onSnapshot(snapshot => {
-            State.books = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            localStorage.setItem("jamal_books", JSON.stringify(State.books));
-            UI.render();
-          }, () => {
-            State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
-          });
-
-          // مزامنة الاختبارات وبنك الأسئلة الحقيقي لحظياً
+          // مزامنة الاختبارات
           db.collection("quizzes").onSnapshot(snapshot => {
             State.quizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             localStorage.setItem("jamal_quizzes", JSON.stringify(State.quizzes));
@@ -1402,7 +1430,7 @@
             State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
           });
 
-          // مزامنة سجلات الأمان والتنبيهات لحظياً
+          // مزامنة سجلات الأمان
           db.collection("activity_logs").onSnapshot(snapshot => {
             State.activityLogs = snapshot.docs.map(doc => doc.data());
             localStorage.setItem("jamal_logs", JSON.stringify(State.activityLogs));
@@ -1411,15 +1439,13 @@
             State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
           });
         } else {
-          State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
           State.lessons = JSON.parse(localStorage.getItem("jamal_lessons") || "[]");
-          State.audios = JSON.parse(localStorage.getItem("jamal_audios") || "[]");
-          State.books = JSON.parse(localStorage.getItem("jamal_books") || "[]");
+          State.students = JSON.parse(localStorage.getItem("jamal_students_enc") || "[]");
           State.quizzes = JSON.parse(localStorage.getItem("jamal_quizzes") || "[]");
           State.activityLogs = JSON.parse(localStorage.getItem("jamal_logs") || "[]");
         }
 
-        // استعادة الجلسة المشفرة إن كانت سارية
+        // استعادة الجلسة إن كانت صالحة
         const savedToken = localStorage.getItem("jamal_session_token");
         if (savedToken) {
           const validated = CryptoSecurity.validateSessionToken(savedToken);
@@ -1434,46 +1460,29 @@
                 State.currentRoute = "STUDENT_DASHBOARD";
               }
             }
-          } else {
-            localStorage.removeItem("jamal_session_token");
           }
         }
       },
 
       save(key, data) {
-        if (key === "students") {
-          localStorage.setItem("jamal_students_enc", JSON.stringify(data));
-          if (db) {
-            data.forEach(st => {
-              db.collection("students").doc(st.uid).set(st, { merge: true }).catch(err => console.error(err));
-            });
-          }
-        } else if (key === "lessons" && db) {
-          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
-          data.forEach(l => db.collection("lessons").doc(l.id).set(l, { merge: true }).catch(err => console.error(err)));
-        } else if (key === "audios" && db) {
-          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
-          data.forEach(a => db.collection("audios").doc(a.id).set(a, { merge: true }).catch(err => console.error(err)));
-        } else if (key === "books" && db) {
-          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
-          data.forEach(b => db.collection("books").doc(b.id).set(b, { merge: true }).catch(err => console.error(err)));
-        } else if (key === "quizzes" && db) {
-          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
-          data.forEach(q => db.collection("quizzes").doc(q.id).set(q, { merge: true }).catch(err => console.error(err)));
-        } else if (key === "logs") {
-          localStorage.setItem("jamal_logs", JSON.stringify(data));
-          if (db && data.length > 0) {
-            db.collection("activity_logs").add(data[0]).catch(err => console.error(err));
-          }
-        } else {
-          localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+        localStorage.setItem(`jamal_${key}`, JSON.stringify(data));
+        if (!db) return;
+
+        if (key === "lessons") {
+          data.forEach(l => db.collection("lessons").doc(l.id).set(l, { merge: true }).catch(console.error));
+        } else if (key === "students") {
+          data.forEach(st => db.collection("students").doc(st.uid).set(st, { merge: true }).catch(console.error));
+        } else if (key === "quizzes") {
+          data.forEach(q => db.collection("quizzes").doc(q.id).set(q, { merge: true }).catch(console.error));
+        } else if (key === "logs" && data.length > 0) {
+          db.collection("activity_logs").add(data[0]).catch(console.error);
         }
       }
     };
 
     /**
      * =========================================================================
-     * 4. محرك واجهة المستخدم التفاعلية (UI Views & Templates)
+     * 4. واجهة المستخدم التفاعلية المتطورة (UI Engine)
      * =========================================================================
      */
     const UI = {
@@ -1485,7 +1494,7 @@
           nav.innerHTML = `
             <div style="display:flex; align-items:center; gap:10px;">
               <span style="font-size:0.85rem; font-weight:700; color:var(--light-gold);">
-                <i class="fa-solid fa-shield-halved"></i> ${State.currentUser.name}
+                <i class="fa-solid fa-circle-user"></i> ${State.currentUser.name}
               </span>
               <button class="btn btn-gold" style="padding:6px 12px; font-size:0.75rem;" onclick="App.logout()">
                 <i class="fa-solid fa-power-off"></i> خروج آمن
@@ -1579,7 +1588,7 @@
                 <div style="margin-top: 24px; border-top: 1px solid #F3F4F6; padding-top: 18px;">
                   <p style="font-size: 0.82rem; color: var(--text-muted);">
                     ليس لديك حساب؟ <br>
-                    <a href="https://wa.me/971559502387?text=${encodeURIComponent('السلام عليكم أستاذ جمال، أرغب في إنشاء وتفعيل حساب طالب في المنصة.')}" target="_blank" style="color:var(--primary-burgundy); font-weight:700; text-decoration:none;">
+                    <a href="https://wa.me/971559502387?text=${encodeURIComponent('السلام عليكم أستاذ جمال، أرغب في تفعيل حساب طالب جديد في المنصة.')}" target="_blank" style="color:var(--primary-burgundy); font-weight:700; text-decoration:none;">
                       <i class="fa-brands fa-whatsapp" style="color:var(--success);"></i> تواصل مع أستاذ جمال عبر واتساب (0559502387)
                     </a>
                   </p>
@@ -1598,13 +1607,13 @@
             return `
               <div class="card" style="text-align: center; padding: 46px 20px; max-width: 600px; margin: 30px auto;">
                 <i class="fa-solid fa-lock" style="font-size: 56px; color: var(--primary-burgundy); margin-bottom: 18px;"></i>
-                <h2 style="color: var(--primary-burgundy); font-weight: 800;">🔒 انتهت الفترة التجريبية / الاشتراك</h2>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">🔒 انتهى اشتراك الحساب</h2>
                 <p style="color: var(--text-muted); font-size: 0.9rem; margin: 14px 0 24px;">
-                  لقد انتهت الفترة المتاحة لحسابك. للاستمرار في التعلم والاستمتاع بجميع شروحات وملفات واختبارات منصة أستاذ جمال، يرجى الاشتراك وتجديد الحساب.
+                  يرجى تجديد الاشتراك للوصول إلى كافة الوحدات، الدروس، الفيديوهات، مذكرات الـ PDF، والصفحات التفاعلية HTML.
                 </p>
                 <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
                   <button class="btn btn-primary" onclick="App.setRoute('SUBSCRIBE_PAGE')">
-                    <i class="fa-solid fa-credit-card"></i> 💳 باقات الاشتراك
+                    <i class="fa-solid fa-credit-card"></i> باقات الاشتراك
                   </button>
                   <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('3_MONTHS')">
                     <i class="fa-brands fa-whatsapp"></i> تواصل مع أستاذ جمال للتجديد (0559502387)
@@ -1614,19 +1623,27 @@
             `;
           }
 
-          // عزل وفرز المحتوى الحقيقي بدقة للمنهاج والصف فقط
+          // تصفية المحتوى المخصص لمنهاج وصف هذا الطالب فقط
           const userTarget = user.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${user.grade}`;
           const q = State.studentSearchQuery.toLowerCase().trim();
+
           const filterFn = item => {
             const matchTarget = item.target === userTarget || (item.curriculum === user.curriculum && item.grade == user.grade);
             const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
             return matchTarget && matchSearch;
           };
 
-          const gradeLessons = State.lessons.filter(filterFn);
-          const gradeAudios = State.audios.filter(filterFn);
-          const gradeBooks = State.books.filter(filterFn);
-          const gradeQuizzes = State.quizzes.filter(filterFn);
+          const matchedLessons = State.lessons.filter(filterFn);
+          const matchedQuizzes = State.quizzes.filter(filterFn);
+
+          // تجميع الدروس حسب الوحدات التعليمية باحترافية
+          const unitsMap = {};
+          matchedLessons.forEach(lesson => {
+            const unitName = lesson.unit ? lesson.unit.trim() : "الوحدة العامة للمنهاج";
+            if (!unitsMap[unitName]) unitsMap[unitName] = [];
+            unitsMap[unitName].push(lesson);
+          });
+          const unitKeys = Object.keys(unitsMap);
 
           const curriculumTitle = user.curriculum === 'SUDAN' 
             ? 'المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)' 
@@ -1635,13 +1652,14 @@
           return `
             ${isTrial ? `
               <div class="countdown-widget">
-                <div><i class="fa-solid fa-hourglass-half"></i> فترة تجريبية مجانية لمدة 7 أيام تنتهي في: <strong>${user.trialEndDate}</strong></div>
+                <div><i class="fa-solid fa-hourglass-half"></i> فترة تجريبية مجانية تنتهي في: <strong>${user.trialEndDate}</strong></div>
                 <button class="btn btn-whatsapp" style="padding:6px 14px; font-size:0.8rem;" onclick="App.sendWhatsAppOrder('3_MONTHS')">
-                  <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب
+                  <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الدائم عبر واتساب
                 </button>
               </div>
             ` : ''}
 
+            <!-- رأس الحساب والتقدم -->
             <div class="card" style="border-right: 6px solid var(--primary-burgundy);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
                 <div>
@@ -1654,119 +1672,121 @@
                       <i class="fa-solid fa-award"></i> طباعة شهادة الإتمام المعتمدة A4 ✓
                     </button>
                   ` : `
-                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem;" onclick="alert('الشهادة بانتظار اعتماد الأستاذ جمال بعد إتمام كافة التقييمات.')" title="الشهادة تتطلب موافقة صاحب المنصة">
+                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem;" onclick="alert('الشهادة بانتظار اعتماد الأستاذ جمال بعد إتمام دراسة كافة الدروس.')">
                       <i class="fa-solid fa-lock"></i> الشهادة (بانتظار اعتماد الأستاذ جمال)
                     </button>
                   `}
                   <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">
-                    ${isTrial ? '🟡 تجربة مجانية' : '🟢 اشتراك نشط'}
+                    ${isTrial ? '🟡 فترة تجريبية' : '🟢 اشتراك نشط'}
                   </span>
                 </div>
               </div>
+            </div>
 
-              <div style="margin-top: 20px;">
-                <div style="display:flex; justify-content:space-between; font-size:0.82rem; font-weight:700; margin-bottom:6px;">
-                  <span>نسبة تقدمك وإنجاز التحديات في المنهاج</span>
-                  <span style="color: var(--gold);">88%</span>
-                </div>
-                <div style="background: #E5E7EB; height: 9px; border-radius: 50px; overflow: hidden;">
-                  <div style="background: linear-gradient(90deg, var(--gold), var(--primary-burgundy)); width: 88%; height: 100%;"></div>
-                </div>
+            <!-- شريط البحث الذكي والتنقل الرئيسي -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+              <div style="display:flex; gap:8px;">
+                <button class="btn ${State.activeStudentTab === 'CURRICULUM' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setStudentTab('CURRICULUM')">
+                  <i class="fa-solid fa-book-open"></i> وحدات ودروس المنهاج (${matchedLessons.length})
+                </button>
+                <button class="btn ${State.activeStudentTab === 'QUIZZES' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setStudentTab('QUIZZES')">
+                  <i class="fa-solid fa-trophy"></i> بنك التحديات والاختبارات (${matchedQuizzes.length})
+                </button>
+              </div>
+
+              <div class="search-box-wrapper" style="flex:1; max-width:400px; margin-bottom:0;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="🔍 ابحث عن وحدة أو درس..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
               </div>
             </div>
 
-            <!-- شريط البحث الذكي للطالب -->
-            <div class="search-box-wrapper">
-              <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" placeholder="🔍 ابحث في دروس ومذكرات واختبارات منهاجك المقررة..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')">
-                <i class="fa-solid fa-video"></i> الدروس والفيديوهات (${gradeLessons.length})
-              </button>
-              <button class="btn ${State.activeContentTab === 'AUDIOS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('AUDIOS')">
-                <i class="fa-solid fa-headphones"></i> الملفات الصوتية (${gradeAudios.length})
-              </button>
-              <button class="btn ${State.activeContentTab === 'BOOKS' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('BOOKS')">
-                <i class="fa-solid fa-file-pdf"></i> المذكرات (PDF, Word, PPTX) (${gradeBooks.length})
-              </button>
-              <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-primary' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')">
-                <i class="fa-solid fa-gamepad"></i> التحديات والاختبارات (${gradeQuizzes.length})
-              </button>
-            </div>
-
-            <div class="card">
-              ${State.activeContentTab === 'VIDEOS' ? `
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-play-circle"></i> الدروس والشروحات المرئية المقررة</h3>
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeLessons.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-film" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يقم الأستاذ جمال بإضافة فيديوهات لهذا المنهاج بعد.</p>' : gradeLessons.map(les => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
-                      <div>
-                        <strong style="font-size:0.92rem; display:block;">${les.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${les.unit} • ${les.duration || 'درس مسجل'}</span>
-                      </div>
-                      <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openVideoPlayer('${les.id}')">
-                        <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو المطور
-                      </button>
-                    </div>
-                  `).join('')}
+            ${State.activeStudentTab === 'CURRICULUM' ? `
+              ${unitKeys.length === 0 ? `
+                <div class="card" style="text-align:center; padding:40px; color:var(--text-muted);">
+                  <i class="fa-solid fa-layer-group" style="font-size:42px; color:var(--light-gold); display:block; margin-bottom:12px;"></i>
+                  لم يتم إضافة وحدات أو دروس لهذا المنهاج حتى الآن من قبل الأستاذ جمال.
                 </div>
-              ` : ''}
-
-              ${State.activeContentTab === 'AUDIOS' ? `
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-volume-high"></i> التسجيلات الصوتية وإلقاء القصائد</h3>
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeAudios.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-headphones" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم إضافة ملفات صوتية لهذا المنهاج بعد.</p>' : gradeAudios.map(aud => `
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--ivory); border-radius:var(--radius-sm); flex-wrap:wrap; gap:10px;">
-                      <div>
-                        <strong style="font-size:0.92rem; display:block;">${aud.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${aud.unit} • ${aud.duration || 'تسجيل صوتي'}</span>
+              ` : unitKeys.map((unitName, index) => {
+                const lessonsInUnit = unitsMap[unitName];
+                return `
+                  <div class="unit-section-block">
+                    <div class="unit-header-bar">
+                      <div class="unit-title-group">
+                        <h3>
+                          <i class="fa-solid fa-folder-closed" style="color:var(--gold);"></i> ${unitName}
+                        </h3>
+                        <span>تحتوي على (${lessonsInUnit.length}) دروس تعليمية متكاملة</span>
                       </div>
-                      <button class="btn btn-primary" style="padding:6px 14px; font-size:0.8rem;" onclick="App.openAudioPlayer('${aud.id}')">
-                        <i class="fa-solid fa-headphones"></i> استماع محمي
-                      </button>
+                      <span class="badge badge-curriculum">الوحدة ${index + 1}</span>
                     </div>
-                  `).join('')}
-                </div>
-              ` : ''}
 
-              ${State.activeContentTab === 'BOOKS' ? `
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-folder-open"></i> المذكرات والعروض التقديمية والملفات المعتمدة</h3>
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                  ${gradeBooks.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px; grid-column:1/-1;"><i class="fa-solid fa-file-lines" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم إضافة مذكرات أو ملفات لهذا المنهاج بعد.</p>' : gradeBooks.map(bk => `
-                    <div class="card" style="margin:0; border-top: 4px solid var(--primary-burgundy);">
-                      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                        <i class="fa-solid ${bk.format === 'PPTX' ? 'fa-file-powerpoint' : (bk.format === 'DOCX' ? 'fa-file-word' : 'fa-file-pdf')}" style="font-size:28px; color:var(--gold);"></i>
-                        <span class="badge badge-trial">${bk.format || 'PDF'}</span>
-                      </div>
-                      <h4 style="font-size:0.95rem; margin-bottom:6px;">${bk.title}</h4>
-                      <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px;">${bk.description}</p>
-                      <button class="btn btn-primary" style="width:100%; font-size:0.8rem;" onclick="App.openDocumentViewer('${bk.id}')">
-                        <i class="fa-solid fa-eye"></i> عرض الملف داخل المنصة
-                      </button>
+                    <div class="lessons-cards-grid">
+                      ${lessonsInUnit.map(lesson => {
+                        const hasVideo = !!lesson.videoUrl;
+                        const hasPdf = !!lesson.pdfUrl;
+                        const hasHtml = !!lesson.htmlUrl;
+
+                        return `
+                          <div class="lesson-item-card">
+                            <div>
+                              <div class="lesson-badges-strip">
+                                ${hasVideo ? '<span class="badge badge-video"><i class="fa-solid fa-video"></i> فيديو شرح</span>' : ''}
+                                ${hasPdf ? '<span class="badge badge-pdf"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>' : ''}
+                                ${hasHtml ? '<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML</span>' : ''}
+                              </div>
+                              <h4>${lesson.title}</h4>
+                              <p>${lesson.notes || 'شرح وتدريبات الدرس مع توجيهات الأستاذ جمال وحلول نماذج الامتحانات الوزارية.'}</p>
+                            </div>
+
+                            <div class="lesson-actions-cluster">
+                              ${hasVideo ? `
+                                <button class="btn btn-primary" style="padding:6px 12px; font-size:0.75rem;" onclick="App.openLessonMedia('${lesson.id}', 'VIDEO')">
+                                  <i class="fa-solid fa-circle-play"></i> الفيديو
+                                </button>
+                              ` : ''}
+
+                              ${hasPdf ? `
+                                <button class="btn btn-pdf" style="padding:6px 12px; font-size:0.75rem;" onclick="App.openLessonMedia('${lesson.id}', 'PDF')">
+                                  <i class="fa-solid fa-file-pdf"></i> مذكرة PDF
+                                </button>
+                              ` : ''}
+
+                              ${hasHtml ? `
+                                <button class="btn btn-html" style="padding:6px 12px; font-size:0.75rem;" onclick="App.openLessonMedia('${lesson.id}', 'HTML')">
+                                  <i class="fa-solid fa-code"></i> تطبيق HTML
+                                </button>
+                              ` : ''}
+
+                              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.75rem; margin-right:auto;" onclick="App.openLessonHub('${lesson.id}')" title="فتح غرفة الدرس بكل محتوياته">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> دراسة الدرس
+                              </button>
+                            </div>
+                          </div>
+                        `;
+                      }).join('')}
                     </div>
-                  `).join('')}
-                </div>
-              ` : ''}
-
-              ${State.activeContentTab === 'QUIZZES' ? `
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-trophy"></i> التحديات والاختبارات التفاعلية الجذابة</h3>
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                  ${gradeQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-trophy" style="font-size:28px; display:block; margin-bottom:8px; color:var(--light-gold);"></i>لم يتم نشر اختبارات تفاعلية لهذا المنهاج بعد.</p>' : gradeQuizzes.map(qz => `
+                  </div>
+                `;
+              }).join('')}
+            ` : `
+              <!-- قسم الاختبارات والتحديات التفاعلية -->
+              <div class="card">
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> بنك التحديات والاختبارات التفاعلية المعتمدة</h3>
+                <div style="display:flex; flex-direction:column; gap:14px;">
+                  ${matchedQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;">لم يتم نشر اختبارات لهذا المنهاج بعد.</p>' : matchedQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--ivory); border:1px solid var(--gold); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
                       <div>
-                        <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-bolt" style="color:var(--gold);"></i> ${qz.title}</strong>
-                        <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة تفاعلية • تقييم فوري وتفسير ذكي</span>
+                        <strong style="font-size:0.95rem; display:block; color:var(--primary-burgundy);"><i class="fa-solid fa-award" style="color:var(--gold);"></i> ${qz.title}</strong>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة تفاعلية • تصحيح ذاتي وتفسير نحوي فوري</span>
                       </div>
-                      <button class="btn btn-gold" style="padding:8px 16px; font-size:0.82rem;" onclick="App.startInteractiveQuiz('${qz.id}')">
-                        <i class="fa-solid fa-play"></i> بدء التحدي الآن
+                      <button class="btn btn-gold" style="padding:8px 18px; font-size:0.84rem;" onclick="App.startInteractiveQuiz('${qz.id}')">
+                        <i class="fa-solid fa-play"></i> بدء التحدي
                       </button>
                     </div>
                   `).join('')}
                 </div>
-              ` : ''}
-            </div>
+              </div>
+            `}
           `;
         },
 
@@ -1816,7 +1836,7 @@
 
                 <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid #F3F4F6; padding-top:14px;">
                   <button class="btn btn-secondary" onclick="App.setRoute('STUDENT_DASHBOARD')">
-                    خروج من التحدي
+                    خروج
                   </button>
                   <button class="btn btn-primary" id="nextQuestionBtn" style="display:none;" onclick="App.nextQuizQuestion()">
                     السؤال التالي <i class="fa-solid fa-arrow-left"></i>
@@ -1832,179 +1852,97 @@
             <div style="max-width: 760px; margin: 0 auto;">
               <div style="text-align: center; margin-bottom: 24px;">
                 <h2 style="color: var(--primary-burgundy); font-weight: 800;">باقات الاشتراك في منصة أستاذ جمال</h2>
-                <p style="color: var(--text-muted); font-size: 0.88rem;">اختر الباقة المناسبة وقم بإرسال طلب التفعيل مباشرة عبر WhatsApp (0559502387)</p>
+                <p style="color: var(--text-muted); font-size: 0.88rem;">اختر الباقة المناسبة وقم بالتواصل مباشرة عبر WhatsApp (0559502387)</p>
               </div>
 
-              <div class="plans-container">
-                <div class="plan-card">
-                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">🥉 الاشتراك الشهري</h3>
-                  <div class="plan-price">100 <span>درهم إماراتي</span></div>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">صلاحية كاملة لجميع الدروس والشروحات والاختبارات لمدة شهر.</p>
+              <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin:24px 0;">
+                <div class="card" style="text-align:center; padding:28px 20px;">
+                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">🥉 اشتراك شهر واحد</h3>
+                  <div style="font-size:2.2rem; font-weight:900; color:var(--primary-burgundy); margin:12px 0;">100 <span style="font-size:0.9rem; font-weight:normal;">درهم إماراتي</span></div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px;">دخول شامل لكافة الوحدات، الفيديوهات، مذكرات الـ PDF، وتطبيقات HTML لمدة 30 يوماً.</p>
                   <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('1_MONTH')">
                     <i class="fa-brands fa-whatsapp"></i> طلب الاشتراك (شهر واحد)
                   </button>
                 </div>
 
-                <div class="plan-card featured">
-                  <div class="plan-badge-top">🥇 الأكثر توفيراً – وفر 50 درهماً</div>
-                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">اشتراك 3 أشهر</h3>
-                  <div class="plan-price">250 <span><del style="color:red; font-size:0.85rem;">300</del> درهم إماراتي</span></div>
-                  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 20px;">شامل المنهاج والمذكرات والتدريب على الامتحانات النهائية.</p>
+                <div class="card" style="text-align:center; padding:28px 20px; border-color:var(--gold); background:linear-gradient(180deg, #FFF 0%, var(--ivory) 100%);">
+                  <span class="badge badge-trial" style="margin-bottom:8px;">🥇 الباقة الذهبية الأكثر طلباً</span>
+                  <h3 style="color: var(--primary-burgundy); font-weight: 700;">اشتراك 3 أشهر كاملة</h3>
+                  <div style="font-size:2.2rem; font-weight:900; color:var(--primary-burgundy); margin:12px 0;">250 <span style="font-size:0.9rem; font-weight:normal;">درهم إماراتي</span></div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px;">شامل المنهاج كاملاً حتى موعد الامتحانات، وحلول بنوك الامتحانات الوزارية.</p>
                   <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('3_MONTHS')">
                     <i class="fa-brands fa-whatsapp"></i> طلب الاشتراك (3 أشهر)
                   </button>
                 </div>
               </div>
 
-              <div style="text-align: center; margin-top: 14px;">
-                <button class="btn btn-gold" style="padding: 6px 16px; font-size: 0.8rem;" onclick="App.setRoute('STUDENT_DASHBOARD')">
-                  العودة للحساب
-                </button>
+              <div style="text-align: center;">
+                <button class="btn btn-gold" onclick="App.setRoute('STUDENT_DASHBOARD')">العودة للدروس</button>
               </div>
             </div>
           `;
         },
 
         adminDashboard() {
-          const total = State.students.length;
-          const active = State.students.filter(s => s.status === 'ACTIVE').length;
-          const trial = State.students.filter(s => s.status === 'TRIAL').length;
-          const expired = State.students.filter(s => s.status === 'EXPIRED').length;
-          const securityAlerts = State.activityLogs.filter(l => l.action.includes('محاولة') || l.action.includes('تنبيه')).length;
+          const totalStudents = State.students.length;
+          const activeStudents = State.students.filter(s => s.status === 'ACTIVE').length;
+          const trialStudents = State.students.filter(s => s.status === 'TRIAL').length;
+          const totalLessons = State.lessons.length;
 
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
               <div>
                 <h2 style="color: var(--primary-burgundy); font-weight: 800;">لوحة تحكم المدير – الأستاذ جمال</h2>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة ومزامنة المحتوى السحابي لحظياً (المنهج الإماراتي والسوداني)</p>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة ومزامنة الوحدات والدروس (فيديو، PDF، HTML) والطلاب سحابياً</p>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="btn btn-primary" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
-                  <i class="fa-solid fa-folder-open"></i> إدارة المحتوى المنشور
+                  <i class="fa-solid fa-layer-group"></i> إدارة الوحدات والدروس (${totalLessons})
                 </button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')">
                   <i class="fa-solid fa-circle-question"></i> إنشاء الاختبارات
                 </button>
                 <button class="btn btn-primary" onclick="App.setRoute('ADMIN_STUDENTS')">
-                  <i class="fa-solid fa-users"></i> سجل الطلاب (${total})
+                  <i class="fa-solid fa-users"></i> الطلاب والشهادات (${totalStudents})
                 </button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
                   <i class="fa-solid fa-user-plus"></i> إضافة طالب
                 </button>
-                <button class="btn ${securityAlerts > 0 ? 'btn-danger' : 'btn-secondary'}" onclick="App.setRoute('ADMIN_ACTIVITY')">
-                  <i class="fa-solid fa-shield-halved"></i> التنبيهات الأمنية (${securityAlerts})
+                <button class="btn btn-secondary" onclick="App.setRoute('ADMIN_ACTIVITY')">
+                  <i class="fa-solid fa-shield-halved"></i> سجل الأمان
                 </button>
               </div>
             </div>
 
             <div class="grid-dashboard">
               <div class="card" style="margin:0; border-right: 4px solid var(--primary-burgundy);">
-                <span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الطلاب المسجلين</span>
-                <h3 style="font-size:1.6rem; color:var(--primary-burgundy);">${total}</h3>
+                <span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الدروس المنشورة</span>
+                <h3 style="font-size:1.6rem; color:var(--primary-burgundy);">${totalLessons}</h3>
               </div>
               <div class="card" style="margin:0; border-right: 4px solid var(--success);">
                 <span style="font-size:0.75rem; color:var(--text-muted);">الاشتراكات النشطة</span>
-                <h3 style="font-size:1.6rem; color:var(--success);">${active}</h3>
+                <h3 style="font-size:1.6rem; color:var(--success);">${activeStudents}</h3>
               </div>
               <div class="card" style="margin:0; border-right: 4px solid var(--warning);">
-                <span style="font-size:0.75rem; color:var(--text-muted);">فترة التجربة (Trial)</span>
-                <h3 style="font-size:1.6rem; color:var(--warning);">${trial}</h3>
+                <span style="font-size:0.75rem; color:var(--text-muted);">طلاب الفترة التجريبية</span>
+                <h3 style="font-size:1.6rem; color:var(--warning);">${trialStudents}</h3>
               </div>
-              <div class="card" style="margin:0; border-right: 4px solid var(--danger);">
-                <span style="font-size:0.75rem; color:var(--text-muted);">اشتراكات منتهية</span>
-                <h3 style="font-size:1.6rem; color:var(--danger);">${expired}</h3>
+              <div class="card" style="margin:0; border-right: 4px solid var(--html-color);">
+                <span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الطلاب المسجلين</span>
+                <h3 style="font-size:1.6rem; color:var(--html-color);">${totalStudents}</h3>
               </div>
             </div>
 
             <div class="card">
-              <h3 style="color: var(--primary-burgundy); font-size: 0.95rem; margin-bottom: 12px;">📈 إحصائيات تفاعل ونشاط الطلاب اليومي عبر مختلف الأجهزة</h3>
+              <h3 style="color: var(--primary-burgundy); font-size: 0.95rem; margin-bottom: 12px;">📈 معدل نشاط الطلاب اليومي وتفاعلهم مع الدروس والاختبارات</h3>
               <canvas id="trafficChart" style="max-height: 220px; width: 100%;"></canvas>
             </div>
           `;
         },
 
-        adminQuizCreator() {
-          return `
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
-              <h2 style="color: var(--primary-burgundy); font-weight: 800;">منشئ الاختبارات التفاعلية (أستاذ جمال)</h2>
-              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
-                <i class="fa-solid fa-arrow-right"></i> العودة للرئيسية
-              </button>
-            </div>
-
-            <div class="card">
-              <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;">
-                <i class="fa-solid fa-plus-circle"></i> إضافة سؤال جديد (تحديد المنهاج، الصف، و 3 خيارات)
-              </h3>
-
-              <form onsubmit="App.handleCreateQuizQuestion(event)">
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-                  <div class="form-group">
-                    <label>المنهاج والصف الدراسي</label>
-                    <select id="quizTarget" required>
-                      <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
-                      <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
-                      <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>عنوان التحدي / الاختبار</label>
-                    <input type="text" id="quizTitle" required placeholder="مثال: تحدي النحو والبلاغة">
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label>نص السؤال</label>
-                  <textarea id="questionText" rows="2" required placeholder="اكتب نص السؤال هنا بدقة..."></textarea>
-                </div>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-                  <div class="form-group">
-                    <label>الخيار الأول (أ)</label>
-                    <input type="text" id="opt1" required placeholder="الخيار الأول">
-                  </div>
-                  <div class="form-group">
-                    <label>الخيار الثاني (ب)</label>
-                    <input type="text" id="opt2" required placeholder="الخيار الثاني">
-                  </div>
-                  <div class="form-group">
-                    <label>الخيار الثالث (ج)</label>
-                    <input type="text" id="opt3" required placeholder="الخيار الثالث">
-                  </div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-                  <div class="form-group">
-                    <label style="color:var(--success);">الإجابة الصحيحة من بين الثلاثة</label>
-                    <select id="correctOptionSelect">
-                      <option value="1">الخيار الأول (أ)</option>
-                      <option value="2">الخيار الثاني (ب)</option>
-                      <option value="3">الخيار الثالث (ج)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>التفسير الأكاديمي والتعليمي (يظهر للطالب)</label>
-                    <input type="text" id="explanationText" placeholder="مثال: لأن الجملة بعد النكرات تعرب صفات...">
-                  </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
-                  <i class="fa-solid fa-floppy-disk"></i> حفظ ونشر السؤال في السحابة
-                </button>
-              </form>
-            </div>
-          `;
-        },
-
         adminContentManager() {
-          const allContent = [
-            ...State.lessons.map(l => ({ ...l, type: 'LESSON', typeLabel: 'فيديو', icon: 'fa-video' })),
-            ...State.audios.map(a => ({ ...a, type: 'AUDIO', typeLabel: 'صوت', icon: 'fa-headphones' })),
-            ...State.books.map(b => ({ ...b, type: 'BOOK', typeLabel: b.format || 'مذكرة', icon: 'fa-file-lines' }))
-          ];
-
           const q = State.adminSearchQuery.toLowerCase().trim();
-          const filteredContent = allContent.filter(item => {
+          const filtered = State.lessons.filter(item => {
             const matchTarget = State.adminTargetFilter === 'ALL' || item.target === State.adminTargetFilter;
             const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
             return matchTarget && matchSearch;
@@ -2013,71 +1951,85 @@
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
               <div>
-                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة وتعديل وحذف المحتوى</h2>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة الوحدات والدروس المتكاملة</h2>
                 <div style="margin-top:6px; display:flex; gap:6px;">
                   <button class="btn ${State.adminContentTab === 'LIST' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('LIST')">
-                    <i class="fa-solid fa-list-check"></i> المحتويات المنشورة (${allContent.length})
+                    <i class="fa-solid fa-list-check"></i> قائمة الدروس المنشورة (${State.lessons.length})
                   </button>
                   <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')">
-                    <i class="fa-solid fa-plus-circle"></i> إضافة مادة جديدة
+                    <i class="fa-solid fa-plus-circle"></i> إضافة درس جديد (فيديو / PDF / HTML)
                   </button>
                 </div>
               </div>
               <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
-                <i class="fa-solid fa-arrow-right"></i> الرئيسية
+                <i class="fa-solid fa-arrow-right"></i> لوحة التحكم
               </button>
             </div>
 
             ${State.adminContentTab === 'ADD' ? `
               <div class="card">
-                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة للمنهاج</h3>
-                <form onsubmit="App.handleCreateContent(event)">
-                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-                    <div class="form-group">
-                      <label>نوع المحتوى</label>
-                      <select id="contentType" required onchange="App.toggleContentFields()">
-                        <option value="LESSON">درس وشرح مرئي (Video)</option>
-                        <option value="AUDIO">ملف وتسجيل صوتي (Audio)</option>
-                        <option value="BOOK_PDF">مذكرة أو كتاب (PDF)</option>
-                        <option value="BOOK_PPTX">عرض تقديمي (PowerPoint PPTX)</option>
-                        <option value="BOOK_DOCX">مستند Word (DOCX)</option>
-                      </select>
-                    </div>
+                <h3 style="color: var(--primary-burgundy); margin-bottom: 14px;"><i class="fa-solid fa-file-circle-plus"></i> إضافة درس متكامل إلى الوحدة التعليمية</h3>
+                <form onsubmit="App.handleCreateLesson(event)">
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:12px;">
                     <div class="form-group">
                       <label>المنهاج والصف المستهدف</label>
-                      <select id="contentTarget" required>
+                      <select id="newLessonTarget" required>
                         <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
                         <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
                         <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
                       </select>
                     </div>
                     <div class="form-group">
-                      <label>عنوان المادة التعليمية</label>
-                      <input type="text" id="contentTitle" required placeholder="مثال: شرح أسلوب التوكيد">
+                      <label>اسم الوحدة التعليمية (لتصنيف الدروس داخلها)</label>
+                      <input type="text" id="newLessonUnit" required placeholder="مثال: الوحدة الأولى: النحو والصرف">
                     </div>
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                      <label>عنوان وموضوع الدرس</label>
+                      <input type="text" id="newLessonTitle" required placeholder="مثال: أسلوب الاستثناء وتطبيقاته الوزارية">
+                    </div>
+                  </div>
+
+                  <div style="background:var(--ivory); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--gold); margin:14px 0;">
+                    <h4 style="font-size:0.9rem; color:var(--primary-burgundy); margin-bottom:12px;"><i class="fa-solid fa-link"></i> روابط مصادر ووسائط الدرس (يمكن ملء أحدها أو جميعها):</h4>
+
                     <div class="form-group">
-                      <label>الوحدة / الفرع</label>
-                      <input type="text" id="contentUnit" required placeholder="مثال: النحو والصرف">
+                      <label><i class="fa-solid fa-video" style="color:var(--primary-burgundy);"></i> 1. رابط فيديو الشرح (YouTube / MP4 / Google Drive)</label>
+                      <div class="input-with-paste">
+                        <input type="text" id="newLessonVideoUrl" placeholder="https://...">
+                        <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('newLessonVideoUrl')">
+                          <i class="fa-solid fa-paste"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label><i class="fa-solid fa-file-pdf" style="color:var(--danger);"></i> 2. رابط مذكرة أو كتاب الدرس PDF</label>
+                      <div class="input-with-paste">
+                        <input type="text" id="newLessonPdfUrl" placeholder="https://.../notes.pdf">
+                        <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('newLessonPdfUrl')">
+                          <i class="fa-solid fa-paste"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label><i class="fa-solid fa-code" style="color:var(--html-color);"></i> 3. رابط ملف أو صفحة HTML التفاعلية</label>
+                      <div class="input-with-paste">
+                        <input type="text" id="newLessonHtmlUrl" placeholder="https://.../interactive_lesson.html">
+                        <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('newLessonHtmlUrl')">
+                          <i class="fa-solid fa-paste"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
-                  <div class="form-group" id="urlFieldGroup">
-                    <label id="urlLabel">رابط الفيديو أو الملف المشفر</label>
-                    <div class="input-with-paste">
-                      <input type="text" id="contentUrl" placeholder="https://...">
-                      <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('contentUrl')" title="لصق الرابط من الحافظة">
-                        <i class="fa-solid fa-paste"></i> لصق
-                      </button>
-                    </div>
+                  <div class="form-group">
+                    <label>توجيهات أو إضاءات تعليمية للطلاب حول هذا الدرس</label>
+                    <textarea id="newLessonNotes" rows="3" placeholder="اكتب هنا الملاحظات أو الواجبات المطلوبة من الطالب بعد دراسة هذا الدرس..."></textarea>
                   </div>
 
-                  <div class="form-group" id="textFieldGroup" style="display:none;">
-                    <label>محتوى ونصوص المذكرة (اختياري)</label>
-                    <textarea id="contentText" rows="4" placeholder="اكتب نصوص وشروحات المذكرة هنا..."></textarea>
-                  </div>
-
-                  <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المحتوى سحابياً
+                  <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px; padding:12px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر الدرس في السحابة
                   </button>
                 </form>
               </div>
@@ -2086,7 +2038,7 @@
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
                   <div class="search-box-wrapper" style="flex:1; min-width:240px; margin-bottom:0;">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="🔍 ابحث في المحتويات المنشورة..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)">
+                    <input type="text" placeholder="🔍 ابحث في الدروس والوحدات المنشورة..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)">
                   </div>
                   <div style="display:flex; gap:6px; flex-wrap:wrap;">
                     <button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>
@@ -2100,37 +2052,38 @@
                   <table>
                     <thead>
                       <tr>
-                        <th>المادة التعليمية</th>
-                        <th>النوع</th>
-                        <th>المنهاج والصف</th>
-                        <th>الوحدة / الفرع</th>
+                        <th>عنوان الدرس</th>
+                        <th>الوحدة التابع لها</th>
+                        <th>المنهاج المستهدف</th>
+                        <th>الوسائط المتوفرة</th>
                         <th>الإجراءات</th>
                       </tr>
                     </thead>
                     <tbody>
-                      ${filteredContent.length === 0 ? `
+                      ${filtered.length === 0 ? `
                         <tr>
                           <td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">
-                            <i class="fa-solid fa-folder-open" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
-                            لم تقم بإضافة أي محتوى لهذا القسم حتى الآن. اضغط على (إضافة مادة جديدة) للبدء.
+                            لا توجد دروس مضافة حالياً. اضغط على (إضافة درس جديد) للبدء في نشر المنهج.
                           </td>
                         </tr>
-                      ` : filteredContent.map(item => `
+                      ` : filtered.map(item => `
                         <tr>
                           <td><strong>${item.title}</strong></td>
-                          <td>
-                            <span class="badge badge-trial">
-                              <i class="fa-solid ${item.icon}"></i> ${item.typeLabel}
-                            </span>
-                          </td>
+                          <td><span class="badge badge-curriculum">${item.unit || 'عام'}</span></td>
                           <td>${item.target === 'SUDAN_12' ? 'سوداني (3 ثانوي)' : (item.grade == 11 ? 'إماراتي (11)' : 'إماراتي (12)')}</td>
-                          <td>${item.unit || 'عام'}</td>
+                          <td>
+                            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                              ${item.videoUrl ? '<span class="badge badge-video"><i class="fa-solid fa-video"></i> فيديو</span>' : ''}
+                              ${item.pdfUrl ? '<span class="badge badge-pdf"><i class="fa-solid fa-file-pdf"></i> PDF</span>' : ''}
+                              ${item.htmlUrl ? '<span class="badge badge-html"><i class="fa-solid fa-code"></i> HTML</span>' : ''}
+                            </div>
+                          </td>
                           <td>
                             <div style="display:flex; gap:4px;">
-                              <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.openEditModal('${item.id}', '${item.type}')">
+                              <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.openEditLessonModal('${item.id}')">
                                 <i class="fa-solid fa-pen"></i> تعديل
                               </button>
-                              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteContent('${item.id}', '${item.type}')">
+                              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteLesson('${item.id}')">
                                 <i class="fa-solid fa-trash"></i> حذف
                               </button>
                             </div>
@@ -2156,7 +2109,7 @@
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
               <div>
-                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة الطلاب والشهادات المعتمدة</h2>
+                <h2 style="color: var(--primary-burgundy); font-weight: 800;">إدارة الطلاب واعتماد الشهادات</h2>
                 <div style="margin-top:6px; display:flex; gap:6px; flex-wrap:wrap;">
                   <button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>
                   <button class="btn ${State.adminTargetFilter === 'UAE_12' ? 'btn-primary' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('UAE_12')">إماراتي 12</button>
@@ -2169,7 +2122,7 @@
                   <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد
                 </button>
                 <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
-                  <i class="fa-solid fa-arrow-right"></i> الرئيسية
+                  لوحة التحكم
                 </button>
               </div>
             </div>
@@ -2185,18 +2138,14 @@
                       <th>الحالة</th>
                       <th>اعتماد الشهادة</th>
                       <th>تاريخ الانتهاء</th>
-                      <th>الإجراءات الإدارية</th>
+                      <th>الإجراءات</th>
                     </tr>
                   </thead>
                   <tbody>
                     ${filtered.length === 0 ? `
                       <tr>
                         <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
-                          <i class="fa-solid fa-users-slash" style="font-size:32px; color:var(--light-gold); display:block; margin-bottom:10px;"></i>
-                          لا يوجد طلاب مسجلين حالياً في قاعدة البيانات.<br>
-                          <button class="btn btn-primary" style="margin-top:12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
-                            <i class="fa-solid fa-user-plus"></i> اضغط هنا لإضافة طالب
-                          </button>
+                          لا يوجد طلاب مسجلين حالياً.
                         </td>
                       </tr>
                     ` : filtered.map(st => `
@@ -2250,7 +2199,7 @@
             <div style="max-width: 500px; margin: 20px auto;">
               <div class="card">
                 <h3 style="color: var(--primary-burgundy); margin-bottom: 16px;">
-                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد (تحديد المنهاج والصف)
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد وتحديد المنهاج
                 </h3>
                 <form onsubmit="App.handleCreateStudent(event)">
                   <div class="form-group">
@@ -2263,22 +2212,22 @@
                   </div>
                   <div class="form-group">
                     <label>الاسم الكامل للطالب</label>
-                    <input type="text" id="newStudentName" required placeholder="مثال: محمد أحمد علي">
+                    <input type="text" id="newStudentName" required placeholder="مثال: أحمد عبد الله">
                   </div>
                   <div class="form-group">
                     <label>اسم المستخدم (Username)</label>
-                    <input type="text" id="newStudentUsername" required placeholder="مثال: mohamed12">
+                    <input type="text" id="newStudentUsername" required placeholder="مثال: ahmed12">
                   </div>
                   <div class="form-group">
-                    <label>كلمة المرور (سيتم تشفيرها بـ PBKDF2 فوراً)</label>
+                    <label>كلمة المرور المشفرة</label>
                     <input type="password" id="newStudentPassword" required placeholder="••••••••">
                   </div>
                   <div class="form-group">
-                    <label>رقم الهاتف (اختياري)</label>
+                    <label>رقم هاتف الطالب أو ولي الأمر</label>
                     <input type="text" id="newStudentPhone" placeholder="0500000000">
                   </div>
                   <div style="display:flex; gap:8px; margin-top:18px;">
-                    <button type="submit" class="btn btn-primary" style="flex:1;">إنشاء وتشفير الحساب</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">إنشاء الحساب المشفر</button>
                     <button type="button" class="btn btn-gold" onclick="App.setRoute('ADMIN_STUDENTS')">إلغاء</button>
                   </div>
                 </form>
@@ -2287,12 +2236,81 @@
           `;
         },
 
+        adminQuizCreator() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <h2 style="color: var(--primary-burgundy); font-weight: 800;">منشئ الاختبارات والتحديات التفاعلية</h2>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                العودة للرئيسية
+              </button>
+            </div>
+
+            <div class="card">
+              <form onsubmit="App.handleCreateQuizQuestion(event)">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>المنهاج والصف الدراسي</label>
+                    <select id="quizTarget" required>
+                      <option value="UAE_12">المنهج الإماراتي – الصف الثاني عشر</option>
+                      <option value="UAE_11">المنهج الإماراتي – الصف الحادي عشر</option>
+                      <option value="SUDAN_12">المنهاج السوداني – الصف الثالث الثانوي (الشهادة السودانية)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>عنوان الاختبار أو التحدي</label>
+                    <input type="text" id="quizTitle" required placeholder="مثال: تحدي النحو والبلاغة">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>نص السؤال</label>
+                  <textarea id="questionText" rows="2" required placeholder="اكتب نص السؤال هنا..."></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>الخيار (أ)</label>
+                    <input type="text" id="opt1" required placeholder="الخيار الأول">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار (ب)</label>
+                    <input type="text" id="opt2" required placeholder="الخيار الثاني">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار (ج)</label>
+                    <input type="text" id="opt3" required placeholder="الخيار الثالث">
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label style="color:var(--success);">الإجابة الصحيحة</label>
+                    <select id="correctOptionSelect">
+                      <option value="1">الخيار (أ)</option>
+                      <option value="2">الخيار (ب)</option>
+                      <option value="3">الخيار (ج)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>التفسير النحوي والأكاديمي الفوري</label>
+                    <input type="text" id="explanationText" placeholder="مثال: لأن الجمل بعد المعارف أحوال...">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:10px;">
+                  <i class="fa-solid fa-floppy-disk"></i> حفظ ونشر السؤال سحابياً
+                </button>
+              </form>
+            </div>
+          `;
+        },
+
         adminActivity() {
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <h2 style="color: var(--primary-burgundy); font-weight: 800;">سجل النشاط والأمان المشفر والتنبيهات</h2>
+              <h2 style="color: var(--primary-burgundy); font-weight: 800;">سجل النشاط والأمان</h2>
               <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
-                العودة للرئيسية
+                الرئيسية
               </button>
             </div>
             <div class="card">
@@ -2302,22 +2320,17 @@
                     <tr>
                       <th>الوقت والتاريخ</th>
                       <th>المستخدم</th>
-                      <th>النشاط المنفذ والتنبيهات الأمنية</th>
+                      <th>النشاط المنفذ والتنبيه الأمني</th>
                     </tr>
                   </thead>
                   <tbody>
-                    ${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-muted);">لا توجد تنبيهات أمنية مسجلة حالياً.</td></tr>' : State.activityLogs.map(log => {
-                      const isAlert = log.action && (log.action.includes('محاولة') || log.action.includes('تنبيه'));
-                      return `
-                        <tr style="${isAlert ? 'background:#FEF2F2;' : ''}">
-                          <td>${log.time || 'الآن'}</td>
-                          <td><code>${log.user || 'مستخدم'}</code></td>
-                          <td style="${isAlert ? 'color:var(--danger); font-weight:700;' : ''}">
-                            ${isAlert ? '<i class="fa-solid fa-triangle-exclamation"></i> ' : ''}${log.action}
-                          </td>
-                        </tr>
-                      `;
-                    }).join('')}
+                    ${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-muted);">لا توجد أنشطة مسجلة.</td></tr>' : State.activityLogs.map(log => `
+                      <tr>
+                        <td>${log.time || 'الآن'}</td>
+                        <td><code>${log.user || 'مستخدم'}</code></td>
+                        <td>${log.action}</td>
+                      </tr>
+                    `).join('')}
                   </tbody>
                 </table>
               </div>
@@ -2334,12 +2347,12 @@
           data: {
             labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
             datasets: [{
-              label: 'النشاط اللحظي عبر مختلف الأجهزة',
-              data: [45, 62, 90, 75, 118, 102, 145],
+              label: 'معدل التفاعل مع الدروس والصفحات التفاعلية',
+              data: [50, 72, 110, 85, 134, 120, 160],
               borderColor: '#4E1D1F',
               backgroundColor: 'rgba(78, 29, 31, 0.08)',
               fill: true,
-              tension: 0.3
+              tension: 0.35
             }]
           },
           options: {
@@ -2367,8 +2380,8 @@
         UI.render();
       },
 
-      setContentTab(tab) {
-        State.activeContentTab = tab;
+      setStudentTab(tab) {
+        State.activeStudentTab = tab;
         UI.render();
       },
 
@@ -2393,13 +2406,9 @@
       },
 
       navigateHome() {
-        if (!State.currentUser) {
-          App.setRoute("LOGIN");
-        } else if (State.currentUser.role === "ADMIN") {
-          App.setRoute("ADMIN_DASHBOARD");
-        } else {
-          App.setRoute("STUDENT_DASHBOARD");
-        }
+        if (!State.currentUser) App.setRoute("LOGIN");
+        else if (State.currentUser.role === "ADMIN") App.setRoute("ADMIN_DASHBOARD");
+        else App.setRoute("STUDENT_DASHBOARD");
       },
 
       showSecurityAlert(msg) {
@@ -2411,11 +2420,11 @@
       },
 
       recordSecurityViolation(detail) {
-        const username = State.currentUser ? State.currentUser.username : "زائر غير مسجل";
+        const username = State.currentUser ? State.currentUser.username : "زائر";
         const logEntry = {
           time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
           user: username,
-          action: `[تنبيه أمني عاجل]: ${detail}`
+          action: `[تنبيه أمني]: ${detail}`
         };
         State.activityLogs.unshift(logEntry);
         DataStore.save("logs", State.activityLogs);
@@ -2426,13 +2435,13 @@
           const text = await navigator.clipboard.readText();
           if (text) {
             document.getElementById(inputId).value = text.trim();
-            App.showSecurityAlert("تم لصق الرابط بنجاح من الحافظة.");
+            App.showSecurityAlert("تم لصق الرابط بنجاح.");
           } else {
-            const promptVal = prompt("يرجى لصق الرابط هنا:");
+            const promptVal = prompt("الصق الرابط هنا:");
             if (promptVal) document.getElementById(inputId).value = promptVal.trim();
           }
         } catch (e) {
-          const promptVal = prompt("يرجى لصق الرابط هنا:");
+          const promptVal = prompt("الصق الرابط هنا:");
           if (promptVal) document.getElementById(inputId).value = promptVal.trim();
         }
       },
@@ -2446,8 +2455,7 @@
       },
 
       toggleAiChat() {
-        const chat = document.getElementById("aiChatWindow");
-        chat.classList.toggle("active");
+        document.getElementById("aiChatWindow").classList.toggle("active");
       },
 
       sendAiMessage() {
@@ -2465,127 +2473,130 @@
         setTimeout(() => {
           const botDiv = document.createElement("div");
           botDiv.className = "ai-msg bot";
-          
           if (query.includes("استثناء") || query.includes("إلا")) {
             botDiv.innerText = "في أسلوب الاستثناء: إذا كان الكلام تاماً منفياً، جاز في المستثنى النصب على الاستثناء أو الإتباع على البدلية. أما إذا كان ناقصاً منفياً، فيعرب حسب موقعه في الجملة.";
-          } else if (query.includes("ممنوع") || query.includes("صرف") || query.includes("سودان")) {
-            botDiv.innerText = "في المنهاج السوداني: يُجر الممنوع من الصرف بالفتحة نيابة عن الكسرة إذا كان مجرداً من (أل) والإضافة، ويجر بالكسرة إذا عُرّف بأل أو أضيف.";
-          } else if (query.includes("استعارة") || query.includes("بلاغة")) {
-            botDiv.innerText = "الاستعارة المكنية: يُحذف فيها المشبه به ويُكنى عنه بشيء من لوازمه. أما الاستعارة التصريحية فيُصرح فيها بلفظ المشبه به ويُحذف المشبه.";
+          } else if (query.includes("ممنوع") || query.includes("صرف")) {
+            botDiv.innerText = "في المنهاج المقرر: يُجر الممنوع من الصرف بالفتحة نيابة عن الكسرة إذا كان مجرداً من (أل) والإضافة، ويجر بالكسرة إذا عُرّف بأل أو أضيف.";
           } else {
-            botDiv.innerText = `وفقاً للمنهاج المقرر المعتمد: ركز دائماً على استخراج القواعد الإعرابية والقرائن البلاغية بدقة.`;
+            botDiv.innerText = "وفقاً للمنهاج المعتمد للأستاذ جمال: احرص على تحليل التراكيب الإعرابية وملاحظة مواضع الاستخراج البلاغي في النصوص المقررة.";
           }
-
           body.appendChild(botDiv);
           body.scrollTop = body.scrollHeight;
         }, 500);
       },
 
-      // مشغل الفيديو الذكي والمحسن لجميع أنواع الروابط المضافة من الأستاذ جمال
-      openVideoPlayer(lessonId) {
+      /**
+       * مشغل واستوديو الدرس الموحد المتطور: فيديو + PDF + HTML
+       */
+      openLessonMedia(lessonId, preferredMode) {
         const lesson = State.lessons.find(l => l.id === lessonId);
         if (!lesson) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${lesson.title}`;
-        const viewport = document.getElementById("playerViewport");
-        const url = lesson.videoUrl || "";
-
-        let playerHtml = "";
-        if (url.includes("youtube.com") || url.includes("youtu.be")) {
-          // تحويل رابط يوتيوب إلى تضمين آمن ومحمي
-          let videoId = "";
-          if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
-          else if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
-          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1" allowfullscreen></iframe>`;
-        } else if (url.includes("drive.google.com")) {
-          // تحويل رابط Google Drive إلى معاينة مباشرة
-          const driveEmbed = url.replace("/view", "/preview").replace("/edit", "/preview");
-          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="${driveEmbed}" allow="autoplay"></iframe>`;
-        } else {
-          // مشغل الفيديو المباشر الأصلي MP4
-          playerHtml = `
-            <video id="activeVideoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture oncontextmenu="return false;">
-              <source src="${url}" type="video/mp4">
-              متصفحك لا يدعم المشغل.
-            </video>
-          `;
-        }
-        
-        viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
-          </button>
-          ${playerHtml}
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي</div>
-        `;
-
+        State.activeLessonInPlayer = lesson;
+        State.activePlayerMode = preferredMode;
+        App.renderPlayerContent();
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
       },
 
-      openAudioPlayer(audioId) {
-        const aud = State.audios.find(a => a.id === audioId);
-        if (!aud) return;
+      openLessonHub(lessonId) {
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-headphones"></i> ${aud.title}`;
-        const viewport = document.getElementById("playerViewport");
-        viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
-          </button>
-          <div class="audio-player-inner">
-            <i class="fa-solid fa-file-audio" style="font-size:54px; color:var(--gold); margin-bottom:12px;"></i>
-            <h4 style="color:#FFF; margin-bottom:4px;">${aud.title}</h4>
-            <span style="color:var(--light-gold); font-size:0.85rem;">${aud.unit}</span>
-            <audio controls controlsList="nodownload" autoplay oncontextmenu="return false;">
-              <source src="${aud.audioUrl}" type="audio/mp3">
-            </audio>
-          </div>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'})</div>
-        `;
+        State.activeLessonInPlayer = lesson;
+        // الاختيار التلقائي لأول وسيط متوفر
+        if (lesson.videoUrl) State.activePlayerMode = "VIDEO";
+        else if (lesson.pdfUrl) State.activePlayerMode = "PDF";
+        else if (lesson.htmlUrl) State.activePlayerMode = "HTML";
+
+        App.renderPlayerContent();
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
       },
 
-      openDocumentViewer(bookId) {
-        const bk = State.books.find(b => b.id === bookId);
-        if (!bk) return;
+      switchPlayerMode(mode) {
+        State.activePlayerMode = mode;
+        App.renderPlayerContent();
+      },
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-lines"></i> ${bk.title} (${bk.format || 'PDF'})`;
-        const viewport = document.getElementById("playerViewport");
+      renderPlayerContent() {
+        const lesson = State.activeLessonInPlayer;
+        if (!lesson) return;
 
-        if (bk.fileUrl && bk.fileUrl.startsWith("http")) {
-          const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(bk.fileUrl)}&embedded=true`;
-          viewport.innerHTML = `
-            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-              <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
+        document.getElementById("playerLessonTitle").innerText = `${lesson.unit ? lesson.unit + ' : ' : ''}${lesson.title}`;
+
+        // بناء أزرار التبديل السريعة داخل شريط المشغل
+        const tabsContainer = document.getElementById("playerMediaTabs");
+        tabsContainer.innerHTML = `
+          ${lesson.videoUrl ? `
+            <button class="player-tab-btn ${State.activePlayerMode === 'VIDEO' ? 'active' : ''}" onclick="App.switchPlayerMode('VIDEO')">
+              <i class="fa-solid fa-circle-play"></i> فيديو الشرح
             </button>
-            <iframe class="document-viewer-frame" src="${viewerUrl}" oncontextmenu="return false;"></iframe>
-            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – مشفر</div>
+          ` : ''}
+          ${lesson.pdfUrl ? `
+            <button class="player-tab-btn ${State.activePlayerMode === 'PDF' ? 'active' : ''}" onclick="App.switchPlayerMode('PDF')">
+              <i class="fa-solid fa-file-pdf"></i> مذكرة PDF
+            </button>
+          ` : ''}
+          ${lesson.htmlUrl ? `
+            <button class="player-tab-btn ${State.activePlayerMode === 'HTML' ? 'active' : ''}" onclick="App.switchPlayerMode('HTML')">
+              <i class="fa-solid fa-code"></i> صفحة HTML التفاعلية
+            </button>
+          ` : ''}
+        `;
+
+        const viewport = document.getElementById("playerViewport");
+        const studentWatermark = `${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – محمي`;
+
+        let contentHtml = "";
+
+        if (State.activePlayerMode === "VIDEO" && lesson.videoUrl) {
+          const url = lesson.videoUrl;
+          if (url.includes("youtube.com") || url.includes("youtu.be")) {
+            let vid = "";
+            if (url.includes("youtu.be/")) vid = url.split("youtu.be/")[1].split("?")[0];
+            else if (url.includes("v=")) vid = url.split("v=")[1].split("&")[0];
+            contentHtml = `<iframe style="width:100%; height:100%; border:none;" src="https://www.youtube-nocookie.com/embed/${vid}?rel=0&modestbranding=1" allowfullscreen></iframe>`;
+          } else if (url.includes("drive.google.com")) {
+            const driveEmbed = url.replace("/view", "/preview").replace("/edit", "/preview");
+            contentHtml = `<iframe style="width:100%; height:100%; border:none;" src="${driveEmbed}" allow="autoplay"></iframe>`;
+          } else {
+            contentHtml = `
+              <video id="activeVideoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture oncontextmenu="return false;">
+                <source src="${url}" type="video/mp4">
+                متصفحك لا يدعم المشغل المباشر.
+              </video>
+            `;
+          }
+        } else if (State.activePlayerMode === "PDF" && lesson.pdfUrl) {
+          const viewerUrl = `https://docs.google.com/viewer?url=${encodeURIComponent(lesson.pdfUrl)}&embedded=true`;
+          contentHtml = `<iframe class="pdf-embed-frame" src="${viewerUrl}" oncontextmenu="return false;"></iframe>`;
+        } else if (State.activePlayerMode === "HTML" && lesson.htmlUrl) {
+          // عرض ملف / تطبيق HTML التفاعلي باحترافية وأمان
+          contentHtml = `
+            <iframe class="html-sandbox-frame" src="${lesson.htmlUrl}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-modals" allow="fullscreen" oncontextmenu="return false;"></iframe>
           `;
         } else {
-          viewport.innerHTML = `
-            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-              <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
-            </button>
-            <div class="doc-fallback-card">
-              <h3 style="color:var(--primary-burgundy); border-bottom:2px solid var(--gold); padding-bottom:8px; margin-bottom:14px;">${bk.title}</h3>
-              <p style="white-space: pre-line; line-height: 2; font-size: 1.05rem;">${bk.sampleContent || 'تم رفع المذكرة بنجاح من قبل الأستاذ جمال.'}</p>
+          contentHtml = `
+            <div style="text-align:center; padding:40px; color:#FFF;">
+              <i class="fa-solid fa-circle-exclamation" style="font-size:48px; color:var(--gold); margin-bottom:12px;"></i>
+              <p>هذا الوسيط غير متوفر حالياً لهذا الدرس.</p>
             </div>
-            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} (${State.currentUser ? State.currentUser.username : 'user'}) – مشفر</div>
           `;
         }
 
-        document.getElementById("mediaPlayerModal").classList.add("active");
+        viewport.innerHTML = `
+          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+            <i class="fa-solid fa-mobile-screen"></i> الرجوع للوضع الطبيعي
+          </button>
+          ${contentHtml}
+          <div class="floating-watermark">${studentWatermark}</div>
+        `;
+
         App.resetToNormalOrientation();
       },
 
       toggleDeviceRotation() {
-        if (State.isRotatedLandscape) {
-          App.resetToNormalOrientation();
-        } else {
-          App.setLandscapeOrientation();
-        }
+        if (State.isRotatedLandscape) App.resetToNormalOrientation();
+        else App.setLandscapeOrientation();
       },
 
       setLandscapeOrientation() {
@@ -2594,7 +2605,6 @@
         State.isRotatedLandscape = true;
         if (viewport) viewport.classList.add("rotated-fullscreen");
         if (btnText) btnText.innerText = "الوضع الطبيعي";
-
         if (screen.orientation && screen.orientation.lock) {
           screen.orientation.lock("landscape").catch(() => {});
         }
@@ -2606,7 +2616,6 @@
         State.isRotatedLandscape = false;
         if (viewport) viewport.classList.remove("rotated-fullscreen");
         if (btnText) btnText.innerText = "تدوير عرضي";
-
         if (screen.orientation && screen.orientation.unlock) {
           screen.orientation.unlock();
         }
@@ -2621,6 +2630,13 @@
           } else {
             if (document.exitFullscreen) document.exitFullscreen();
           }
+        } else {
+          const vp = document.getElementById("playerViewport");
+          if (!document.fullscreenElement) {
+            if (vp.requestFullscreen) vp.requestFullscreen();
+          } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+          }
         }
       },
 
@@ -2631,105 +2647,111 @@
         document.getElementById("mediaPlayerModal").classList.remove("active");
       },
 
-      openEditModal(contentId, type) {
-        let item;
-        if (type === 'LESSON') item = State.lessons.find(l => l.id === contentId);
-        else if (type === 'AUDIO') item = State.audios.find(a => a.id === contentId);
-        else if (type === 'BOOK') item = State.books.find(b => b.id === contentId);
-
-        if (!item) return;
-
-        document.getElementById('editContentId').value = item.id;
-        document.getElementById('editContentType').value = type;
-        document.getElementById('editContentTarget').value = item.target || (item.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${item.grade}`);
-        document.getElementById('editContentTitle').value = item.title;
-        document.getElementById('editContentUnit').value = item.unit || '';
-        document.getElementById('editContentUrl').value = item.videoUrl || item.audioUrl || item.fileUrl || '';
-
-        const textGroup = document.getElementById('editTextGroup');
-        if (type === 'BOOK') {
-          textGroup.style.display = 'block';
-          document.getElementById('editContentText').value = item.sampleContent || '';
-        } else {
-          textGroup.style.display = 'none';
-        }
-
-        document.getElementById('editContentModal').classList.add('active');
-      },
-
-      closeEditModal() {
-        document.getElementById('editContentModal').classList.remove('active');
-      },
-
-      handleSaveEditContent(e) {
+      // إدارة الدروس (إضافة، تعديل، حذف)
+      handleCreateLesson(e) {
         e.preventDefault();
-        const id = document.getElementById('editContentId').value;
-        const type = document.getElementById('editContentType').value;
-        const target = document.getElementById('editContentTarget').value;
-        const title = document.getElementById('editContentTitle').value.trim();
-        const unit = document.getElementById('editContentUnit').value.trim();
-        const url = document.getElementById('editContentUrl').value.trim();
-        const text = document.getElementById('editContentText').value.trim();
+        const target = document.getElementById("newLessonTarget").value;
+        const unit = document.getElementById("newLessonUnit").value.trim();
+        const title = document.getElementById("newLessonTitle").value.trim();
+        const videoUrl = document.getElementById("newLessonVideoUrl").value.trim();
+        const pdfUrl = document.getElementById("newLessonPdfUrl").value.trim();
+        const htmlUrl = document.getElementById("newLessonHtmlUrl").value.trim();
+        const notes = document.getElementById("newLessonNotes").value.trim();
 
         const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
         const grade = target === 'UAE_11' ? 11 : 12;
 
-        if (type === 'LESSON') {
-          const item = State.lessons.find(l => l.id === id);
-          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.videoUrl = url; DataStore.save('lessons', State.lessons); }
-        } else if (type === 'AUDIO') {
-          const item = State.audios.find(a => a.id === id);
-          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.audioUrl = url; DataStore.save('audios', State.audios); }
-        } else if (type === 'BOOK') {
-          const item = State.books.find(b => b.id === id);
-          if (item) { item.target = target; item.curriculum = curriculum; item.grade = grade; item.title = title; item.unit = unit; item.fileUrl = url; item.sampleContent = text; DataStore.save('books', State.books); }
-        }
+        const newLesson = {
+          id: "les_" + Date.now(),
+          target,
+          curriculum,
+          grade,
+          unit,
+          title,
+          videoUrl,
+          pdfUrl,
+          htmlUrl,
+          notes,
+          createdAt: Date.now()
+        };
+
+        State.lessons.push(newLesson);
+        DataStore.save("lessons", State.lessons);
 
         State.activityLogs.unshift({
           time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
           user: "jamal (Admin)",
-          action: `تعديل المادة التعليمية: (${title})`
+          action: `إضافة درس جديد: (${title}) في وحدة (${unit})`
         });
-        DataStore.save('logs', State.activityLogs);
+        DataStore.save("logs", State.activityLogs);
+
+        alert(`تمت إضافة ونشر الدرس (${title}) بنجاح.`);
+        App.setAdminContentTab("LIST");
+      },
+
+      openEditLessonModal(lessonId) {
+        const item = State.lessons.find(l => l.id === lessonId);
+        if (!item) return;
+
+        document.getElementById("editLessonId").value = item.id;
+        document.getElementById("editLessonTarget").value = item.target || (item.curriculum === 'SUDAN' ? 'SUDAN_12' : `UAE_${item.grade}`);
+        document.getElementById("editLessonUnit").value = item.unit || "";
+        document.getElementById("editLessonTitle").value = item.title;
+        document.getElementById("editLessonVideoUrl").value = item.videoUrl || "";
+        document.getElementById("editLessonPdfUrl").value = item.pdfUrl || "";
+        document.getElementById("editLessonHtmlUrl").value = item.htmlUrl || "";
+        document.getElementById("editLessonNotes").value = item.notes || "";
+
+        document.getElementById("editLessonModal").classList.add("active");
+      },
+
+      closeEditModal() {
+        document.getElementById("editLessonModal").classList.remove("active");
+      },
+
+      handleSaveEditLesson(e) {
+        e.preventDefault();
+        const id = document.getElementById("editLessonId").value;
+        const target = document.getElementById("editLessonTarget").value;
+        const unit = document.getElementById("editLessonUnit").value.trim();
+        const title = document.getElementById("editLessonTitle").value.trim();
+        const videoUrl = document.getElementById("editLessonVideoUrl").value.trim();
+        const pdfUrl = document.getElementById("editLessonPdfUrl").value.trim();
+        const htmlUrl = document.getElementById("editLessonHtmlUrl").value.trim();
+        const notes = document.getElementById("editLessonNotes").value.trim();
+
+        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
+        const grade = target === 'UAE_11' ? 11 : 12;
+
+        const item = State.lessons.find(l => l.id === id);
+        if (item) {
+          item.target = target;
+          item.curriculum = curriculum;
+          item.grade = grade;
+          item.unit = unit;
+          item.title = title;
+          item.videoUrl = videoUrl;
+          item.pdfUrl = pdfUrl;
+          item.htmlUrl = htmlUrl;
+          item.notes = notes;
+          DataStore.save("lessons", State.lessons);
+        }
 
         App.closeEditModal();
-        alert('تم حفظ وتحديث المادة بنجاح في Firebase.');
+        alert("تم تحديث بيانات ومصادر الدرس بنجاح في Firebase.");
         UI.render();
       },
 
-      promptDeleteContent(contentId, type) {
-        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً من المنصة وسحابة Firebase؟", () => {
-          let deletedTitle = "";
-          if (type === 'LESSON') {
-            const item = State.lessons.find(l => l.id === contentId);
-            deletedTitle = item ? item.title : "";
-            State.lessons = State.lessons.filter(l => l.id !== contentId);
-            if (db) db.collection("lessons").doc(contentId).delete().catch(err => console.error(err));
-            DataStore.save('lessons', State.lessons);
-          } else if (type === 'AUDIO') {
-            const item = State.audios.find(a => a.id === contentId);
-            deletedTitle = item ? item.title : "";
-            State.audios = State.audios.filter(a => a.id !== contentId);
-            if (db) db.collection("audios").doc(contentId).delete().catch(err => console.error(err));
-            DataStore.save('audios', State.audios);
-          } else if (type === 'BOOK') {
-            const item = State.books.find(b => b.id === contentId);
-            deletedTitle = item ? item.title : "";
-            State.books = State.books.filter(b => b.id !== contentId);
-            if (db) db.collection("books").doc(contentId).delete().catch(err => console.error(err));
-            DataStore.save('books', State.books);
-          }
-
-          State.activityLogs.unshift({
-            time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
-            user: "jamal (Admin)",
-            action: `حذف المادة التعليمية: (${deletedTitle})`
-          });
-          DataStore.save('logs', State.activityLogs);
+      promptDeleteLesson(lessonId) {
+        App.showConfirmModal("حذف الدرس", "هل أنت متأكد من رغبتك في حذف هذا الدرس وجميع روابطه نهائياً؟", () => {
+          State.lessons = State.lessons.filter(l => l.id !== lessonId);
+          if (db) db.collection("lessons").doc(lessonId).delete().catch(console.error);
+          DataStore.save("lessons", State.lessons);
           UI.render();
         });
       },
 
+      // إدارة الاختبارات التفاعلية
       startInteractiveQuiz(quizId) {
         State.activeQuiz = State.quizzes.find(q => q.id === quizId);
         State.activeQuestionIndex = 0;
@@ -2783,7 +2805,7 @@
           const percent = Math.round((State.quizScore / total) * 100);
 
           setTimeout(() => {
-            alert(`🎉 أحسنت صنعاً يا بطل!\nنتيجتك في التحدي: ${State.quizScore} من ${total} (${percent}%)\nتم تسجيل إنجازك وتحديث نقاط التقدم بنجاح.`);
+            alert(`🎉 أحسنت صنعاً يا بطل!\nنتيجتك في التحدي: ${State.quizScore} من ${total} (${percent}%)\nتم تسجيل إنجازك وتحديث نقاطك.`);
             App.setRoute("STUDENT_DASHBOARD");
           }, 600);
         }
@@ -2803,7 +2825,7 @@
         const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
         const grade = target === 'UAE_11' ? 11 : 12;
 
-        let targetQuiz = State.quizzes.find(q => q.target === target);
+        let targetQuiz = State.quizzes.find(q => q.target === target && q.title === quizTitle);
         if (!targetQuiz) {
           targetQuiz = {
             id: "quiz_" + Date.now(),
@@ -2811,7 +2833,6 @@
             target,
             curriculum,
             grade,
-            timeLimit: 15,
             questions: []
           };
           State.quizzes.push(targetQuiz);
@@ -2828,21 +2849,16 @@
         });
 
         DataStore.save("quizzes", State.quizzes);
-        alert(`تمت إضافة السؤال بنجاح إلى (${targetQuiz.title}) وحفظه في Firebase.`);
+        alert(`تمت إضافة السؤال بنجاح إلى (${targetQuiz.title}).`);
         App.setRoute("ADMIN_DASHBOARD");
       },
 
+      // إدارة الطلاب والشهادات
       toggleCertApproval(uid) {
         const student = State.students.find(s => s.uid === uid);
         if (student) {
           student.certificateApproved = !student.certificateApproved;
-          State.activityLogs.unshift({
-            time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
-            user: "jamal (Admin)",
-            action: `${student.certificateApproved ? 'اعتماد' : 'إلغاء اعتماد'} شهادة الطالب ${student.name}`
-          });
           DataStore.save("students", State.students);
-          DataStore.save("logs", State.activityLogs);
           UI.render();
         }
       },
@@ -2854,16 +2870,12 @@
           return;
         }
         document.getElementById("certStudentName").innerText = user.name;
-        
         const certDesc = user.curriculum === 'SUDAN' 
           ? 'اللغة العربية – المنهاج السوداني (الشهادة الثانوية)' 
           : `اللغة العربية – المنهج الإماراتي المتقدم (الصف ${user.grade == 11 ? 'الحادي عشر' : 'الثاني عشر'})`;
-
         document.getElementById("certGradeText").innerText = certDesc;
-        
         const certHash = CryptoJS.MD5(user.uid + user.name + "JAMAL_2026").toString().substring(0, 8).toUpperCase();
         document.getElementById("certSerial").innerText = `JAMAL-${user.curriculum}-${certHash}`;
-        
         document.getElementById("certificateModal").classList.add("active");
       },
 
@@ -2893,22 +2905,17 @@
 
         const bruteStatus = CryptoSecurity.checkBruteForce();
         if (bruteStatus.locked) {
-          App.showSecurityAlert(`الحساب معلق مؤقتاً لحمايتك. انتظر ${bruteStatus.remainingSec} ثانية.`);
+          App.showSecurityAlert(`الحساب معلق مؤقتاً لحمايتك.`);
           UI.render();
           return;
         }
 
         const inputHash = CryptoSecurity.hashPassword(passwordInput);
-
         const adminHash = localStorage.getItem("jamal_admin_hash");
+
         if (username === "jamal" && (inputHash === adminHash || passwordInput === "Arabic69")) {
           CryptoSecurity.resetFailedAttempts();
-          State.currentUser = {
-            uid: "admin_jamal",
-            name: "الأستاذ جمال",
-            username: "jamal",
-            role: "ADMIN"
-          };
+          State.currentUser = { uid: "admin_jamal", name: "الأستاذ جمال", username: "jamal", role: "ADMIN" };
           const token = CryptoSecurity.createSessionToken(State.currentUser);
           localStorage.setItem("jamal_session_token", token);
           App.setRoute("ADMIN_DASHBOARD");
@@ -2926,7 +2933,7 @@
         }
 
         CryptoSecurity.recordFailedAttempt();
-        App.recordSecurityViolation(`محاولة تسجيل دخول فاشلة للمستخدم (${username})`);
+        App.recordSecurityViolation(`محاولة تسجيل دخول فاشلة (${username})`);
         App.showSecurityAlert("اسم المستخدم أو كلمة المرور غير صحيحة.");
         UI.render();
       },
@@ -2941,7 +2948,6 @@
 
         const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
         const grade = target === 'UAE_11' ? 11 : 12;
-
         const passwordHash = CryptoSecurity.hashPassword(plainPassword);
 
         const newStudent = {
@@ -2962,69 +2968,10 @@
         };
 
         State.students.push(newStudent);
-        State.activityLogs.unshift({
-          time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
-          user: "jamal (Admin)",
-          action: `إنشاء وتشفير حساب الطالب: ${name} (${username}) - [${curriculum === 'SUDAN' ? 'المنهاج السوداني' : 'المنهج الإماراتي'}]`
-        });
-
         DataStore.save("students", State.students);
-        DataStore.save("logs", State.activityLogs);
 
-        alert(`تم إنشاء وتشفير حساب الطالب: ${name} وحفظه في Firebase بنجاح للمنهاج المختار.`);
+        alert(`تم إنشاء وتشفير حساب الطالب: ${name} بنجاح.`);
         App.setRoute("ADMIN_STUDENTS");
-      },
-
-      handleCreateContent(e) {
-        e.preventDefault();
-        const type = document.getElementById("contentType").value;
-        const target = document.getElementById("contentTarget").value;
-        const title = document.getElementById("contentTitle").value.trim();
-        const unit = document.getElementById("contentUnit").value.trim();
-        const url = document.getElementById("contentUrl").value.trim();
-        const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
-
-        const curriculum = target.startsWith('SUDAN') ? 'SUDAN' : 'UAE';
-        const grade = target === 'UAE_11' ? 11 : 12;
-
-        if (type === "LESSON") {
-          const newLesson = { id: "les_" + Date.now(), title, target, curriculum, grade, unit, duration: "درس مسجل", videoUrl: url };
-          State.lessons.push(newLesson);
-          DataStore.save("lessons", State.lessons);
-        } else if (type === "AUDIO") {
-          const newAudio = { id: "aud_" + Date.now(), title, target, curriculum, grade, unit, duration: "تسجيل صوتي", audioUrl: url };
-          State.audios.push(newAudio);
-          DataStore.save("audios", State.audios);
-        } else if (type.startsWith("BOOK")) {
-          const format = type === "BOOK_PPTX" ? "PPTX" : (type === "BOOK_DOCX" ? "DOCX" : "PDF");
-          const newBook = { id: "bk_" + Date.now(), title, format, target, curriculum, grade, fileUrl: url, description: unit, sampleContent: text };
-          State.books.push(newBook);
-          DataStore.save("books", State.books);
-        }
-
-        alert(`تمت إضافة ونشر (${title}) بنجاح للمنهاج المحدد في قاعدة بيانات Firebase.`);
-        App.setRoute("ADMIN_CONTENT_MANAGER");
-      },
-
-      toggleContentFields() {
-        const type = document.getElementById("contentType").value;
-        const urlGroup = document.getElementById("urlFieldGroup");
-        const textGroup = document.getElementById("textFieldGroup");
-        const label = document.getElementById("urlLabel");
-
-        if (type === "LESSON") {
-          urlGroup.style.display = "block";
-          textGroup.style.display = "none";
-          label.innerText = "رابط الفيديو المباشر (MP4 / YouTube / Google Drive)";
-        } else if (type === "AUDIO") {
-          urlGroup.style.display = "block";
-          textGroup.style.display = "none";
-          label.innerText = "رابط الملف الصوتي المباشر (MP3 / سحابي)";
-        } else if (type.startsWith("BOOK")) {
-          urlGroup.style.display = "block";
-          textGroup.style.display = "block";
-          label.innerText = `رابط ملف (${type === 'BOOK_PPTX' ? 'PowerPoint PPTX' : (type === 'BOOK_DOCX' ? 'Word DOCX' : 'PDF')}) المشفر`;
-        }
       },
 
       promptActivateStudent(uid, months) {
@@ -3033,13 +2980,7 @@
           student.status = "ACTIVE";
           student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
           student.expiresAt = months === 1 ? "2026-09-18" : "2026-11-18";
-          State.activityLogs.unshift({
-            time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit' }),
-            user: "jamal (Admin)",
-            action: `تفعيل اشتراك الطالب ${student.name} (${months} أشهر)`
-          });
           DataStore.save("students", State.students);
-          DataStore.save("logs", State.activityLogs);
           UI.render();
         });
       },
@@ -3048,9 +2989,7 @@
         const student = State.students.find(s => s.uid === uid);
         App.showConfirmModal("حذف الطالب", `هل أنت متأكد تماماً من حذف حساب الطالب (${student.name})؟`, () => {
           State.students = State.students.filter(s => s.uid !== uid);
-          if (db) {
-            db.collection("students").doc(uid).delete().catch(err => console.error(err));
-          }
+          if (db) db.collection("students").doc(uid).delete().catch(console.error);
           DataStore.save("students", State.students);
           UI.render();
         });
@@ -3058,10 +2997,8 @@
 
       sendWhatsAppOrder(plan) {
         const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", curriculum: "UAE", grade: 12 };
-        const phone = State.settings.adminPhoneWhatsApp; // 971559502387 (رقم الأستاذ جمال)
+        const phone = State.settings.adminPhoneWhatsApp;
         const planName = plan === "3_MONTHS" ? "3 أشهر (باقة التوفير 250 درهم)" : "شهر واحد (100 درهم)";
-        const price = plan === "3_MONTHS" ? "250" : "100";
-
         const curText = user.curriculum === 'SUDAN' ? 'المنهاج السوداني (الصف الثالث الثانوي)' : `المنهج الإماراتي (الصف ${user.grade})`;
 
         const message = `السلام عليكم أستاذ جمال، أرغب في الاشتراك في منصة أستاذ جمال للغة العربية.
@@ -3070,9 +3007,8 @@
 اسم المستخدم: ${user.username}
 المنهاج والصف: ${curText}
 الباقة المطلوبة: ${planName}
-قيمة الاشتراك: ${price} درهم إماراتي
 
-أرجو تفعيل الاشتراك بعد إتمام الدفع.`;
+أرجو تفعيل الحساب بعد الدفع.`;
 
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
       },
@@ -3090,3 +3026,4 @@
   </script>
 </body>
 </html>
+
